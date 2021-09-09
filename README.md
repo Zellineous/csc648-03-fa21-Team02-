@@ -13,13 +13,13 @@
 3. Fill out the table below
 
 
-| Student Name | Student Email | GitHub Username |
-|    :---:     |     :---:     |     :---:       |
-| member1      |               |                 |
-| member2      |               |                 |
-| member3      |               |                 |
-| member4      |               |                 |
-| member5      |               |                 |
-| member6      |               |                 |
+| Student Name                        | Student Email          | GitHub Username |
+|    :---:                            |     :---:              |     :---:       |
+| Alberto Alexander Ramirez Rodriguez |aramir18@mail.sfsu.edu  | aramir18        |
+| Shailendra Hamal                    |shamal1@mail.sfsu.edu   | shailendra1000  |
+| Abhijai Singh                       |asingh34@mail.sfsu.edu  | Abhijai95       |
+| Emily Do                            |edo1@mail.sfsu.edu      | emily-do        |
+| Thomas P He                         |the2@mail.sfsu.edu      | the-96          |
+| Raymond Zuo                         |rzuo@mail.sfsu.edu      | Zellineous      |
 
 ## NO code needs to be stored in the root of your repository. You may rename the application folder if you like to your team's application name. But all source code related to your team's application should be stored inside the application folder.
