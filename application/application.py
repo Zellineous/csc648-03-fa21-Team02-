@@ -6,7 +6,7 @@ application.config['SECRET_KEY'] = '123456789'
 
 @application.route('/')
 def home():
-    return '<h2>Hello,</h2> This is the home page. and it works with html'
+    return '<h2>Hello,</h2> This is the home page. and it works with html, update'
 
 
 if __name__ == '__main__':

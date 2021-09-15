@@ -1,3 +1,7 @@
 aboutus_app.zip
 .venv
 .ebignore.txt
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
