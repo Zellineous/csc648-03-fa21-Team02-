@@ -1,0 +1,13 @@
+.description {
+	left: 50%;
+	position: absolute;
+	top: 45%;
+	transform: translate(-50%, -55%);
+	text-align: center;
+}
+
+/* following text */
+.description p {
+	font-size: 1rem;
+	line-height: 1.5;
+}
