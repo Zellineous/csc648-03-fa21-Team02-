@@ -1,0 +1,1344 @@
+/* -----------------------------------------
+UIO CUSTOM JS - /js/uio.custom.js
+$(document).ready(function () {
+----------------------------------------- */
++function ($) {
+    /* -----------------------------------------
+    private variable and constants
+    ----------------------------------------- */
+    var tabresponsive = "table-responsive";
+    var noLineSpace = "line_height_0";
+    var cbaddclass = 'form-check-inline p-l-md m-l-0 m-r-md'
+    //var cbaddclass = 'form-check-inline p-l-md m-l-0'
+
+    var cbaddclasschk = 'form-check-inline p-l m-l-0'
+    var cbicon = '<div class="check-icon-checkbox"><i class="ca-gov-icon-check-mark"></i></div>';
+    var cbLabelWithClass = '<label class="form-check-inline p-l-md m-l-0 m-r-md"></label>';
+    var cbLabelClass = 'hidden-up pos-abs';
+    var cbSpan = '<span class="checkbox m-b display_chrome_inline"></span>';
+    var rbSpan = '<span class="radio m-b display_chrome_inline"></span>';
+    var radioBtnDiv = '<div class="check-icon-radio"><i></i></div>';
+    var fileBrwsInputFileID = '#' + $('input[type=file]').attr('id');
+    var fileBrwsInputGrpFileAttach = '<div class="input-group file-attach display_flex "></div>';
+    var fileBrwsInputGrpBtn = '<div class="input-group-btn"></div>';
+    var fileBrwsBtn = '<button class="btn btn-md btn-primary rounded-0">Browse</button>';
+    var fileBrwsInputTxt = '<input class="form-control" placeholder="No file chosen" type="text" id="txtFileName">';
+    var externalURL = '';
+    var curNotAllowed = 'cursor-not-allowed';
+
+
+    /* -----------------------------------------
+    add responsive class to any table exist 
+    on the page.
+    ----------------------------------------- */
+    $('table.table').each(function () {
+        if (!$(this).parent().is("span")) {
+            $(this).wrap("<div></div>");
+            if (!$(this).hasClass("table-list")) {
+                $(this).parent('div').addClass(tabresponsive);
+            }
+            fixGridView($(this));
+        }
+    })
+
+    // CustomGridView always renders border & rules attributes
+    // which are NOT compatible w/ table-striped class
+    $('table.table-striped').removeAttr('border');
+    $('table.table-striped').removeAttr('rules');
+
+    
+    /* -----------------------------------------
+    move context sensitive help icons to inside label
+    ----------------------------------------- */
+    $('.help-icon[RelatedLabelID]').each(function () {
+        var labelId = $(this).attr('RelatedLabelID');
+        var parent = $(this).parent();
+        var label = $(parent).find('[id$="' + labelId + '"]');
+
+        if (label.length == 1) {
+            var html = $(label).html();
+            var csh = $(this).detach();
+
+            $(label).html(html.trim());
+            $(label).append(csh);
+            $(csh).addClass('text-nowrap');
+        }
+    });
+
+    /* -----------------------------------------
+    remove '\n' character before help icons
+    ----------------------------------------- */
+    $('span.help-icon').each(function () {
+        if ($(this).attr('RelatedLabelID') != undefined) // ignore RelatedLabelID attrs
+            return true; // continue to next iteration
+
+        var helpHtml = $(this).prop('outerHTML');
+        var parentHtml = $(this).parent().html();
+        var helpIndex = parentHtml.indexOf(helpHtml);
+        var beforeHtml = parentHtml.slice(0, helpIndex);
+        var newLine = '\n';
+
+        if (beforeHtml.endsWith(newLine)) {
+            var afterHtml = parentHtml.slice(helpIndex, parentHtml.length);
+            var newBeforeHtml = beforeHtml.slice(0, helpIndex - newLine.length);
+            var newParentHtml = newBeforeHtml + afterHtml;
+
+            $(this).parent().html(newParentHtml);
+        }
+    });
+
+    /* -----------------------------------------
+    re-render file browse as required for the v5 template
+    ----------------------------------------- */
+    $('input[type=file]').each(function () {
+        if ($(this).length) {
+            $(this).wrap(fileBrwsInputGrpFileAttach);
+            $(this).wrap(fileBrwsInputGrpBtn);
+
+            $(fileBrwsBtn).insertBefore(this);
+            $(fileBrwsInputTxt).insertBefore('.input-group-btn');
+        }
+        // Remove the space between file upload control and its underneath control or its validation message     
+        var fileSelector = '.input-group, .file-attach, .display_flex';
+        var parentBlock = $(this).parents(".file-attach").parent();
+        if ($(parentBlock).children("span").size() > 0) {
+            var valFileUpload = $(parentBlock).find("span:last");
+            if ($(valFileUpload).length) {
+                $(this).parents(".file-attach").removeClass('m-b-N15');
+            }
+        } else {
+            $(this).parents(".file-attach").addClass('m-b-N15');
+        }
+    });
+
+    $(fileBrwsInputFileID).change(function () {
+        var filename = $('input[type=file]').val().split('\\').pop();
+        var inputFileTextID = '#' + $('input[type=text]').attr('id');
+        $(inputFileTextID).val(filename);
+    });
+
+    /* ---------------------------------------------------------------
+    re-render required field indicator as required for the v4 template
+    --------------------------------------------------------------- */
+    $('span>span.required-label').each(function () {
+        var clDiv = $(this).closest('div');
+        if ($(clDiv).length && !$(clDiv).hasClass('pnlSkipContent')) {
+            var hasCheckbox = $(clDiv).find(".checkbox");
+            if ($(hasCheckbox).length) {
+                $(hasCheckbox).find('label').before(this);
+            }
+        }
+    });
+
+    /* -----------------------------------------
+    make visible the validation summary panel 
+    only when there is any error occured
+    ----------------------------------------- */
+    var $validationSummary = $("div[id$='pnlValidationSummary']");
+    if ($validationSummary.find("ul").length > 0) {
+        $validationSummary.removeClass("hidden");
+        document.querySelector('[id$="pnlValidationSummary"]').focus()
+    }
+
+ 	/* -----------------------------------------
+    remove unnecessary error header
+    ----------------------------------------- */
+	var $validationERROR = $("span[id$='validationSummary']");
+	$($validationERROR).each(function () {
+		$(this).find("span:first").remove();
+	});
+
+   /* -----------------------------------------
+    make required-label as invisible if any span contains 
+    the attribute with showrequiredindicator = false
+    ----------------------------------------- */
+    var $divOtherIncomeInformation = $("[showrequiredindicator = false]");
+
+    $($divOtherIncomeInformation).each(function () {
+        $(this).find("span[class='required-label']").remove();
+    });
+
+
+    /* -----------------------------------------
+    remove unnecessary error header
+    ----------------------------------------- */
+    var $validationERROR = $("span[id$='validationSummary']");
+    $($validationERROR).each(function () {
+        $(this).find("span:first").remove();
+    });
+
+    /* -----------------------------------------
+    add placeholder to date fields
+    var $txtDateValue = $("input[name$='txtDateValue']");
+    $($txtDateValue).each(function () {
+    $(this).attr('placeholder', 'MMDDYYYY');
+    });
+    ----------------------------------------- */
+    remove_style($("input[size]"));
+    $("span[id*='pnlDate']").each(function () {
+        var dateDisplayFormat = $(this).find("span[id*='lblDateDisplayFormat']");
+        if ($(dateDisplayFormat).length) {
+            var innerText = dateDisplayFormat[0].innerHTML;
+            $(this).find("input:first").attr('placeholder', innerText);
+        }
+        $(dateDisplayFormat).remove();
+    });
+
+    /* -----------------------------------------
+    Phonenumber placeholder
+    ----------------------------------------- */
+    $('div.phoneNumber').each(function () {
+        var phoneSub = $(this).find("span[id$='PhoneNumberSub']");
+        if ($(phoneSub).length) {
+            var innerText = phoneSub[0].innerHTML; 
+            $(this).find("input:first").attr('placeholder', innerText);
+        }
+        $(phoneSub).remove();
+    });
+
+    /* -----------------------------------------
+    Currency placeholder
+    ----------------------------------------- */
+
+
+    $('span > input[type=text].eddCurrencyField').each(function () {
+        var parent = $(this).parent();
+        UpdateCurrencyControlText(parent);
+        $(parent).on('change', function () {
+            UpdateCurrencyControlText(parent) 
+        });
+    }); 
+    function UpdateCurrencyControlText(parent) {
+        var enteredNumber = parent.find('input:text').val().replace(/[^0-9\.]+/g, '');
+        if (enteredNumber != '') {
+            parent.find('input:text').val(Number(enteredNumber).toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
+        } 
+    }
+
+
+    /* -----------------------------------------
+    TextArea
+    ----------------------------------------- */
+    $('span > textarea.eddTextAreaField').each(function () {
+        var parent = $(this).parent();
+        ShowTextAreaCharCount(parent);
+        $(parent).on('input propertychange', function () { 
+            ShowTextAreaCharCount(parent);
+        }); 
+    }); 
+
+    function ShowTextAreaCharCount(parent) {
+        var len = parent.find('textarea').val().length;
+        var maxlength = $(parent).attr('maxlength');
+
+        var baselabel = $("span[id$='textCounter']").data("baselabel");
+        var label = $("span[id$='textCounter']").data("label");
+        var finallabel = "";
+        if (baselabel == undefined || label == undefined)
+            return;
+        if (len === 0) {
+            finallabel = baselabel.replace('{0}', maxlength);
+        }
+        else if (len > maxlength) {
+            parent.find('textarea').val(parent.find('textarea').val().substring(0, maxlength));
+            finallabel = label.replace('{0}', 0);
+        }
+        else {
+            finallabel = label.replace('{0}', maxlength - len);
+        }
+
+        parent.find('span').text(finallabel);
+    }
+
+    /* -----------------------------------------
+    SSN Field placeholder
+    ----------------------------------------- */
+    $("div>span[id*='SSN']:not(.ph-ignore)").each(function () {
+        var ssnBlock = $(this).parent();
+        if ($(ssnBlock).children("span").size() > 1) {
+            var ssnSub = $(ssnBlock).find("span:last");
+            if ($(ssnSub).length) {
+                var innerText = ssnSub[0].innerHTML;
+                $(ssnBlock).find("input:first").attr('placeholder', innerText);
+            }
+            $(ssnSub).remove();
+        }
+    });
+
+    /* -----------------------------------------
+    Other Field placeholder
+    ----------------------------------------- */
+    $("div span[id$='Sub']").each(function () {
+        var subBlock = $(this).parent();
+        if ($(subBlock).children("span").size() > 1) {
+            var subSub = $(subBlock).find("span:last");
+            if ($(subSub).length) {
+                var innerText = subSub[0].innerHTML;
+                $(subBlock).find("input:first").attr('placeholder', innerText);
+            }
+            $(subSub).remove();
+        }
+    });
+
+    /* -----------------------------------------
+    Time Property 
+    ----------------------------------------- */
+    $("span[id$='pnlTime']").each(function () {
+        $(this).find("input:first").attr('placeholder', 'HH');
+        $(this).find("input:last").attr('placeholder', 'MM');
+        $(this).replaceWith("<div>" + $(this)[0].innerHTML + "</div>");
+    });
+
+    $("span[id$='TimeDisplayFormat']").each(function () {
+        $(this).remove();
+    });
+
+    /* -----------------------------------------
+    Input with maxlength
+    ----------------------------------------- */
+    $("input[maxlength]").each(function () {
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf('MSIE ');
+        var trident = ua.indexOf('Trident/');
+        var edge = ua.indexOf('Edge/');
+
+        var length = $(this).attr('maxlength');
+        if (parseInt(length) > 5 && parseInt(length) < 11) {
+            var isPhoneNumber = $(this).closest("div.phoneNumber");
+            var isZipCode = $(this).closest("div.zipCode");
+            var isDateTime = $(this).closest("div.dateTime");
+            if ($(isPhoneNumber).length == 0
+                && $(isZipCode).length == 0
+                && $(isDateTime).length == 0) {
+                $(this).addClass('width-half');
+            }
+        }
+        if (parseInt(length) < 6) {
+            var isPhoneNumber = $(this).closest("div.phoneNumber");
+            var isZipCode = $(this).closest("div.zipCode");
+            var isDateTime = $(this).closest("div.dateTime");
+            if ($(isPhoneNumber).length == 0
+                && $(isZipCode).length == 0
+                && $(isDateTime).length == 0) {
+                $(this).addClass('width-quarter');
+            }
+        }
+    });
+
+
+    /* -----------------------------------------
+    Handling Long Words and URLs 
+    force break, hyphenation, etc.
+    ----------------------------------------- */
+    $("p a").each(function () {
+        $(this).addClass('dont-break-out');
+    });
+
+    /* -----------------------------------------
+    Inline error message appear next line
+    ----------------------------------------- */
+     $("span[title]").each(function () {
+         var tl = $(this).attr("title");
+         var inHTML = this.innerHTML;
+         var elt = $(this);
+
+         if (tl.replace(/\s/g, '') == htmlUnescape(inHTML).replace(/\s/g, '')
+             && tl.replace(/\s/g, '').toUpperCase() != 'HELP')
+         {
+             if ($(this).parents('div.input-group').length > 0) {
+                 var inputGroup = $(this).parents('div.input-group');
+                 inputGroup.parent().append($(this));
+             }
+             if ($(this).parents('span.checkbox').length > 0) {
+                 var inputGroup = $(this).parents('span.checkbox').parent('div');
+                 /*inputGroup.append($(elt));*/
+                 $(this).remove();
+                 inputGroup.append($(elt));
+             }
+             $(this).addClass('line_height white-space-normal');
+             $(this).removeAttr('style');
+             //$(this).attr('style', 'line-height: initial; color: #E00000');
+             $(this).wrap("<div></div>");
+         }
+     })
+    $("table").each(function () {
+        if ($(this).parent('span').length > 0) {
+            $(this).parent('span').addClass(noLineSpace);
+
+        }
+    })
+    $(".form-control").each(function () {
+        if ($(this).parent('span').length > 0
+            || $(this).parent('div').length > 0) {
+            $(this).parents('span').addClass(noLineSpace);
+
+        }
+    })
+    /*-----------------------------------------------
+    Session Timeout Notication - button functions
+    ------------------------------------------------*/
+    $("#btnSessionLogOut").click(function () {
+        HideSessionTimeoutNotification();
+        LogoutSession();
+    });
+    $("#btnSessionContinue").click(function () {
+        HideSessionTimeoutNotification();
+        ResetSessionTimers();
+    });
+
+    $("#sessionModal").removeAttr('aria-hidden');
+
+    function HideSessionTimeoutNotification() {
+        if ($('#sessionModal').hasClass('in')) {
+            $('#sessionModal').modal('hide');
+        }
+    }
+    /*------------------------------------------------*/
+
+    /*-----------------------------------------------
+    Navigation Alert 
+    ------------------------------------------------*/
+    $('.NavigationURL').click(function () {
+        externalURL = $(this).data('id');
+    });
+
+    $("#navigationModal").removeAttr('aria-hidden');
+
+    $("#btnNavigateContinue").click(function () {
+        $('#navigationModal').modal('hide');
+        window.open(externalURL);
+
+
+    });
+    /*------------------------------------------------*/
+
+    /* -----------------------------------------
+    Date field within table should not wrap 
+    ----------------------------------------- */
+    $("span[id*='Date']").each(function () {
+        if ($(this).parent("td").length > 0) {
+            $(this).parent("td").attr("nowrap", "nowrap");
+        }
+    });
+
+   /* --------------------------------------------------------
+    Add css classes to validator to each span to indicating type of previous siblings
+    -----------------------------------------------------------*/
+ $('span.invalid').each(function () {
+        var prev = $(this).prev(); // previous sibling
+        var tagName = $(prev).prop('tagName').toLowerCase();
+        var type = $(prev).attr('type');
+
+        // textbox
+        if (tagName == 'input' && type == 'text' && $(prev).hasClass('form-control')) {
+            $(this).addClass('text-box');
+			$(prev).addClass('invalid');
+        }
+		// textarea
+		else if (tagName == 'textarea') {
+			$(this).addClass('text-area');
+			$(prev).addClass('invalid');
+		}
+		// select
+		else if (tagName == 'select') {
+			$(this).addClass('drop-down-list');
+			$(prev).addClass('invalid');
+		}
+        // checkbox
+        else if (tagName == 'span' && $(prev).hasClass('form-check-inline')) {
+            $(this).addClass('check-box');
+        }
+		// date picker
+		else if (tagName == 'span' && $(prev).hasClass('date-picker-fmt')) {
+			var prev2 = $(prev).prev();
+			
+			if ($(prev2).hasClass('input-group date-picker')) {
+				$(prev2).addClass('invalid');
+				$(this).addClass('date-picker');
+			}
+        }
+        // time picker
+        else if (tagName == 'ul' && $(prev).hasClass('timepicker-rbl')) {
+            $(this).addClass('timepicker-validator');
+        }
+        // new claim survey rating code radio btn list
+        else if (tagName == 'ul' && $(prev).hasClass('rating-codes')) {
+            $(this).addClass('rating-codes-validator');
+        }
+    });	
+
+   /* --------------------------------------------------------
+    Initialize date picker to set todayHighlight &
+    make addon icon show calendar
+    -----------------------------------------------------------*/
+    $('.eddDateField').each(function () {
+        var tb = $(this);
+        var parent = $(tb).parent();
+        var lang = $(parent).attr('lang');
+        var addon = $(tb).next('.input-group-addon');
+
+        if (lang != undefined) {
+            $(tb).datepicker({ format: 'mm/dd/yyyy', todayHighlight: true, language: lang });
+        }
+
+        if (addon != undefined) {
+            $(addon).on('click', function () {
+                $(tb).datepicker('show');
+            });
+        }
+    });
+    /* -----------------------------------------------------------*/
+
+    /* --------------------------------------------------------
+     Initialize show hide button for accordion panels
+     -----------------------------------------------------------*/
+    $('#btnShowHide').on('click', function (event) {
+        event.preventDefault();
+        toggleButton(event.target);
+    });
+
+    $('#btnShowHide').on('keydown', function (event) {
+        handleBtnKeyDown(event.target);
+    });
+    /* -----------------------------------------------------------*/
+  } (jQuery);
+
+/* --------------------------------------------------------
+Make the buttons stacked on medium view from 768px to 992px and there are more than 4 buttons
+-----------------------------------------------------------*/
+function applyStackedButton(media) {
+
+    $('div.btn-group').each(function () {
+        var buttons_count = $(this).find('input[type="submit"]').length;
+        if (buttons_count >= 5 && media.matches) {
+
+            $(this).addClass('text-left');
+            $('div.btn-group-left').addClass('button_group_stacked');
+            $('div.btn-group-right').addClass('button_group_stacked');
+            $('.button').each(function () {
+                $(this).addClass('width-half');
+                $(this).addClass('m-l-0');
+            })
+        } else {
+            $(this).removeClass('text-left');
+            $('div.btn-group-left').removeClass('button_group_stacked');
+            $('div.btn-group-right').removeClass('button_group_stacked');
+            $('.button').each(function () {
+                $(this).removeClass('width-half');
+                $(this).removeClass('m-l-0');
+            })
+        }
+    })
+}
+
+function resetProcessBar(media) {
+	if ($(".processbaritem").height() >= 80) {
+		$(".processbar .processbaritem .itemdescription").addClass('d-n');
+		$(".processbar .processbaritem .itemnumber").addClass('d-b');
+	} else {if ($(".processbar .processbaritem .itemdescription").hasClass('d-n') 
+			||$(".processbar .processbaritem .itemnumber").hasClass('d-b')) {
+			$(".processbar .processbaritem .itemdescription").removeClass('d-n');
+			$(".processbar .processbaritem .itemnumber").removeClass('d-b');
+			}
+	}
+}
+
+/* -----------------------------------------
+ Looks for &nbsp; at very end of element HTML
+ and removes it
+-------------------------------------------*/
+function removeNbsp(elem) {
+    var html = $(elem).html().trim();
+    var nbsp = '&nbsp;';
+    var nbspLen = nbsp.length;
+
+    if (html.endsWith(nbsp)) {
+        var lastIdx = html.lastIndexOf(nbsp);
+
+        if (html.length - nbspLen == lastIdx) {
+            var newHtml = html.substring(0, lastIdx - 1);
+
+            $(elem).html(newHtml);
+        }
+    }
+}
+/* ------------------------------------------- */
+
+/* -----------------------------------------
+Expand the width of Datetime control when the watermark inside is not displayed correctly
+----------------------------------------- */
+$.fn.textWidth = function (text, font) {
+    if (!$.fn.textWidth.fakeEl) {
+        $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
+    }
+    $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
+    return $.fn.textWidth.fakeEl.width();
+};
+
+function adjustDateTimeTextBox(media) {
+    var datetimeInput = $("span[id*='pnlDate']").children("input");
+    if (media.matches) {
+        datetimeInput.each(function () {
+            var newWidth = 0;
+            $(this).removeAttr("style");            
+            var inputWidth = $(this).width();
+            var watermarkText = $(this).attr("placeholder");
+            var watermarkWidth = $.fn.textWidth(watermarkText);
+
+            if (inputWidth <= watermarkWidth) {
+                newWidth = watermarkWidth + 2;
+                $(this).width(newWidth);
+            }
+        })
+    }
+    else {
+        datetimeInput.removeAttr("style");
+    }
+}
+
+var changeTextboxWithWatermark = function () {    
+    var viewToAdjust = window.matchMedia("(min-width:768px)");
+    adjustDateTimeTextBox(viewToAdjust);
+    viewToAdjust.addListener(adjustDateTimeTextBox);    
+}
+
+/* -----------------------------------------
+Document ready section 
+●	Dissable default action on enter key for all input fields.
+-------------------------------------------*/
+$(document).ready(function () {
+   
+	$('form').keypress(function (event) {
+		if (event.keyCode == 13) {
+			event.preventDefault();
+		}
+	});
+    /*Apply the stacked button style and the event handler to media*/
+    var media = window.matchMedia("(min-width:768px) and (max-width:991px)");
+    applyStackedButton(media);
+    media.addListener(applyStackedButton);
+
+    changeTextboxWithWatermark();    
+});
+
+$(document).ready(function () {
+    var chkDay = $('span.chk-day input[type=checkbox]');
+    var chkDayFunc = function (chk) {
+        var dayHdr = $(chk).closest('.day-header');
+        var dayDtl = $(dayHdr).next('.day-detail');
+
+        if ($(chk).is(':checked'))
+            $(dayDtl).removeClass('hidden');
+        else
+            $(dayDtl).addClass('hidden');
+    };
+
+    $(chkDay).each(function () {
+        chkDayFunc(this);
+    });
+
+    $(chkDay).on('change', function () {
+        chkDayFunc(this);
+    });
+
+    /* -----------------------------------------
+     Looks for &nbsp; at very end of element HTML
+     and removes it
+    -------------------------------------------*/
+    $('span > input[type=text], select').each(function () {
+        var parent = $(this).parent();
+
+        removeNbsp(parent);
+    });
+
+    $('span > textarea').each(function () {
+        var parent = $(this).parent();
+
+        removeNbsp(parent);
+    });
+
+    $('.timepicker span.timepicker-rbl, .timepicker div.form-group').each(function () {
+        removeNbsp(this);
+    });
+
+    $('.checkbox-numbered-question-list span[id*="prtIsPUACOVIDReasonChecked"]').each(function () {
+        removeNbsp(this);
+    });
+
+    $('.checkbox-list').each(function () {
+        var parent = $(this).parent();
+
+        removeNbsp(parent);
+    });
+
+    $('.rbtn-list, .chk-list').each(function () {
+        var parent = $(this).parent();
+
+        removeNbsp(this);
+    });
+
+    /* ------------------------------------------- */
+
+    /* -----------------------------------------
+     Event handler for time picker onblur that 
+     formats the textbox string to hh:mm format &
+     changes 24 time to 12 hour am/pm time
+    -------------------------------------------*/
+    $('span.timepicker-rbl ul.timepicker-rbl').each(function () {
+        $(this).addClass('form-check');
+    });
+
+    $(".timepicker input[type=text]").on("blur", function (e) {
+        e.target.value = e.target.value.replace(/^(\d?\d):?(\d\d)?$/, function (match, hh, mm) {
+            //console.log(match, hh, mm);
+            var hhInt = parseInt(hh, 10);
+            if (hhInt < 0 || hhInt > 23) {
+                return match;
+            }
+
+            // Fill in minutes if not specified.
+            if (typeof mm === "undefined") {
+                mm = "00";
+            }
+
+            var mmInt = parseInt(mm, 10);
+            if (mmInt < 0 || mmInt > 59) {
+                return match;
+            }
+
+            var timepicker = $(e.target).closest('.timepicker');
+            // Adjust from military time.
+            if (hhInt > 12) {
+                timepicker.find(".form-check input[type=radio]")[1].checked = true;
+                hh = (hhInt - 12).toString();
+            } else if (hhInt === 0) {
+                timepicker.find(".form-check input[type=radio]")[0].checked = true;
+                hh = "12";
+            }
+
+            if (hh.length === 1) {
+                hh = "0" + hh;
+            }
+            return hh + ":" + mm;
+        });
+    });
+    /* ------------------------------------------- */
+
+});
+
+/* Document ready section for show/hide of subquestions */
+$(document).ready(function () {
+    InitializePanelNumberOfDays();
+    InitializePanelIncomeType();
+    //InitializeConditionalDisplayForRadioBtns();
+    //InitializeConditionalDisplayForDropDownLists();
+    InitializeConditionalDisplayGeneric();
+    InitializeOtherTypesOfInCome();
+
+     /* ShowSubquestion1a(); */
+});
+
+/*
+function ShowSubquestion1a() {
+    var sickDaysWeek1 = $("span[id$='lblSickDaysWeek1']").text();
+    var sickDaysWeek2 = $("span[id$='lblSickDaysWeek2']").text();
+
+    if (sickDaysWeek1 > 0 || sickDaysWeek2 > 0) {
+        $("span[id$='Subquestion1a']").show();
+    }
+    else {
+        $("span[id$='Subquestion1a']").hide();
+    }
+}
+*/
+
+//Here We are using Listbox Value of 3558 that is coming from Database for Showing/Hiding textbox.-- >
+function InitializeOtherTypesOfInCome() {
+    var chkBoxes = $("[id*=lstBxReasons] input[type=checkbox]");
+    chkBoxes.change(function() {
+        chkBoxes.each(function () {
+
+            if ($(this).val() == '3558') {
+                if (($(this).is(":checked")))
+                    ShowOrHideOtherTypeOfInCome(true);
+                else {
+                    $("[id$='prtNotRegularIncomeTypeNotListedDescription'] input[type='text']").val('');
+                    ShowOrHideOtherTypeOfInCome(false);
+                }
+            }
+        })
+    });
+
+    ShowOrHideOtherTypeOfInCome(false);
+}
+
+function ShowOrHideOtherTypeOfInCome(show) {
+    var div = $('[id$="prtNotRegularIncomeTypeNotListedDescription"]').closest('.row.form-group');
+
+    if (show)
+        $(div).show();
+    else
+        $(div).hide();
+}
+
+function InitializePanelNumberOfDays() {
+    ShowOrHidePanelNumberOfDays();
+    $("span.able2work input[type='radio']").change(function () {
+        ShowOrHidePanelNumberOfDays();
+    });
+}
+
+function ShowOrHidePanelNumberOfDays() {
+    var rbOpt = $("span.able2work input[type='radio']");
+    if (rbOpt.length > 0) {
+        if (rbOpt[0].checked == true) {
+            $("[id$='panelNumberOfDays']").show();
+        }
+        else {
+            $("[id$='prtNumberOfDays'] input[type='text']").val('');
+            $("[id$='panelNumberOfDays']").hide();
+        }
+    }
+}
+
+function InitializePanelIncomeType() {
+    $("[id$='prtType']").each(function (n) {
+        ShowOrHidePanelIncomeType();
+        $("#" + this.id).on("change", function () {
+            ShowOrHidePanelIncomeType();
+        });
+    });
+}
+
+function ShowOrHidePanelIncomeType() {
+    var selectValue = $("[id$='prtType'] option:selected").val();
+    if (selectValue == '1908') {
+        $("[id$='panelIncomeType']").show();
+    }
+    else {
+        $("[id$='prtNotListed'] textarea").val('');
+        $("[id$='panelIncomeType']").hide();
+    }
+}
+
+function InitializeConditionalDisplayGeneric() {
+    var fnGetIdAttr = function (suffix) {
+        return 'ConditionalDisplayId' + suffix.toString();
+    };
+
+    var fnGetValuesAttr = function (suffix) {
+        return 'ConditionalDisplayValues' + suffix.toString();
+    };
+
+    var fnGetControlType = function (panel, suffix) {
+        var conditionalDisplayId = $(panel).attr(fnGetIdAttr(suffix));
+        var control = $('[id$="' + conditionalDisplayId + '"]');
+
+        if ($(control).find('input[type="radio"]').length > 0)
+            return "radiobuttonlist";
+
+        if ($(control).find('input[type="checkbox"]').length > 0)
+            return "checkboxlist";
+
+        if ($(control).find('select').length > 0)
+            return "dropdownlist";
+    };
+
+    var fnGetRbtnBaseId = function (outerSpan) {
+        var baseId = $(outerSpan).attr('baseid');
+
+        if (baseId == undefined) {
+            var outerSpanIds = $(outerSpan).attr('id').split('_');
+
+            if (outerSpanIds.length > 0) {
+                baseId = outerSpanIds[outerSpanIds.length - 1];
+            }
+        }
+
+        return baseId;
+    };
+
+    var fnGetChkBxsBaseId = function (outerUl) {
+        var baseId = $(outerUl).attr('baseid');
+
+        if (baseId == undefined) {
+            var outerUlIds = $(outerUl).attr('id').split('_');
+
+            if (outerUlIds.length > 0) {
+                baseId = outerUlIds[outerUlIds.length - 1];
+            }
+        }
+
+        return baseId;
+   }
+
+    var fnGetDdlBaseId = function (ddl, outerSpan) {
+        var baseId = $(ddl).attr('baseid');
+
+        if (baseId == undefined) {
+            var outerSpanIds = $(outerSpan).attr('id').split('_');
+
+            if (outerSpanIds.length > 0) {
+                baseId = outerSpanIds[outerSpanIds.length - 1];
+            }
+        }
+
+        return baseId;
+    };
+
+
+    var fnGetSelectedRbtnValue = function (rbtns) {
+        var rbtn = $(rbtns).filter(function () {
+            return $(this).is(':checked');
+        });
+
+        return rbtn.length == 0 ? undefined : $(rbtn).val();
+    };
+
+    var fnGetSelectedChkbxValues = function (chkbxs) {
+        var chked = $(chkbxs).filter(function () {
+            return $(this).is(':checked');
+        });
+
+        var sels = [];
+
+        $(chked).each(function () {
+            sels.push($(this).val());
+        });
+        
+        return sels;
+    };
+
+    var fnGetRbtnPanels = function (panels, baseId, selVal, suffix) { // radio button list only
+        var results = [];
+        var i;
+
+        for (i = 0; i < $(panels).length; i++) {
+            var panel = panels[i];
+            var values = $(panel).attr(fnGetValuesAttr(suffix)).split('|');
+            var rbtnIdMatched = $(panel).attr(fnGetIdAttr(suffix)) == baseId;
+            var found = values.indexOf(selVal) >= 0;
+
+            if (rbtnIdMatched)
+                results.push({
+                    panel: $(panel),
+                    showPanel: found
+                });
+        }
+
+        return results;
+    };
+
+    var fnGetChkBxsPanels = function (panels, baseId, selVals, suffix) { // check box list only
+        var results = [];
+        var i;
+        var ii;
+        var iii;
+
+        for (i = 0; i < $(panels).length; i++) {
+            var panel = panels[i];
+            var values = $(panel).attr(fnGetValuesAttr(suffix)).split('|');
+            var chkbxIdMatched = $(panel).attr(fnGetIdAttr(suffix)) == baseId;
+            var found = false;
+
+            for (ii = 0; ii < values.length; ii++) {
+                var value = values[ii];
+
+                for (iii = 0; iii < selVals.length; iii++) {
+                    var selVal = selVals[iii];
+
+                    if (!found && value == selVal)
+                        found = true;
+                }
+            }
+
+            if (chkbxIdMatched)
+                results.push({
+                    panel: $(panel),
+                    showPanel: found
+                });
+        }
+
+        return results;
+    }
+
+    var fnGetPanel = function (panels, baseId, selVal, suffix) { // drop down list only
+        var panel = $(panels).filter(function () {
+            var values = $(this).attr(fnGetValuesAttr(suffix)).split('|');
+            var found = values.indexOf(selVal) >= 0;
+            var ddlIdMatched = $(this).attr(fnGetIdAttr(suffix)) == baseId;
+
+            return ddlIdMatched && found;
+        });
+
+        var result = {
+            panel: panel,
+            showPanel: panel.length > 0
+        };
+
+        return result;
+    };
+
+    var fnRadioButtonList = function (elem, suffix) {
+        var rbtnWrapperId = $(elem).attr(fnGetIdAttr(suffix));
+        var rbtns = $('[id$="' + rbtnWrapperId + '"] input[type="radio"]');
+        var outerSpan = $(rbtns).closest('span').parent('span');
+        var baseId = fnGetRbtnBaseId(outerSpan);
+        var hasEvt = $(outerSpan).attr('hasEvt') == '1';
+        var selVal = selVal = fnGetSelectedRbtnValue(rbtns);
+        var panels = $('[' + fnGetIdAttr(suffix) + '="' + baseId + '"]');
+        var oPanels = fnGetRbtnPanels(panels, baseId, selVal, suffix);
+
+        $(outerSpan).attr('baseid', baseId);
+        $(elem).addClass('hidden');
+
+        $(oPanels).each(function () {
+            var oPanel = $(this)[0];
+
+            if (oPanel.showPanel)
+                $(oPanel.panel).removeClass('hidden');
+            else {
+                $(oPanel.panel).addClass('hidden');
+            }
+        });
+
+        if (!hasEvt) {
+            $(rbtns).on('change', function () {
+                var outerSpan = $(this).closest('span').parent('span');
+                var baseId = $(outerSpan).attr('baseid');
+                var selVal = $(this).val();
+                var panels = $('[' + fnGetIdAttr(suffix) + '="' + baseId + '"]');
+                var oPanels = fnGetRbtnPanels(panels, baseId, selVal, suffix);
+
+                $(oPanels).each(function () {
+                    var oPanel = $(this)[0];
+
+                    if (oPanel.showPanel)
+                        $(oPanel.panel).removeClass('hidden');
+                    else {
+                        $(oPanel.panel).addClass('hidden');
+                        $(oPanel.panel).find('input[type="text"]').val('');
+                        $(oPanel.panel).find('textarea').val('');
+                    }
+                });
+            });
+
+            $(outerSpan).attr('hasEvt', '1');
+        }
+    }
+
+    var fnCheckboxList = function (elem, suffix) {
+        var chkWrapperId = $(elem).attr(fnGetIdAttr(suffix));
+        var chkbxs = $('[id$="' + chkWrapperId + '"] input[type="checkbox"]');
+        var outerUl = $(chkbxs).closest('ul');
+        var baseId = fnGetChkBxsBaseId(outerUl);
+        var hasEvt = $(outerUl).attr('hasEvt') == '1';
+        var selVals = fnGetSelectedChkbxValues(chkbxs);
+        var panels = $('[' + fnGetIdAttr(suffix) + '="' + baseId + '"]');
+        var oPanels = fnGetChkBxsPanels(panels, baseId, selVals, suffix);
+
+        $(outerUl).attr('baseid', baseId);
+        $(elem).addClass('hidden');
+
+        $(oPanels).each(function () {
+            var oPanel = $(this)[0];
+
+            if (oPanel.showPanel)
+                $(oPanel.panel).removeClass('hidden');
+            else {
+                $(oPanel.panel).addClass('hidden');
+            }
+        });
+
+        if (!hasEvt) {
+            $(chkbxs).on('change', function () {
+                var isChecked = $(this).is(':checked');
+                var outerUl = $(this).closest('ul');
+                var baseId = $(outerUl).attr('baseid');
+                var selVal = $(this).val();
+                var selVals = [];
+                selVals.push(selVal);
+                var panels = $('[' + fnGetIdAttr(suffix) + '="' + baseId + '"]');
+                var oPanels = fnGetChkBxsPanels(panels, baseId, selVals, suffix);
+
+                $(oPanels).each(function () {
+                    var oPanel = $(this)[0];
+
+                    if (oPanel.showPanel && isChecked)
+                        $(oPanel.panel).removeClass('hidden');
+                    else {
+                        $(oPanel.panel).addClass('hidden');
+                        $(oPanel.panel).find('input[type="text"]').val('');
+                        $(oPanel.panel).find('textarea').val('');
+                    }
+                });
+            });
+
+            $(outerUl).attr('hasEvt', '1');
+        }
+    }
+
+    var fnDropDownList = function (elem, suffix) {
+        var ddlWrapperId = $(elem).attr(fnGetIdAttr(suffix));
+        var ddl = $('[id$="' + ddlWrapperId + '"] select');
+        var outerSpan = $(ddl).parent('span');
+        var baseId = fnGetDdlBaseId(ddl, outerSpan);
+        var hasEvt = $(ddl).attr('hasEvt') == '1';
+        var selVal = $(ddl).val();
+        var panels = $('[' + fnGetIdAttr(suffix) + '="' + baseId + '"]');
+        var oPanel = fnGetPanel(panels, baseId, selVal, suffix);
+        var panel = oPanel.panel;
+        var showPanel = oPanel.showPanel;
+
+        $(ddl).attr('baseid', baseId);
+        $(elem).addClass('hidden');
+
+        if (showPanel)
+            panel.removeClass('hidden');
+
+        if (!hasEvt) {
+            $(ddl).on('change', function () {
+                var baseId = $(this).attr('baseid');
+                var selVal = $(this).val();
+                var panels = $('[' + fnGetIdAttr(suffix) + '="' + baseId + '"]');
+                var oPanel = fnGetPanel(panels, baseId, selVal, suffix);
+                var panel = oPanel.panel;
+                var showPanel = oPanel.showPanel;
+
+                $(panels).addClass('hidden');
+
+                $(panels).each(function () {
+                    $(this).find('input[type="text"]').val('');
+                    $(this).find('textarea').val('');
+                });
+
+                if (showPanel)
+                    $(panel).removeClass('hidden');
+            });
+
+            $(ddl).attr('hasEvt', '1');
+        }
+    }
+
+    for (var i = 1; i <= 5; i++) {
+        var idAttr = 'ConditionalDisplayId';
+        var valueAttr = 'ConditionalDisplayValues';
+        var suffix = '';
+
+        if (i > 1) {
+            idAttr += i;
+            valueAttr += i;
+            suffix = i.toString();
+        }
+
+        var selector = '[' + idAttr + '][' + valueAttr + ']';
+
+        $(selector).each(function () {
+            var type = fnGetControlType(this, suffix);
+
+            switch (type) {
+                case 'radiobuttonlist':
+                    fnRadioButtonList(this, suffix);
+                    break;
+
+                case 'checkboxlist':
+                    fnCheckboxList(this, suffix);
+                    break;
+
+                case 'dropdownlist':
+                    fnDropDownList(this, suffix);
+                    break;
+            }
+        });
+    }
+}
+
+var orgOnload = window.onload; // get MaintainScrollPositionOnPostback event
+
+window.onload = function (e) {
+    if (typeof orgOnload == 'function') {
+        orgOnload();
+    }
+
+    /*Set process bar to only numbers when content reaching beyond 3 lines*/
+    var pbMedia = window.matchMedia("(min-width:992px) and (max-width:1279px)");
+    resetProcessBar(pbMedia);
+    pbMedia.addListener(resetProcessBar);
+
+    $('div.itemnumber').hide().show(0);
+}
+
+/*----------------------------------------- */
+
+
+
+/* -----------------------------------------
+common function and event
+DO NOT change any code unless really required
+----------------------------------------- */
+function fixGridView(tableEl) {
+	var jTbl = $(tableEl);
+
+	if (jTbl.find("tbody>tr>th").length > 0) {
+		var firstRow = jTbl.find("tbody tr:first");
+		if ($(firstRow).hasClass("GridPager")) {
+			$(firstRow).remove();
+			jTbl.children("tbody").before("<thead></thead>");
+			jTbl.children("thead").append(firstRow);
+			jTbl.find("thead").append(jTbl.find("th").parent());
+		} else {
+			/*jTbl.find("tbody tr:first").remove();*/
+			jTbl.children("tbody").before("<thead><tr></tr></thead>");
+			jTbl.find("thead tr").append(jTbl.find("th"));
+			$(firstRow).remove();
+		}
+	}
+}
+
+function htmlEscape(str) {
+	return str
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+function htmlUnescape(str) {
+	return str
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+}
+
+function remove_style(all) {
+	var i = all.length;
+	var j, is_hidden;
+
+	// Presentational attributes.
+	var attr = [
+    'align',
+    'background',
+    'bgcolor',
+    'border',
+    'cellpadding',
+    'cellspacing',
+    'color',
+    'face',
+    'height',
+    'hspace',
+    'marginheight',
+    'marginwidth',
+    'noshade',
+    'nowrap',
+    'valign',
+    'vspace',
+    'width',
+    'vlink',
+    'alink',
+    'text',
+    'link',
+    'frame',
+    'frameborder',
+    'clear',
+    'scrolling',
+    'style',
+    'size',
+	'tabindex',
+	'role'
+  ];
+
+	var attr_len = attr.length;
+
+	while (i--) {
+		is_hidden = (all[i].style.display === 'none');
+
+		j = attr_len;
+
+		while (j--) {
+			all[i].removeAttribute(attr[j]);
+		}
+
+		// Re-hide display:none elements,
+		// so they can be toggled via JS.
+		if (is_hidden) {
+			all[i].style.display = 'none';
+			is_hidden = false;
+		}
+	}
+}
+
+/* -----------------------------------------
+UserName Empty then remove space. 
+----------------------------------------- */
+
+$('.user-name').each(function () {
+	var username = $("#lblLoginUserName").text();
+	if (username.length == 0) {
+		$(this).parent().remove();
+	}
+
+});
+
+/* -----------------------------------------
+Make the text of each column other than Date value wrapped as normal 
+----------------------------------------- */
+$('table').find("td").find("span").not("[id*='Date']").each(function () {
+		$(this).addClass("white-space-normal");
+});
+
+
+
+/* -----------------------------------------
+Make disabled hyperlinked display as a text 
+----------------------------------------- */
+$('a.aspNetDisabled').each(function () {
+    $(this).replaceWith(function () {
+        return $('<span/>', {
+            class: 'aspNetDisabled',
+            html: this.innerHTML
+        });
+    });
+});
+
+/*-----------------------------------------------
+    Accordion Control
+------------------------------------------------*/
+
+function handleBtnClick(element) {
+	toggleButton(element);
+}
+
+function handleBtnKeyDown(event) {
+	// Check to see if space or enter were pressed
+	if (event.key === " " || event.key === "Enter" || event.key === "Spacebar") { // "Spacebar" for IE11 support
+		// Prevent the default action to stop scrolling when space is pressed
+		event.preventDefault();
+		toggleButton(event.target);
+	}
+}
+
+function toggleButton(element) {
+	// Check to see if the button is pressed
+	var pressed = (element.getAttribute("aria-pressed") === "true");
+	var stateText = document.getElementById('showHideText');
+	// Change aria-pressed to the opposite state
+	element.setAttribute("aria-pressed", !pressed);
+	// toggle the Expand/Collapse state of the accordions
+	if (pressed) {
+		collapse();
+		stateText.innerHTML = $('#hdnShowAll').val();
+	} else {
+		expand();
+		stateText.innerHTML = $('#hdnHideAll').val();
+	}
+}
+
+function expand() {
+	$('.toggleAccordion').collapse('show');
+}
+function collapse() {
+	$('.toggleAccordion').collapse('hide');
+}
+/*------------------------------------------------*/

@@ -1,0 +1,1149 @@
+﻿/* -----------------------------------------
+   Branding logo.
+----------------------------------------- */
+.branding .header-organization-banner a {
+	text-decoration: none;
+}
+
+.mobile-controls {
+	height: auto;
+}
+
+.main-content {
+	flex: 1 0 auto;
+}
+
+.check-icon-radio {
+    top: 11px !important;
+}
+/*//This is a CSS  Change for  Hiding the Vertical scroll baron print func. Commenting it out for future refernce*/  
+/*body {
+    overflow: hidden;
+    height: 100%;
+}*/
+@media (max-width: 339px) {
+	.branding .header-organization-banner a {
+		position: relative !important;
+		top: 16px;
+		max-height: 60px;
+	}
+}
+
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   Utility Header.
+----------------------------------------- */
+.utility-header .settings-links {
+	min-height: 31px;
+}
+
+
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   Show question numbers and the question in 
+	the same line in all devices.
+----------------------------------------- */
+@media only screen
+and (min-width:1px)
+and (max-width:600px){
+    label.numberLabel, label.numberLabelOld {
+        height: 50px;
+        float: left;
+    }
+    label.numberLabelRep {
+        height: 24px;
+        float: left;
+    }
+    label.numberLabelRep3 {
+        height: 160px;
+        float: left;
+    }
+    /*div.row.form-group .card.card-default.mt-2.mr-2.card-indent.wide {
+        max-width: 38%;
+    }*/
+}
+@media only screen and (min-width:601px) and (max-width:1024px) {
+    label.numberLabel {
+        height: 50px;
+        float: left;
+    }
+    label.numberLabelRep3 {
+        height: 70px;
+        float: left;
+    }
+    label.numberLabelRep {
+        height: 24px;
+        float: left;
+    }
+}
+label.numberLabelRep {
+    display: inline;
+    max-width: 89%;
+    vertical-align: top;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+label.numberLabelRep3 {
+    display: inline;
+    max-width: 89%;
+  
+    float:left;
+    vertical-align: top;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+label.numberLabelOld, label.questionLabel {
+    display: inline !important;
+    max-width: 85%;
+    vertical-align: top;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+label.numberLabel {
+    display: block !important;
+    height: 100%;
+    float: left;
+    padding-right: 5px;
+    text-align: right;
+    min-width: 1.5rem;
+    max-width: 1.5rem;
+}
+label.numberLabel.md-wide {
+    min-width: 2rem;
+    max-width: 2rem;
+}
+label.numberLabel.wide {
+    min-width: 2.5rem;
+    max-width: 2.5rem;
+}
+label.margin{
+    margin-left:2px;
+}
+span.control-indent {
+    padding-left: 1.5rem !important;
+    display: inline-block !important;
+    width: 100% !important;
+}
+label.label-indent {
+    padding-left: 1.5rem !important;
+    display: inline-block !important;
+}
+div.div-indent {
+    margin-left: 1.5rem !important;
+}
+div.row.form-group .card.card-default.mt-2.mr-2.card-indent:nth-child(even) {
+    margin-left: 1.5rem !important;
+}
+input[type="submit"].btn-indent {
+    margin-left: 1.5rem !important;
+}
+span.rad-btn-lbl {
+    padding-left: 1.5rem !important;
+}
+.rad-btn-indent-wide span.rad-btn-lbl {
+    padding-left: 2.5rem !important;
+}
+span.control-indent.md-wide {
+    padding-left: 2rem !important;
+}
+label.label-indent.md-wide {
+    padding-left: 2rem !important;
+}
+span.control-indent.wide,
+label.label-indent.wide {
+    padding-left: 2.5rem !important;
+}
+div.div-indent.md-wide {
+    margin-left: 2rem !important;
+}
+div.div-indent.wide {
+    margin-left: 2.5rem !important;
+}
+div.row.form-group .card.card-default.mt-2.mr-2.card-indent.wide {
+    margin-left: 2.5rem !important;
+}
+input[type="submit"].btn-indent.wide {
+    margin-left: 2.5rem !important;
+}
+.rad-btn-indent-wide .m-r-md.radio.p-l-md {
+    padding-left: 2.5rem !important;
+}
+div.row.form-group .card.card-default.mt-2.mr-2.card-indent.wide label {
+    white-space: nowrap;
+}
+
+span.label-merge {
+    display: inline-block;
+    max-width: 89%;
+    margin-bottom: .3rem;
+}
+
+span.label-merge label.questionLabel {
+    display: inline !important;
+}
+
+/*----------------------------------------- */
+/* -----------------------------------------
+   Uniform button size.
+----------------------------------------- */
+/*input[type=button], input[type=submit], input[type=reset] {
+	min-width: 112px;
+}*/
+.standard-button {
+    min-width: 144px !important;
+    /* min-width: 112px;*/
+}
+.wide-button {
+    width: 250px;
+}
+div.minwide-button input[type=submit] {
+    min-width: 250px !important;
+}
+/*----------------------------------------- */
+    /* -----------------------------------------
+   Image - Button size.
+----------------------------------------- */
+    .verifywithIDme {
+    width: 200px;
+    height: 35px;
+}
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   Accordion control.
+----------------------------------------- */
+#showHideText.collapse::after {
+	content: "Show All";
+}
+
+#showHideText.collapse.show::after {
+	content: "Hide All";
+}
+
+#showHideText.collapse:not(.show) {
+	display: inline;
+}
+
+#btnAccrShowHide {
+	margin-top: 2px;
+}
+/*----------------------------------------- */
+
+.radioQuestion span{
+	transform:translateX(-1.5em)
+}
+
+.form-check-inline.display-nowrap > input[type=radio],
+.form-check-inline.display-nowrap > label {
+    display: inline !important;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.ten99g label.questionLabel {
+    display: inline !important;
+}
+.ten99g label.numberLabel {
+    text-align: left;
+}
+
+@media (max-width: 767.98px) {
+    .form-control.invalid {
+        width: calc(100% - 20px);
+        display: inline-block;
+    }
+	
+	textarea.form-control {
+		margin-bottom: 15px;
+	}
+	
+	.input-group.date-picker.invalid {
+        width: calc(100% - 20px);
+	}
+	
+	span.invalid.text-area {
+        position: absolute;
+        top: 0px;
+        right: 16px;
+	}
+	
+	span.invalid.date-picker,
+	span.invalid.text-box,
+	span.invalid.drop-down-list {
+        position: absolute;
+        top: 9px;
+        right: 16px;
+	}
+
+    #trAliasNames .gray-panel:first-child .row.form-group:first-child {
+        margin-bottom: 0px;
+    }
+
+    .btn-row.nav-btns {
+        /*display: flex;
+        flex-flow: column;*/
+    }
+
+    .btn-row.nav-btns .btn-primary {
+        /*order: 1;
+        margin-top: 0px !important;*/
+    }
+
+    .btn-row.nav-btns .btn-secondary {
+        order: 2;
+        margin-top: 0px !important;
+    }
+
+    div.lv-datepicker span.invalid.date-picker {
+        position: absolute;
+        top: 34px;
+        right: 5px; 
+    }
+}
+
+@media (min-width: 768px) {
+    span.invalid:not(.check-box) {
+        position: absolute;
+        top: 9px;
+        right: -9px;
+    }
+
+    span.invalid.date-picker {
+        position: absolute;
+        top: 34px;
+        right: -13px;
+    }
+
+    div.lv-datepicker span.invalid.date-picker {
+        position: absolute;
+        top: 34px;
+        right: -15px;
+    }
+
+    .btn-row.nav-btns .btn-primary,
+    .btn-row.nav-btns .btn-secondary {
+        display: inline-block;
+        width: unset !important;
+        margin-top: 0px;
+    }
+}
+
+span.invalid.timepicker-validator {
+    position: static;
+    top: unset;
+    right: unset;
+    display: inline-block;
+}
+
+@media print {
+    .PrintableSummaryApplication {
+        display: table;
+    }
+	.standard-button {
+		display: none;
+	}
+
+	.printHide {
+		display: none;
+	}
+
+    .card {
+        word-wrap: normal;
+    }
+
+    .card span, .card div.col-xxs-12.col-xs-12.col-sm-12.col-md-12.col-lg-12 {
+        word-wrap: normal;
+        white-space: nowrap;
+    }
+}
+
+@media screen {
+    .PrintableSummaryApplication {
+        display: none;
+    }
+}
+
+.forceInvalid {
+	border-radius: unset;
+	background-image: none !important;
+	border: none;
+	padding: 0px;
+}
+span.invalid a {
+	border-radius: unset;
+	background-image: none !important;
+	border: none;
+	padding: 0px;
+}
+span.invalid.check-box {
+	position: absolute;
+}
+span.ca-gov-icon-close-line, span.ca-gov-icon-warning-circle {
+    color: #e00000;
+}
+span.ca-gov-icon-close-line, span.ca-gov-icon-important {
+	color: #e00000;
+	font-weight: bold;
+}
+span.ca-gov-icon-warning-circle.white {
+    color: #fff;
+}
+
+span.ca-gov-icon-warning-circle.dark {
+    color: #333;
+}
+.m-r-md.radio {
+    margin-right: 0px !important
+}
+.m-r-md.radio label {
+    margin-right: 1.5rem !important
+}
+
+#trCurrentLocationCalifornia {
+    background-color: #f5f5f5;
+}
+
+
+/* -----------------------------------------
+   checkbox required label position fix
+----------------------------------------- */
+span.checkbox {
+    position: relative;
+    display: inline-block;
+}
+span.checkbox > span.required-label {
+    position: absolute;
+    left: 30px;
+    top: 0px;
+}
+span.checkbox > label.form-check-inline.p-l-md.m-l-0 > span.required-label {
+    position: absolute;
+    left: 15px;
+    top: 0px;
+}
+span.checkbox .check-icon-checkbox {
+    top: 5px;
+    left: -10px;
+    transform: translateY(0px);
+}
+span.checkbox .form-check-inline {
+    margin-left: 15px !important;
+}
+/*Added code for ? getting closer to text*/
+.csh-align > span > label.form-check-inline {
+    margin-right: -7px !important;
+}
+
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   checkbox unordered question list
+----------------------------------------- */
+
+div.checkbox-list ul {
+    list-style-type: none;
+    padding-left: 0px;
+    margin-bottom: 0px !important;
+}
+
+div.checkbox-list ul li span.m-b.checkbox {
+    margin-bottom: 0px !important;
+}
+
+div.checkbox-list ul li label {
+    font-weight: 400;
+}
+
+div.checkbox-list ul li span.required-label {
+    display: none;
+}
+
+.overflow-hidden-important {
+    overflow: hidden !important;
+}
+
+/*----------------------------------------- */
+/*------------------------------------------
+    Split unolder list to 2 column
+--------------------------------------------*/
+span.unorder-list ul {
+   column-count:2;
+}
+
+span.unorder-list ul li {
+    break-inside: avoid-column;
+}
+
+@media (max-width: 576px) {
+span.unorder-list ul  {
+        column-count: 1;
+    }
+}
+/*--------------------------------------*/
+
+/* remov_wrp_cust */
+p.remov_wrp_cust {
+    margin-bottom: 0px;
+}
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   checkbox numbered question list
+----------------------------------------- */
+.checkbox-numbered-question-list span.checkbox {
+    display: inline !important;
+}
+
+.checkbox-numbered-question-list span.checkbox .check-icon-checkbox {
+    left: -30px;
+}
+
+.checkbox-numbered-question-list label.questionLabel.form-check-inline,
+.checkbox-numbered-question-list label.questionLabel {
+    margin-left: 50px !important;
+    display: block !important;
+    font-weight: 700 !important;
+}
+
+.checkbox-numbered-question-list label.numberLabelOld {
+    position: absolute;
+    left: 40px;
+    top: 0px;
+}
+.checkbox-numbered-question-list label.numberLabel {
+    position: absolute;
+    left: 35px;
+    top: 0px;
+    font-weight: 700 !important;
+}
+.checkbox-numbered-question-list input[type=checkbox] {
+    position: absolute;
+    left: 15px;
+    top: 0px;
+}
+.numbered-checkbox-question-list {
+    position: relative;
+}
+.numbered-checkbox-question-list label.numberLabel {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.numbered-checkbox-question-list input[type=checkbox] {
+    position: absolute;
+    left: 27px;
+    top: 0px;
+}
+.numbered-checkbox-question-list > span > label {
+    margin-left: 50px !important;
+    display: inline-block !important;
+    font-weight: 700 !important;
+}
+.checkbox-accept-label {
+    position: relative;
+}
+.checkbox-accept-label input[type=checkbox] {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.checkbox-accept-label label {
+    margin-left: 1.5rem !important;
+}
+fieldset span.chk-day > label {
+    font-weight: 700 !important;
+}
+
+/* -----------------------------------------
+   radio button list
+----------------------------------------- */
+span.rbtn-list {
+    display: inline-block;
+}
+ul.rbtn-list {
+    list-style-type: none;
+    padding: 0px;
+    margin-bottom: 0px;
+}
+
+ul.rbtn-list:not(.vertical) li {
+    float: left;
+    padding-bottom: 0px !important;
+}
+ul.rbtn-list.vertical li {
+    display: block;
+}
+ul.rbtn-list.vertical li::after {
+    /* from clearfix */
+    display: block;
+    clear: both;
+    content: "";
+}
+ul.rbtn-list.vertical li input[type=radio] {
+    /*display: block;*/
+    display: inline-block;
+}
+ul.rbtn-list.vertical li label {
+    /* from long-label */
+    display: block;
+    margin-bottom: 5px;    
+    margin-left: 2rem;
+    }
+
+ul.rbtn-list.horiz li {
+    margin-right: 1rem;
+}
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   checkbox list
+----------------------------------------- */
+ul.chk-list {
+    list-style-type: none;
+    padding: 0px;
+}
+
+/*----------------------------------------- */
+
+ul.chk-list.vertical {
+    margin-bottom: 0px;
+}
+ul.chk-list.vertical li {
+    display: block;
+}
+ul.chk-list li input[type=checkbox] {
+    display: inline-block;
+}
+ul.chk-list li label {
+    display: block;
+    margin-left: 1.5rem;
+}
+ul.chk-list:not(.vertical) li {
+    margin-bottom: 5px;
+    width: 48%; 
+    display: inline-block;
+    vertical-align: top;
+}
+
+@media (max-width: 576px) {
+    ul.chk-list:not(.vertical) li {
+        width: 100%;
+    }
+}
+span.read-only input[type=checkbox] {
+    display: none;
+}
+span.read-only label {
+    font-weight: 700 !important;
+}
+
+/*input[type="radio"]:checked + * + * i {
+    color: #fff;
+    background-color: #046B99;
+    border-color: #046B99; 
+} */
+
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   context sensitive help icon
+----------------------------------------- */
+span.help-icon a {
+    background-image: none !important;
+}
+
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   Date Picker
+----------------------------------------- */
+	
+.datepicker-color {
+    color: #333333;
+}
+
+.input-group.date-picker > .input-group-addon {
+    font-size: 1.40rem !important;
+}
+
+/*----------------------------------------- */
+span.date-format,
+span.text-muted {
+    font-size: 14px;
+}
+.form-control-pnl-bg {
+    background-color: #f5f5f5;
+}
+
+span.form-check-inline > label.form-check-inline,
+span.radio > label.form-check-inline {
+    font-weight: normal;
+
+}
+
+/* -----------------------------------------
+   Time Picker
+----------------------------------------- */
+span.chk-day.m-b,
+span.radio.m-b,
+span.radio.m-b label.form-check-inline {
+    margin-bottom: 0px !important;
+}
+
+.timepicker label.period-header {
+    margin-bottom: 0px;
+}
+
+.timepicker ul.timepicker-rbl {
+    list-style-type: none;
+    padding: 0px;
+    margin-bottom: 0px;
+    display: inline-block;
+}
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   confirmation page rating codes radio button list
+----------------------------------------- */
+span.rating-codes {
+    position: relative;
+    display: inline-block;
+}
+
+span.rating-codes ul {
+    list-style-type: none;
+    padding-left: 1.5rem;
+    display: inline-block;
+}
+
+span.rating-codes ul li {
+    float: left;
+    min-width: 50%;
+    padding: 0.15rem;
+    margin: 0;
+}
+
+span.invalid.rating-codes-validator {
+    position: absolute;
+    top: 3px;
+    right: 10%;
+}
+
+@media (min-width: 340px) {
+    span.rating-codes ul li {
+        min-width: 40%;
+    }
+
+    span.invalid.rating-codes-validator {
+        right: 25%;
+    }
+}
+
+@media (min-width: 576px) {
+    span.rating-codes ul li {
+        min-width: 33%;
+    }
+
+    span.invalid.rating-codes-validator {
+        right: 7%;
+    }
+}
+
+@media (min-width: 768px) {
+    span.invalid.rating-codes-validator {
+        right: -5%;
+    }
+}
+
+@media (min-width: 992px) {
+    span.invalid.rating-codes-validator {
+        right: 5%;
+    }
+}
+
+@media (min-width: 1200px) {
+    span.rating-codes ul li {
+        min-width: 15%;
+    }
+
+    span.invalid.rating-codes-validator {
+        right: -10px;
+    }
+}
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   Sub-questions and grid panel background color and the padding
+----------------------------------------- */
+.form-group-panel .sub-question-panel .form-group {
+	padding: 20px;
+}
+
+/*Added code for applying white background on UIOnline home page*/
+.white-panel {
+	background-color: #fff !important;
+	padding: 20px 20px 20px 20px;
+}
+/*Added code for the  Alignmnet and spacing removal in custom panel on UIOnline home page*/
+.gridlines th, .gridlines td {
+	border-top: 1px solid #dee2e6;
+	padding: 0.75rem 0rem 0.75rem 0rem;
+	vertical-align: top;
+}
+.gray-panel {
+	background-color: #f5f5f5;
+	padding: 20px 20px 4px 20px;
+}
+
+.gray-panel-p20 {
+	background-color: #f5f5f5;
+	padding: 20px 20px 20px 20px;
+}
+
+.mt-unset {
+	margin-top: unset;
+}
+
+.form-control-pnl-bg {
+	background-color: #f5f5f5;
+}
+
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   Text under the control, like date format (mm/dd/yy) 
+	and time format like hh:mm
+----------------------------------------- */
+span.date-format,
+span.text-muted {
+    font-size: 14px;
+}
+
+/*----------------------------------------- */
+
+
+span.form-check-inline > label.form-check-inline,
+span.radio > label.form-check-inline {
+    font-weight: normal;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+}
+
+/* -----------------------------------------
+   Session timeout popup
+----------------------------------------- */
+.container.session-timeout .col-xs-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.container.session-timeout h6 {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+.section-header-btn input {
+	margin-top: -12px;
+}
+/*----------------------------------------- */
+/* -----------------------------------------
+   gridview
+----------------------------------------- */
+.action-column {
+	width: 5%;
+}
+
+.item-alignment {
+	vertical-align: middle !important;
+	text-align: center;
+}
+/*----------------------------------------- */
+/* -----------------------------------------
+   validator icons
+----------------------------------------- */
+@media (min-width: 250px) {
+	input[type="text"].form-control.invalid,
+	select.form-control.invalid,
+	textarea.form-control.invalid {
+		max-width: 88%;
+		display: inline-block;
+	}
+
+	.input-group.date-picker.invalid {
+		max-width: 88%;
+	}
+}
+
+@media (min-width: 340px) {
+	input[type="text"].form-control.invalid,
+	select.form-control.invalid,
+	textarea.form-control.invalid {
+		max-width: 91%;
+		display: inline-block;
+	}
+
+	.input-group.date-picker.invalid {
+		max-width: 91%;
+	}
+}
+
+@media (min-width: 450px) {
+	input[type="text"].form-control.invalid,
+	select.form-control.invalid,
+	textarea.form-control.invalid {
+		max-width: 92%;
+		display: inline-block;
+	}
+
+	.input-group.date-picker.invalid {
+		max-width: 92%;
+	}
+}
+
+@media (min-width: 576px) {
+	input[type="text"].form-control.invalid,
+	select.form-control.invalid,
+	textarea.form-control.invalid {
+		max-width: 95%;
+		display: inline-block;
+	}
+
+	.input-group.date-picker.invalid {
+		max-width: 95%;
+	}
+}
+
+@media (min-width: 768px) {
+	span.invalid:not(.check-box) {
+		position: absolute;
+		top: 9px;
+		right: -9px;
+	}
+
+	span.invalid.date-picker {
+		position: absolute;
+		top: 7px;
+		right: -9px;
+	}
+
+	div.lv-datepicker span.invalid.date-picker {
+		position: absolute;
+		top: 34px;
+		right: -15px;
+	}
+
+	span.invalid.rating-codes-validator {
+		right: -5%;
+	}
+
+	input[type="text"].form-control.invalid,
+	select.form-control.invalid,
+	textarea.form-control.invalid {
+		max-width: 100%;
+	}
+
+	.input-group.date-picker.invalid {
+		max-width: 100%;
+	}
+
+}
+/* -----------------------------------------
+   Horizontal divider hide
+----------------------------------------- */
+div:not(.subHeader) > hr.divider.bg-dark {
+    display: none;
+}
+/*----------------------------------------- */
+
+/* -----------------------------------------
+   Table striped pager
+----------------------------------------- */
+table.table-striped tr.GridPager {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+table.table-striped tr.GridPager td {
+    border-top: none;
+}
+
+table.table-striped tr.GridPager table tr, table.table-striped tr.GridPager table tr:hover {
+    background-color: #f2f2f2;
+    border-color: #f2f2f2;
+}
+
+table.table tr.GridPager {
+    text-align: left;
+}
+/*----------------------------------------- */
+
+.padding-left {
+    padding-left: 1.5em;
+}
+/* --------------------------------------------
+    Horizontal Scroll bar on Responsive table
+    ------------------------------------------*/
+
+@media only screen and (min-width:375px) and (max-width:780px) {
+    .table-responsive {
+        flex: 100%;
+        max-width: 100%;
+        margin-bottom: 15px;
+        overflow-x: auto !important;
+        border: 1px solid #dddddd;
+        z-index: 1;
+    }
+        .table-responsive::-webkit-scrollbar {
+            height: 5px;
+        }
+        .table-responsive::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px grey;
+            border-radius: 5px;
+        }
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #343a40;
+            border-radius: 5px;
+        }
+            .table-responsive::-webkit-scrollbar-thumb:hover {
+                background: #6c757d;
+            }
+}
+/* -----------------------------------------
+   Phone number fields
+----------------------------------------- */
+.pc-40 {
+    width: 40%;
+}
+.pc-45 {
+    width: 45%;
+}
+.pc-47 {
+    width: 47%;
+}
+.pc-54 {
+    width: 54%;
+}
+.pc-52 {
+    width:52%;
+}
+.pc-8 {
+    width: 8%;
+}
+.pc-1 {
+    width:1%;
+}
+
+div span.phone {
+    width: calc(50% - 20px);
+}
+
+div span.phone-ext {
+    width: calc(50% - 30px);
+}
+
+div label.ext {
+    width: 40px;
+}
+
+@media (min-width: 320px) and (max-width: 576px ) {
+    .phone-with-ext .col-12 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .phone-with-ext .col-12.order-sm-2 {
+        order: 2;
+    }
+
+    .phone-with-ext .col-12.order-sm-3 {
+        order: 3;
+    }
+}
+/* new EDD radio butons */
+.row.form-group > fieldset {
+    width: 100%;
+}
+fieldset legend label {
+    font-weight: 700 !important;
+}
+fieldset legend {
+    margin-bottom: 0;
+}
+.edd-rad-btn.verticalbtn {
+    width:95px;
+}
+fieldset div.edd-rad-btn label,
+fieldset div.edd-rad-btn ul li label {
+    float: left;
+    margin-right: 1.5rem;
+}
+ul.rbtn-list.vertical li label {
+    float: none;
+}
+fieldset div.edd-rad-btn label:last-child,
+fieldset div.edd-rad-btn ul li:last-child label {
+    margin-right: 0;
+}
+fieldset div.edd-rad-btn ul li/*:not(:last-child label)*/ {
+    margin-right: 1.5rem;
+}
+fieldset div.edd-rad-btn ul li:last-child {
+    margin-right: 0 !important;
+}
+fieldset div.edd-rad-btn {
+    display: inline-block;
+}
+fieldset div.invalid-wrapper {
+    display: inline;
+}
+@media (max-width: 767.98px) {
+    fieldset div.invalid-wrapper span.invalid {
+        display: inline;
+        position: relative;
+        top: -9px !important;
+    }
+}
+fieldset div.invalid-wrapper span.invalid {
+    top: 0;
+}
+label.questionLabel {
+    display: inline-block !important;
+}
+label.numberLabel.wide + label.questionLabel { /* adjacent sibling selector */
+    max-width: 80%;
+}
+ul.form-check-inline, span.form-check-inline ul {
+    margin-bottom: 0px;
+}
+ul.form-check-inline li, span.form-check-inline ul li {
+    display: inline;
+    float: left;
+}
+ul.form-check-inline li label {
+    font-weight: normal;
+}
+div.edd-rad-btn span.form-check-inline ul {
+    margin-left: 0 !important;
+    margin-right: 1.5rem !important;
+    padding-left: 0 !important;
+}
+.timepicker ul.timepicker-rbl li {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+.timepicker ul.timepicker-rbl li label {
+    font-weight: normal;
+    margin-bottom: 0px;
+}
+fieldset label {
+    font-weight: 400 !important;
+}
+.required-label {
+    font-weight: 700;
+}

@@ -1,0 +1,2319 @@
+﻿$(document).ready(function () {
+    // Trigger custom event "hide" and "show"; each child input also trigger this event
+    (function ($) {
+        $.each(['show', 'hide'], function (i, ev) {
+            var el = $.fn[ev];
+            $.fn[ev] = function () {
+                this.trigger(ev);
+                this.children().find("input").each(function () {
+                    $(this).trigger(ev);
+                });
+                return el.apply(this, arguments);
+            };
+
+
+
+
+
+        });
+    })(jQuery);
+    var displayMode = $("#hdnDisplayMode");
+
+    if (displayMode.val() == "Edit") {
+        MultilineTextBoxMaxLengthLimit();
+        MultilineTextBoxDivWidth();
+        InitializeSortingInformation();
+        InitializeApplicantInformationEvents();
+        InitializeDriverLicenseIDCardInformationEvents();
+        InitializePriorClaimInformationEvents();
+        InitializeContactInformationEvents();
+        InitializeDigitalPaymentOptionInformationEvents();
+        InitializeLastEmployerInformationEvents();
+        InitializeEnterLastEmployerDetails();
+        InitializeEmploymentInformationEvents();
+        InitializeAvailabilityInformationEvents();
+        InitializeCitizenshipInformationEvents();
+        InitalizeOtherInformationEvents();
+        InitializeDisasterUnemploymentInformationEvents();
+        InitializeSchoolEmployeeInformationEvents();
+    }
+    else {
+        InitializeApplicantInformationReadOnly();
+        InitializeDMVInformationReadOnly();
+        InitializePriorClaimInformationReadOnly();
+        InitializeContactInformationReadOnly();
+        InitializeDigitalPaymentOptionInformationReadOnly();
+        InitializeCitizenshipInformationReadOnly();
+        InitializeLastEmployerInformationReadOnly();
+        InitializeEmploymentInformationReadOnly();
+        InitializeSchoolEmployeeInformationReadOnly();
+        InitializeAvailabilityInformationReadOnly();
+        InitalizeOtherInformationReadOnly();
+        InitializeDisasterUnemploymentInformationReadOnly();
+        SurveyMultilineTextBoxMaxLengthLimit();
+        AddAriaLabelForEditLinksOnSummary();
+    }
+});
+
+// BEGIN - SCR_NC_23 – Sorting Information
+function InitializeSortingInformation() {
+    DisplayCurrentLocationCalifornia();
+    $("[id$='prtIsMilitaryService'] input[type='radio']").change(function () {
+        DisplayCurrentLocationCalifornia();
+    });
+}
+
+function DisplayCurrentLocationCalifornia() {
+    var rbOpt = $("[id$='prtIsMilitaryService'] input[type='radio']");
+    if (rbOpt.length > 0) {
+        if (rbOpt[0].checked == true) {
+            $("[id$='trCurrentLocationCalifornia']").show();
+        }
+        else {
+            $("[id$='trCurrentLocationCalifornia']").hide();
+        }
+    }
+}
+// END - SCR_NC_23 – Sorting Information
+
+// BEGIN - SCR_NC_30 – Applicant Information
+function InitializeApplicantInformationEvents() {
+    DisplaySSNs();
+    DisplaySSNName();
+    
+    var hideText = $('#hdnHideAll').val();
+    var showText = $('#hdnShowAll').val();
+
+	if ($("#prtSSNDisplay").length > 0) { // check if prtSSNDisplay exists
+		var label = $("#prtSSNDisplay").next('label');
+		var html = label.html();
+		var newHtml = html.replace(hideText, '<span class="ssn-show-hide">' + hideText + '</span>');
+		
+		label.html(newHtml);
+	}
+
+    $("#prtSSNDisplay").change(function () {
+        var str = $('#hdnfield').val();
+
+        if ($(this).is(':checked') == true) {
+            $("#prtMaskedSSN").text(str);
+            $('span.ssn-show-hide').text(hideText);
+        }
+		else {
+			$("#prtMaskedSSN").text('XXX-XX-' + str.substr(str.length - 4));
+            $('span.ssn-show-hide').text(showText);
+        }
+    });
+    $("#prtSSNLastFourDigitsDisplay").change(function () {
+        if ($(this).is(':checked') == true) {
+            $("#prtSSNLastFourDigits input").get(0).setAttribute('type', 'text');
+        }
+        else {
+            $("#prtSSNLastFourDigits input").get(0).setAttribute('type', 'password');
+        }
+    });
+    $("#prtOtherSSN1Display").change(function () {
+        if ($(this).is(':checked') == true) {
+            $("#prtOtherSSN1 input").get(0).setAttribute('type', 'text');
+        }
+        else {
+            $("#prtOtherSSN1 input").get(0).setAttribute('type', 'password');
+        }
+    });
+    $("#prtOtherSSN2Display").change(function () {
+        if ($(this).is(':checked') == true) {
+            $("#prtOtherSSN2 input").get(0).setAttribute('type', 'text');
+        }
+        else {
+            $("#prtOtherSSN2 input").get(0).setAttribute('type', 'password');
+        }
+    });
+
+    $("#prtIsNameSameAsSSN input[type=radio]").change(function () {
+        DisplaySSNName();
+    });
+
+    $(".estimatedCheckBoxTopAlign").each(function (index) {
+        $(this).find("input[type='checkbox']").attr("id", $(this).find("input[type='checkbox']").attr("id") + index);
+        $(this).find("label").attr("for", $(this).find("label").attr("id") + index);
+    });
+}
+
+function DisplaySSNs() {
+    if ($("#prtSSNDisplay").is(':checked') == true) {
+        var str = $('#hdnfield').val();
+        $("#prtMaskedSSN").text(str);
+    }
+    else if ($("#prtSSNDisplay").length != 0) {
+        var str = $('#hdnfield').val();
+        $("#prtMaskedSSN").text('XXX-XX-' + str.substr(str.length - 4));
+    }
+	
+	$('[id*="lblSSN"]').attr('for', 'prtMaskedSSN');
+
+    if ($("#prtSSNLastFourDigitsDisplay").is(':checked') == true) {
+        $("#prtSSNLastFourDigits input").get(0).setAttribute('type', 'text');
+    }
+    else if ($("#prtSSNLastFourDigitsDisplay").length != 0) {
+        $("#prtSSNLastFourDigits input").get(0).setAttribute('type', 'password');
+    }
+
+    if ($("#prtOtherSSN1Display").is(':checked') == true) {
+        $("#prtOtherSSN1 input").get(0).setAttribute('type', 'text');
+    }
+    else if ($("#prtOtherSSN1Display").length != 0) {
+        $("#prtOtherSSN1 input").get(0).setAttribute('type', 'password');
+    }
+
+    if ($("#prtOtherSSN2Display").is(':checked') == true) {
+        $("#prtOtherSSN2 input").get(0).setAttribute('type', 'text');
+    }
+    else if ($("#prtOtherSSN2Display").length != 0) {
+        $("#prtOtherSSN2 input").get(0).setAttribute('type', 'password');
+    }
+}
+
+function DisplaySSNName() {
+    var rbOpt = $("#prtIsNameSameAsSSN input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[1].checked == true) {
+        $(".trProvideNameSSN").show();
+    }
+    else if (rbOpt.length != 0) {
+        $(".trProvideNameSSN").hide();
+    }
+}
+
+function FormatInput(value) {
+    var returnVal = value;
+    if (returnVal != undefined) {
+        if (returnVal.length >= 3) {
+            if (returnVal.length < 7) {
+                returnVal = returnVal.substr(0, 3) + returnVal.substr(4);
+            }
+            else if (returnVal.length >= 7 && returnVal.length <= 11) {
+                returnVal = returnVal.substr(0, 3) + returnVal.substr(4, 2) + returnVal.substr(7);
+            }
+        }
+    }
+    return returnVal;
+}
+// END - SCR_NC_30 – Applicant Information
+
+// BEGIN - SCR_NC_31 – Driver License or ID Card Information
+function InitializeDriverLicenseIDCardInformationEvents() {
+    DisplayDMVInformation();
+
+    $("#prtHasStateId input[type=radio]").change(function () {
+        DisplayDMVInformation();
+    });
+}
+
+function DisplayDMVInformation() {
+    var rbOpt = $("#prtHasStateId input[type=radio]");
+    if (rbOpt.length > 0) {
+        if (rbOpt[0].checked == true) {
+            $(".providDMVInfo").show();
+        }
+        else {
+            $(".providDMVInfo").hide();
+        }
+    }
+}
+// END - SCR_NC_31 – Driver License or ID Card Information
+
+// BEGIN - SCR_NC_32 – Prior Claim Information
+function InitializePriorClaimInformationEvents() {
+    DisplayRecentClaimAndDate(); // Call to ensure controls are displayed on pageload if claimant already provided
+
+    // When Q1 changes, show/hide the recent claim filed fields
+    $('#prtFileUIDIPastTwoYears input[type=radio]').change(function () {
+        DisplayRecentClaimAndDate(); 
+    });
+}
+
+function DisplayRecentClaimAndDate() {
+    var rbFileUIDIPastTwoYears = $('#prtFileUIDIPastTwoYears input[type=radio]');
+    if (rbFileUIDIPastTwoYears.length > 0) {
+        if (rbFileUIDIPastTwoYears[0].checked == true) {
+            $(".trRecentClaimAndDateInfo").show();
+        }
+        else {
+            $(".trRecentClaimAndDateInfo").hide();
+        }
+    }
+}
+// END - SCR_NC_32 – Prior Claim Information
+
+// BEGIN - SCR_NC_33 – Contact Information
+function InitializeContactInformationEvents() {
+    DisplayResdAddress();
+    $("[id$='prtIsResdAndMailingAddressSame'] input[type=radio]").change(function () {  
+        DisplayResdAddress();
+    });
+}
+
+function DisplayResdAddress() {
+    var rbOpt = $("[id$='prtIsResdAndMailingAddressSame'] input[type=radio]"); 
+    if (rbOpt.length != 0 && rbOpt[1].checked == true) {
+        $("[id$='pnlResdAddress']").removeClass("hidden");
+    }
+    else if (rbOpt.length != 0) {
+        $("[id$='pnlResdAddress']").addClass("hidden");
+    }
+}
+// END - SCR_NC_33 – Contact Information
+
+//BEGIN - SCR_NC_34 - Digital Payment Option Information
+function InitializeDigitalPaymentOptionInformationEvents() {
+    DisplayDigitalPaymentOptionInformation();
+
+    $("#prtCanDigitalPaymentOptionId input[type=radio]").change(function () {
+        DisplayDigitalPaymentOptionInformation();
+    });
+
+}
+
+function DisplayDigitalPaymentOptionInformation() {
+    var rbOpt = $("#prtCanDigitalPaymentOptionId input[type=radio]");
+
+    $("#prtClaimentEmailId input").attr("disabled", "disabled");
+    if (rbOpt.length > 0) {
+        if (rbOpt[0].checked == true) {
+            $("[id$='digitalPaymentOptionInfo']").show();       
+        }
+        else {
+            $("[id$='digitalPaymentOptionInfo']").hide(); 
+        }
+    }
+}
+
+//END - ScR_NC_34 - Digital Payment Option Information
+// BEGIN - SCR_NC_40 – Last Employer Information
+function InitializeLastEmployerInformationEvents() {
+    WagesInformationDisplay(); // Call to ensure controls are displayed on pageload if claimant already provided
+    TotalWagesCalculation(); // Call to ensure total wages are calculated on pageload
+    OtherIncomeDisplay(); // Call to ensure controls are enabled/disabled based on previous claimant answers
+    $(".estimatedCheckBoxTopAlign").each(function (index) {
+        $(this).find("input[type='checkbox']").attr("id", "chkValue" + index);
+        $(this).find("label").attr("for", "chkValue" + index);
+    });
+
+    // When LastDateWorked changes, display the wages textboxes (disabled/enabled as required)
+    $("#prtLastDateWorked input[type='text']").bind('input propertychange paste change', function () {
+        WagesInformationDisplay();
+    });
+
+    // When any wages text box is updated, total wages should recalculate
+    $("[id*='prtDailyGrossWages']").each(function () {
+        $(this).bind('input propertychange paste change', function () {
+            TotalWagesCalculation();
+        });
+    });
+
+    $("#divOtherIncomeInformation input[type='checkbox']").each(function () {
+        $(this).change(function () {
+            OtherIncomeDisplay();
+        });
+    });
+
+}
+
+// Other Types of Income Functions
+function OtherIncomeDisplay() {
+
+    $("#divOtherIncomeInformation input[type='checkbox']").each(function (index) {
+        var checkBoxIndex = index;
+        if ($(this).is(':checked') == true) {
+            $("#divOtherIncomeInformation input[type='text']").each(function (index) {
+                // debugger;
+                var trueIndex = parseInt(parseFloat(index / 3));
+                if (checkBoxIndex == undefined || checkBoxIndex == trueIndex) {
+                    if ($(this).parent().attr("class") != "aspNetDisabled") {
+                        $(this).show();
+                        var pnlLastEmployerOtherIncomeTemplate = GetClientID("pnlLastEmployerOtherIncomeTemplate_" + checkBoxIndex);
+                        var lblAmount = GetClientID("lblAmount_" + checkBoxIndex);
+                        var lblFromDate = GetClientID("lblFromDate_" + checkBoxIndex);
+                        var lbltoDate = GetClientID("lblToDate_" + checkBoxIndex);
+                        var lblOtherPayCommentMaxChars = GetClientID("lblOtherPayCommentMaxChars");
+                        var lblOPExplain = GetClientID("lblOPExplain");
+                        var lbl4e1 = GetClientID("lbl4e1");
+                        $("#" + lblAmount).show();
+                        $("#" + lblFromDate).show();
+                        $("#" + lbltoDate).show();
+                        $("#" + pnlLastEmployerOtherIncomeTemplate).show();
+
+                        var pnlOtherPayComment = GetClientID("pnlOtherPayComment");
+
+                        if ($('#' + GetClientID("chkValue_4")).prop('checked')) {
+                            //debugger;
+                            $("#" + lblOtherPayCommentMaxChars).show();
+                            $("#" + lblOPExplain).show();
+                            $("#" + lbl4e1).show();
+                            $("#" + pnlOtherPayComment).show();
+
+                        }
+                        else {
+                            //  debugger;
+                            $("#" + lblOtherPayCommentMaxChars).hide();
+                            $("#" + lblOPExplain).hide();
+                            $("#" + lbl4e1).hide();
+                            $("#" + pnlOtherPayComment).hide();
+
+                        }
+                        //if ($('#chkValue4').prop('checked')) {
+                        //    debugger;
+                        //    $("#" + lblOtherPayCommentMaxChars).show();
+                        //    $("#" + lblOPExplain).show();
+                        //    $("#" + lbl4e1).show();
+
+                        //}
+                        //else {
+                        //    debugger;
+                        //    $("#" + lblOtherPayCommentMaxChars).hide();
+                        //    $("#" + lblOPExplain).hide();
+                        //    $("#" + lbl4e1).hide();    
+
+                        //}
+
+                    }
+                }
+            });
+            $("#divOtherIncomeInformation input[type='image']").each(function (index) {
+                var trueIndex = parseInt(parseFloat(index / 2));
+                if (checkBoxIndex == undefined || checkBoxIndex == trueIndex) {
+                    if ($(this).parent().attr("class") != "aspNetDisabled") {
+                        $(this).show();
+                        $(this).css("opacity", "1.0");
+                    }
+                }
+            });
+            if (checkBoxIndex == ($("#divOtherIncomeInformation input[type='checkbox']").length - 1)) {
+                if ($("#prtOtherPayComment textarea").parent().attr("class") != "aspNetDisabled") {
+                    //$("#prtOtherPayComment textarea").removeAttr("disabled");
+                    $("#prtOtherPayComment textarea").show();
+                }
+            }
+        }
+        else {
+            $("#divOtherIncomeInformation input[type='text']").each(function (index) {
+                var trueIndex = parseInt(parseFloat(index / 3));
+                //debugger;
+                if (checkBoxIndex == undefined || checkBoxIndex == trueIndex) {
+                    $(this).hide();
+                    $(this).val("");
+                    var pnlLastEmployerOtherIncomeTemplate = GetClientID("pnlLastEmployerOtherIncomeTemplate_" + checkBoxIndex);
+                    var lblAmount = GetClientID("lblAmount_" + checkBoxIndex);
+                    var lblFromDate = GetClientID("lblFromDate_" + checkBoxIndex);
+                    var lbltoDate = GetClientID("lblToDate_" + checkBoxIndex);
+                    var pnlOtherPayComment = GetClientID("pnlOtherPayComment");
+
+                    $("#" + lblAmount).hide();
+                    $("#" + lblFromDate).hide();
+                    $("#" + lbltoDate).hide();
+                    $("#" + pnlLastEmployerOtherIncomeTemplate).hide();
+                    $("#" + pnlOtherPayComment).hide();
+
+                    var lblOtherPayCommentMaxChars = GetClientID("lblOtherPayCommentMaxChars");
+                    var lblOPExplain = GetClientID("lblOPExplain");
+                    var lbl4e1 = GetClientID("lbl4e1");
+                    if ($('#chkValue4').prop('checked')) {
+                        $("#" + lblOtherPayCommentMaxChars).show();
+                        $("#" + lblOPExplain).show();
+                        $("#" + lbl4e1).show();
+
+                    }
+                    else {
+                        $("#" + lblOtherPayCommentMaxChars).hide();
+                        $("#" + lblOPExplain).hide();
+                        $("#" + lbl4e1).hide();
+                    }
+                }
+
+
+
+            });
+            $("#divOtherIncomeInformation input[type='image']").each(function (index) {
+                var trueIndex = parseInt(parseFloat(index / 2));
+                if (checkBoxIndex == undefined || checkBoxIndex == trueIndex) {
+                    $(this).hide();
+                    $(this).css("opacity", "0.5");
+                }
+            });
+            if (checkBoxIndex == ($("#divOtherIncomeInformation input[type='checkbox']").length - 1)) {
+
+                $("#prtOtherPayComment textarea").hide();
+                $("#prtOtherPayComment textarea").val("");
+            }
+        }
+    });
+}
+
+function GetClientID(asp_net_id) {
+    return $("[id$=" + asp_net_id + "]").attr("id");
+};
+// Wages Information Functions
+function WagesInformationDisplay() {
+    var firstDay, lastDay, currentDay, ldwDate;
+    var lastDateWorked = $("#prtLastDateWorked input[type='text']").val();
+    $("#prtTotalDailyGrossWages input[type='text']").attr("disabled", "true");
+
+    if (lastDateWorked != "" && isValidDateFormat(lastDateWorked) == true) {
+        // If Claimant entered a date and it is in a valid format (MM/DD/YYYY)
+        var newClaimPauseInd = $("#hdnNewClaimPauseInd").val();
+
+        if (newClaimPauseInd == "True") {
+
+            firstDay = getFirstDayOfTheWeek(new Date(lastDateWorked));
+            lastDay = getLastDayOfTheWeek(new Date(lastDateWorked));
+            currentDay = lastDateWorked;
+            ldwDate = $("#hdnLDWDate").val();
+            if (lastDateWorked >= ldwDate) {
+                if ($("#hdnDateFormat").val() == "") {
+                    var dateFormatCollection = [
+                        $("#lblLastWageDay1").text(),
+                        $("#lblLastWageDay2").text(),
+                        $("#lblLastWageDay3").text(),
+                        $("#lblLastWageDay4").text(),
+                        $("#lblLastWageDay5").text(),
+                        $("#lblLastWageDay6").text(),
+                        $("#lblLastWageDay7").text()];
+                    $("#hdnDateFormat").val(JSON.stringify(dateFormatCollection));
+                }
+                dateFormatCollection = JSON.parse($("#hdnDateFormat").val());
+                $("#lblLastWageDay1").text(dateFormatCollection[0].replace("{0}", Adddate(new Date(firstDay), 0)));
+                $("#lblLastWageDay2").text(dateFormatCollection[1].replace("{0}", Adddate(new Date(firstDay), 1)));
+                $("#lblLastWageDay3").text(dateFormatCollection[2].replace("{0}", Adddate(new Date(firstDay), 2)));
+                $("#lblLastWageDay4").text(dateFormatCollection[3].replace("{0}", Adddate(new Date(firstDay), 3)));
+                $("#lblLastWageDay5").text(dateFormatCollection[4].replace("{0}", Adddate(new Date(firstDay), 4)));
+                $("#lblLastWageDay6").text(dateFormatCollection[5].replace("{0}", Adddate(new Date(firstDay), 5)));
+                $("#lblLastWageDay7").text(dateFormatCollection[6].replace("{0}", Adddate(new Date(firstDay), 6)));
+            }
+        }
+        else {
+            firstDay = $("#hdnEffectiveDate").val();
+            lastDay = $("#hdnWeekEndDate").val();
+            currentDay = $("#hdnCurrentDate").val();
+        }
+
+        var dayIndex = new Date(lastDateWorked).getDay();
+        var enable = false;
+        if (isValidCalendarDate(lastDateWorked) == true) {
+            enable = (compareDates("GreaterThanEqual", lastDateWorked, firstDay) && compareDates("LessThanEqual", lastDateWorked, lastDay) && compareDates("LessThanEqual", lastDateWorked, currentDay));
+        }
+        if (newClaimPauseInd == "True") {
+            if (isValidCalendarDate(lastDateWorked) == true) {
+                var currentDate = $("#hdnCurrentDate").val();
+                if (compareDates("LessThan", lastDateWorked, ldwDate) || compareDates("GreaterThan", lastDateWorked, currentDate))
+                    enable = false;
+            }
+        }
+
+        if (enable) {
+            // Display the wages text boxes; disable those that are less than the current day.
+            $(".trWagesInfo").show();
+            $("[id*='prtDailyGrossWages'] input[type='text']").each(function (index) {
+                if (index <= dayIndex) {
+                    if ($(this).parent().attr("class") != "aspNetDisabled") {
+                        $(this).removeAttr("disabled");
+                    }
+                }
+                else {
+                    $(this).attr("disabled", "true");
+                    $(this).val(""); // Remove Wages
+                }
+            });
+        }
+        else {
+            // hide the wages text boxes
+            $(".trWagesInfo").hide();
+            $("[id*='prtDailyGrossWages'] input[type='text']").each(function () {
+                $(this).val(""); // Remove Wages
+            });
+        }
+    }
+    else {
+        // hide the wages text boxes
+        $(".trWagesInfo").hide();
+        $("[id*='prtDailyGrossWages'] input[type='text']").each(function () {
+            $(this).val(""); // Remove Wages
+        });
+    }
+   
+    TotalWagesCalculation();
+}
+
+function TotalWagesCalculation() {
+    var totalWages = 0;
+    $("[id*='prtDailyGrossWages'] input[type='text']").each(function () {
+        var textVal = $(this).val().replace(/\$/g, '').replace(/,/g, '');
+        if (isValidNumber(textVal) == true) {
+            totalWages += parseFloat(textVal) || 0;
+        }
+    });
+    if (totalWages == 0) {
+        totalWages = "0.00";
+    }
+    else {
+        totalWages = totalWages.toFixed(2);
+    }
+    $("#prtTotalDailyGrossWages input[type='text']").val(totalWages);
+}
+
+
+
+// Helper Functions
+function isValidDateFormat(value) {
+    var validDateFormat = new RegExp("^\\d{2}\/\\d{2}\/\\d{4}$");
+    var returnValue = false;
+    if (value != undefined) {
+        if (validDateFormat.test(value)) {
+            returnValue = true;
+        }
+    }
+    return returnValue;
+}
+
+function isValidNumber(value) {
+    var validNumFormat = new RegExp("^\\d{0,6}(\\.\\d{1,2}|\\.)?$");
+    var returnValue = false;
+    if (value != undefined) {
+        if (validNumFormat.test(value)) {
+            returnValue = true;
+        }
+    }
+    return returnValue;
+}
+
+function compareDates(operand, val1, val2) {
+    var date1 = new Date(val1);
+    var date2 = new Date(val2);
+    var returnVal = false;
+
+    if (operand == "GreaterThanEqual") {
+        if (date1 >= date2) {
+            returnVal = true;
+        }
+    }
+    else if (operand == "LessThanEqual") {
+        if (date1 <= date2) {
+            returnVal = true;
+        }
+    }
+    else if (operand == "LessThan") {
+        if (date1 < date2) {
+            returnVal = true;
+        }
+    }
+    else if (operand == "GreaterThan") {
+        if (date1 > date2) {
+            returnVal = true;
+        }
+    }
+    return returnVal;
+}
+// END - SCR_NC_40 – Last Employer Information
+
+// BEGIN - SCR_NC_42/43 – Enter Last Employer (Details)
+function InitializeEnterLastEmployerDetails() {
+    PhysicalAddressDisplay(); // Call to ensure controls are displayed on pageload if claimant already provided
+    LastEmployerDetailsDisplay(); // Call to ensure controls are displayed on pageload if claimant already answered Q1
+
+    $("[id$='prtOptSamePhysicalAddress'] input[type=radio]").each(function (index) {
+        $(this).attr("id", $("[id$='prtOptSamePhysicalAddress'] input[type=radio]").attr("id") + index);
+    });
+    $("[id$='prtOptSamePhysicalAddress'] label").each(function (index) {
+        $(this).attr("for", $("[id$='prtOptSamePhysicalAddress'] label").attr("for") + index);
+    });
+
+    // When Q2 changes, display the physcial address fields
+    $("[id$='prtOptSamePhysicalAddress'] input[type=radio]").change(function () {
+        PhysicalAddressDisplay();
+    });
+    $("[id$='prtHasAnyLastEmployer'] input[type=radio]").change(function () {
+        LastEmployerDetailsDisplay();
+    });
+}
+
+function PhysicalAddressDisplay() {
+    var rbOptPhysAddress = $("[id$='prtOptSamePhysicalAddress'] input[type=radio]");
+    if (rbOptPhysAddress.length != 0 && rbOptPhysAddress[1].checked == true) {
+        $("#divPhysicalAddressInfo").removeClass("hidden");
+    }
+    else if (rbOptPhysAddress.length != 0) {
+        $("#divPhysicalAddressInfo").addClass("hidden");
+    }
+}
+
+function LastEmployerDetailsDisplay() {
+    var prtHasAnyLastEmployer = $("[id$='prtHasAnyLastEmployer'] input[type = radio]");
+    if (prtHasAnyLastEmployer.length != 0 && prtHasAnyLastEmployer[0].checked == true) {
+        $("[id$='divLastEmployerDetails']").show();  
+    }
+    else if (prtHasAnyLastEmployer.length != 0) {
+        PhysicalAddressDisplay(); // Call to ensure control is reset
+        $("[id$='divLastEmployerDetails']").hide();
+    }
+}
+
+// END - SCR_NC_42/43 – Enter Last Employer (Details)
+
+// BEGIN - SCR_NC_50 – Employment Information
+function InitializeEmploymentInformationEvents() {
+    DisplayAddEmployerInformation();
+    DisableAndAddPlaceholderText();
+    FocusElement();
+
+    $("#gvBasePeriodEmployers input[type='radio']").each(function (index) {
+        $(this).attr("id", $(this).attr("id") + index);
+    });
+    $("#gvBasePeriodEmployers label").each(function (index) {
+        $(this).attr("for", $(this).attr("for") + index);
+    });
+    $("#prtWorkedForAnyOtherEmployerNotListed input[type='radio']").each(function (index) {
+        $(this).attr("id", $(this).attr("id") + "prtWorkedForAnyOtherEmployerNotListed" + index);
+    });
+    $("#prtWorkedForAnyOtherEmployerNotListed label").each(function (index) {
+        $(this).attr("for", $(this).attr("for") + "prtWorkedForAnyOtherEmployerNotListed" + index);
+    });
+
+    $("[id$='prtWorkedForAnyEmployer'] input[type=radio]").change(function () {
+        DisplayAddEmployerInformation();
+    });
+
+    $("#gvBasePeriodEmployers tr").each(function (index) {
+        if (index > 0) {
+            var rbList = $(this).find("input[type=radio]");
+            var isAdditionalInformationProvided = $(this).find("#hdnIsAdditionalInformationProvided");
+            var updateLink = $(this).find("#lblUpdate");
+
+            var additionalInformationStatus = $(this).find("#lblIsAdditionalInformationProvided");
+            additionalInformationStatus.text(EmployerAdditionalInformationStatus(rbList, ConvertToBoolean(isAdditionalInformationProvided.val())));
+
+            if (rbList[0].checked == true) {
+                updateLink.show();
+            }
+            else {
+                updateLink.hide();
+            }
+        }
+    });
+}
+
+function DisplayAddEmployerInformation() {
+    var rbOpt = $("[id$='prtWorkedForAnyEmployer'] input[type=radio]");
+    var prtWorkedForAnyOtherEmployerNotListed = $("[id$='prtWorkedForAnyOtherEmployerNotListed'] input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".addEmployerInformationGroup").show();
+    }
+    else if (rbOpt.length != 0) {
+        if (rbOpt[1].checked == true) {
+            prtWorkedForAnyOtherEmployerNotListed[1].checked = true;
+        }
+        $(".addEmployerInformationGroup").hide();
+    }
+}
+
+function FocusElement() {
+    var hdnFocusId = $("#hdnFocusId");
+
+    if ($(hdnFocusId).length == 0)
+        return;
+
+    var id = $(hdnFocusId).val();
+
+    if (id.length == 0)
+        return;
+
+    var selector = "[id$=" + id + "]";
+
+    $(selector).focus();
+    $(hdnFocusId).val('');
+}
+
+function WorkedForEmployerChanged(rbSpanList, rowIndex, isAdditionalInformationProvided) {
+    var gvRowIndex = parseInt(rowIndex) + 1;
+    var rbList = rbSpanList.getElementsByTagName("input");
+    var status = EmployerAdditionalInformationStatus(rbList, ConvertToBoolean(isAdditionalInformationProvided));
+    $($("#gvBasePeriodEmployers tr").get(gvRowIndex)).find("#lblIsAdditionalInformationProvided").text(status);
+
+    var updateLink = $($("#gvBasePeriodEmployers tr").get(gvRowIndex)).find("#lblUpdate");
+    if (rbList[0].checked == true) {
+        updateLink.show();
+    }
+    else {
+        updateLink.hide();
+    }
+}
+
+function EmployerAdditionalInformationStatus(rbList, isAdditionalInformationProvided) {
+    var returnVal = "";
+
+    var currSelection;
+    if (rbList[0].checked == true) {
+        currSelection = true;
+    }
+    else if (rbList[1].checked == true) {
+        currSelection = false;
+    }
+
+    if (currSelection != undefined) {
+        if (currSelection == true) {
+            if (isAdditionalInformationProvided == true) {
+                returnVal = EmploymentInformationLabels.StatusComplete;
+            }
+            else {
+                returnVal = EmploymentInformationLabels.StatusIncomplete;
+            }
+        }
+        else {
+            returnVal = EmploymentInformationLabels.StatusNotApplicable;
+        }
+    }
+    else {
+        returnVal = EmploymentInformationLabels.StatusIncomplete;
+    }
+
+    return returnVal;
+}
+
+function ConvertToBoolean(value) {
+    if (value == undefined) {
+        return;
+    }
+    else {
+        return value.toString().toLowerCase() == "true" ? true : false;
+    }
+}
+
+function DisableAndAddPlaceholderText() {
+    var prtBusinessType = $("[id$='prtBusinessType'] textarea");
+    var prtWorkType = $("[id$='prtWorkType'] textarea");
+    if (prtBusinessType.length != 0) {
+        if (prtBusinessType.val() == "") {
+            prtBusinessType.attr('placeholder', EmploymentInformationLabels.PlaceholderAddBusinessType);
+        }
+        prtBusinessType.attr("disabled", "disabled");
+    }
+    if (prtWorkType.length != 0) {
+        if (prtWorkType.val() == "") {
+            prtWorkType.attr('placeholder', EmploymentInformationLabels.PlaceholderAddWorkType);
+        }
+        prtWorkType.attr("disabled", "disabled");
+    }
+}
+
+// END - SCR_NC_50 – Employment Information
+
+// BEGIN - SCR_NC_70 – Availability Information
+
+function InitializeAvailabilityInformationEvents() {
+    AddAvailabilityInformationPlaceholderText();
+    SeasonalWorkInformation();
+    ReturntoWorkInformation();
+    JobOffer();
+    SelfEmploymentInformation();
+    TradeAssociationInformation();
+    ClearHiddenDataTypeValidationsAvailabilityInformation();
+    FocusElement();
+
+    $("[id$='optSeasonalWork'] input[type=radio]").change(function () {
+        SeasonalWorkInformation();
+    });
+
+    $("[id$='optReturnToWork'] input[type=radio]").change(function () {
+        ReturntoWorkInformation();
+    });
+    $("[id$='optAvailableFullTime'] input[type=radio]").change(function () {
+        JobOffer();
+    });
+
+    $("[id$='optWillingAvailableFullTime'] input[type=radio]").change(function () {
+        ModifyJobOffer();
+    });
+
+    $("[id$='optAvailablePartTime'] input[type=radio]").change(function () {
+        PartTimeJobOffer();
+    });
+    $("#lstOver50PercentPT").on("change", "select", function () {
+        WorkedParttime();
+    });
+    $("[id$='optSameHoursPT'] input[type=radio]").change(function () {
+        PartTimeJobOfferAccept();
+    });
+
+    $("[id$='optSelfEmployed'] input[type=radio]").change(function () {
+        SelfEmploymentInformation();
+    });
+
+    $("[id$='optModifySelfEmployed'] input[type=radio]").change(function () {
+        ModifySelfEmploymentInformation();
+    });
+    $("[id$='optUnion'] input[type=radio]").change(function () {
+        TradeAssociationInformation();
+    });
+}
+
+function AddAvailabilityInformationPlaceholderText() {
+	var txtUsualOccupation = $("[id$='txtUsualOccupation'] textarea");
+	var txtOtherSkills = $("[id$='txtOtherSkills'] textarea");
+	var txtUsualOccupationPT = $("[id$='txtUsualOccupationPT'] textarea");
+	var txtExplainNotSameHoursPT = $("[id$='txtExplainNotSameHoursPT'] textarea");
+    if (txtUsualOccupation.length != 0) {
+        if (txtUsualOccupation.val() == "") {
+            txtUsualOccupation.attr("placeholder", PlaceholderAddWorkType);
+        }
+        txtUsualOccupation.attr("disabled", "disabled");
+    }
+    if (txtOtherSkills.length != 0) {
+        if (txtOtherSkills.val() == "") {
+            txtOtherSkills.attr("placeholder", PlaceholderAddWorkType);
+        }
+        txtOtherSkills.attr("disabled", "disabled");
+    }
+    if (txtUsualOccupationPT.length != 0) {
+        if (txtUsualOccupationPT.val() == "") {
+            txtUsualOccupationPT.attr("placeholder", PlaceholderAddWorkType);
+        }
+		txtUsualOccupationPT.attr("disabled", "disabled");
+	}	
+}
+
+//function to hide/unhide SeasonalWorkInformation
+function SeasonalWorkInformation() {
+    //var rbOpt = $("#optSeasonalWork input[type=radio]");
+    var rbOpt = $("[id$='optSeasonalWork'] input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".SeasonalWork").show();
+        $("[id$='WorkAvailabilitySeasonalWork']").show();
+    }
+    else {
+        $(".SeasonalWork").hide();
+        $("[id$='WorkAvailabilitySeasonalWork']").hide();
+    }
+}
+
+// function to hide/unhide ReturntoWorkInformation
+function ReturntoWorkInformation() {
+    var rbOpt = $("[id$='optReturnToWork'] input[type=radio]");
+    //var rbOpt = $("#optReturnToWork input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".Returnworkdate").show();
+        $("[id$='WorkAvailabilityReturnworkdate']").show();
+    }
+    else {
+        $(".Returnworkdate").hide();
+        $("[id$='WorkAvailabilityReturnworkdate']").hide();
+    }
+}
+
+// function to hide/unhide JobOfferInformation
+function JobOffer() {
+    var rbOpt = $("[id$='optAvailableFullTime'] input[type=radio]");
+    //var rbOpt = $("#optAvailableFullTime input[type=radio]");
+
+    if (rbOpt.length != 0 && rbOpt[1].checked == true) {
+        $(".CannotWorkFT").show();
+        $("[id$='WorkAvailabilityCannotWorkFT']").show();
+        ModifyJobOffer();
+    }
+    else {
+        $(".ModifyCannotWorkFT").hide();
+        $(".CannotWorkFT").hide();
+        $(".CannotWorkPT").hide();
+        $(".CanWorkPT").hide();
+        $(".Over50PercentPT").hide();
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+        $("[id$='WorkAvailabilityCannotWorkFT']").hide();
+    }
+}
+
+// function to hide/unhide ModifyJobOfferInformation
+function ModifyJobOffer() {
+    var rbOpt = $("[id$='optWillingAvailableFullTime'] input[type=radio]");
+    //var rbOpt = $("#optWillingAvailableFullTime input[type=radio]");
+
+    if (rbOpt.length != 0 && rbOpt[1].checked == true) {
+        $(".ModifyCannotWorkFT").show();
+        PartTimeJobOffer();
+    }
+    else {
+        $(".ModifyCannotWorkFT").hide();
+        $(".CannotWorkPT").hide();
+        $(".CanWorkPT").hide();
+        $(".Over50PercentPT").hide();
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+    }
+}
+
+// function to hide/unhide PartTimeJobOfferInformation
+function PartTimeJobOffer() {
+    var rbOpt = $("[id$='optAvailablePartTime'] input[type=radio]");
+    //var rbOpt = $("#optAvailablePartTime input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[1].checked == true) {
+        $(".CannotWorkPT").show();
+        $(".CanWorkPT").hide();
+        $(".Over50PercentPT").hide();
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+    }
+    else if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".CanWorkPT").show();
+        $(".CannotWorkPT").hide();
+        WorkedParttime();
+    }
+
+    else {
+        $(".CanWorkPT").hide();
+        $(".CannotWorkPT").hide();
+        $(".Over50PercentPT").hide();
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+    }
+}
+// function to hide/unhide WorkedParttimeInformation
+function WorkedParttime() {
+    //InitialQuestionsYesNoCode' is the collection variable defined in WorkAvailabilityTemplate.ascx which internally binds
+    var ddOpt = $("#lstOver50PercentPT select");
+    if (ddOpt.length > 0) {
+        if (ddOpt.length != 0 && (ddOpt.val() == InitialQuestionsYesNoCode.YesSelected) || (ddOpt.val() == InitialQuestionsYesNoCode.UnsureSelected)) {
+            $(".Over50PercentPT").show();
+            PartTimeJobOfferAccept();
+        }
+        else {
+            $(".Over50PercentPT").hide();
+            $(".SameHoursPTYes").hide();
+            $(".SameHoursPTNo").hide();
+        }
+    }
+}
+
+// function to hide/unhide PartTimeJobOfferAcceptInformation
+function PartTimeJobOfferAccept() {
+    var rbOpt = $("[id$='optSameHoursPT'] input[type=radio]");
+    //var rbOpt = $("#optSameHoursPT input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".SameHoursPTYes").show();
+        $(".SameHoursPTNo").hide();
+    }
+    else if (rbOpt.length != 0 && rbOpt[1].checked == true) {
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").show();
+    }
+    else {
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+    }
+}
+
+// function to hide/unhide SelfEmploymentInformation
+function SelfEmploymentInformation() {
+    var rbOpt = $("[id$='optSelfEmployed'] input[type=radio]");
+    //var rbOpt = $("#optSelfEmployed input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".SelfEmployed").show();
+        ModifySelfEmploymentInformation();
+        $("[id$='WorkAvailabilitySelfEmployed']").show();
+    }
+    else {
+        $(".SelfEmployed").hide();
+        $(".ModifySelfEmployed").hide();
+        $("[id$='WorkAvailabilitySelfEmployed']").hide();
+    }
+}
+
+//function to hide/unhide Modify SelfEmployementInformation
+
+function ModifySelfEmploymentInformation() {
+    var rbOpt = $("[id$='optModifySelfEmployed'] input[type=radio]");
+    //var rbOpt = $("#optModifySelfEmployed input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[1].checked == true) {
+        $(".ModifySelfEmployed").show();
+    }
+    else {
+        $(".ModifySelfEmployed").hide();
+    }
+}
+
+// function to hide/unhide TradeAssociationInformation
+
+function TradeAssociationInformation() {
+    var rbOpt = $("[id$='optUnion'] input[type=radio]");
+    //var rbOpt = $("#optUnion input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".Union").show();
+        $("[id$='WorkAvailabilityUnion']").show();       
+    }
+    else {
+        $(".Union").hide();
+        $("[id$='WorkAvailabilityUnion']").hide();  
+    }
+}
+
+function ClearHiddenDataTypeValidationsAvailabilityInformation() {
+    $("[id$='prtSeasonBeginDate'] input[type='text']").bind("hide", function () {
+        if (isValidDateFormat($(this).val()) == false || isValidCalendarDate($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+    $("[id$='prtSeasonEndDate'] input[type='text']").bind("hide", function () {
+        if (isValidDateFormat($(this).val()) == false || isValidCalendarDate($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+    $("[id$='prtReturnWorkDate'] input[type='text']").bind("hide", function () {
+        if (isValidDateFormat($(this).val()) == false || isValidCalendarDate($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+    $("[id$='txtAvgHoursPT'] input[type='text']").bind("hide", function () {
+        if (isValidInteger($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+}
+
+// END - SCR_NC_70 – Availability Information
+
+// BEGIN - SCR_NC_34 – Citizenship Statistical Information
+
+function InitializeCitizenshipInformationEvents() {
+    DisplayNonUSCitizenInformation();
+    DisplayUSCISInformation();
+    ClearHiddenDataTypeValidationsCitizenshipInformation();
+
+    $("[id$='optUSCISRegistered'] input[type='radio']").each(function (index) {
+        $(this).attr("id", $(this).attr("id") + index);
+    });
+    $("[id$='optUSCISRegistered'] label").each(function (index) {
+        $(this).attr("for", $(this).attr("for") + index);
+    });
+    $("[id$='optIsLegalToWorkInUs'] input[type='radio']").each(function (index) {
+        $(this).attr("id", $(this).attr("id") + "optIsLegalToWorkInUs" + index);
+    });
+    $("[id$='optIsLegalToWorkInUs'] label").each(function (index) {
+        $(this).attr("for", $(this).attr("for") + "optIsLegalToWorkInUs" + index);
+    });
+
+    $("[id$='optUSCitizen'] input[type=radio]").change(function () {
+        DisplayNonUSCitizenInformation();
+    });
+
+    $("[id$='optUSCISRegistered'] input[type=radio]").change(function () {
+        DisplayUSCISInformation();
+    });
+
+    $("#lstINSDoc").on("change", "select", function () {
+        $(".provideUSCISInfo input[type='text']").val("");
+        $("#prtPassportCountry select").val("0");
+        $(".provideUSCISInfo input[type='text'],#prtPassportCountry select").attr("disabled", "disabled");
+        DisplayUSCISControls(this);
+    });
+}
+
+function DisplayNonUSCitizenInformation() {
+    var rbOpt = $("[id$='optUSCitizen'] input[type=radio]");
+    if (rbOpt.length > 0) {
+        if (rbOpt[1].checked == true) {
+            $(".provideForeignInfo").show();
+            $("[id$='optUSCISRegistered'] input[type=radio]").trigger("change");
+            $("[id$='CitizenshipInfoProvideForeignInfo']").show();
+        }
+        else {
+            $(".provideForeignInfo").hide();
+            $(".provideUSCISInfo").hide();
+            $("[id$='optReceivingPension'] input[type='text']").val()
+            $("[id$='CitizenshipInfoProvideForeignInfo']").hide();
+        }
+    }
+}
+function DisplayUSCISInformation() {
+    var rbOptUSCitizen = $("[id$='optUSCitizen'] input[type=radio]");
+    var rbOptUSCISRegistered = $("[id$='optUSCISRegistered'] input[type=radio]");
+    if (rbOptUSCISRegistered.length > 0 && rbOptUSCitizen.length > 0) {
+        if (rbOptUSCitizen[1].checked == true && rbOptUSCISRegistered[0].checked == true) {
+            $(".provideUSCISInfo").show();
+            $(".provideUSCISInfo input,#prtPassportCountry select").attr("disabled", "disabled");
+            DisplayUSCISControls($("#lstINSDoc select"));
+        }
+        else {
+            $(".provideUSCISInfo").hide();
+        }
+    }
+}
+function DisplayUSCISControls(lstINSDoc) {
+    /********************************************************************************************************************************************
+    'USCISDocumentType' is the collection variable defined in CitizenshipInformationTemplate.ascx which internally binds
+    EDD.CCR.Utility.ReferenceTableConstant values using server tags.
+    *********************************************************************************************************************************************/
+
+    if (USCISDocumentType != undefined) {
+        if ($(lstINSDoc).parent().attr("class") != "aspNetDisabled") {
+            if ($(lstINSDoc).val() == USCISDocumentType.UnexpPassport) {
+                $("[id$='optIsLegalToWorkInUs'] input,#txtDocumentExpirationDate input,#txtPassportNumber input, #txtArrivalOrDepartureNumber input,#prtPassportCountry select").removeAttr("disabled");
+            }
+            if ($(lstINSDoc).val() == USCISDocumentType.RentryPermitI327 || $(lstINSDoc).val() == USCISDocumentType.RefugeeTravelDocumentI571 || $(lstINSDoc).val() == USCISDocumentType.EmpAuthCardI766) {
+                $("[id$='optIsLegalToWorkInUs'] input,#txtDocumentExpirationDate input,#txtAlienRegNumber input").removeAttr("disabled");
+            }
+            if ($(lstINSDoc).val() == USCISDocumentType.PermResidentCardI551 || $(lstINSDoc).val() == USCISDocumentType.EmpAuthCardI766) {
+                $("[id$='optIsLegalToWorkInUs'] input,#txtDocumentExpirationDate input,#txtAlienRegNumber input,#txtPermanentResidentCardNbr input").removeAttr("disabled");
+            }
+            if ($(lstINSDoc).val() == USCISDocumentType.ArrDepRecordI94) {
+                $("[id$='optIsLegalToWorkInUs'] input,#txtDocumentExpirationDate input,#txtArrivalOrDepartureNumber input").removeAttr("disabled");
+            }
+            if ($(lstINSDoc).val() == USCISDocumentType.ArrDepRecordI94UnexpPassport) {
+                $("[id$='optIsLegalToWorkInUs'] input,#txtDocumentExpirationDate input,#txtArrivalOrDepartureNumber input,#txtPassportNumber input,#txtVisaNumber input,#prtPassportCountry select").removeAttr("disabled");
+            }
+            if ($(lstINSDoc).val() == USCISDocumentType.OtherDocument) {
+                $("[id$='optIsLegalToWorkInUs'] input,#txtDocumentExpirationDate input,#txtArrivalOrDepartureNumber input,#txtAlienRegNumber input,#txtOtherDocumentDescription input, #txtPassportNumber input, #prtPassportCountry select").removeAttr("disabled");
+            }
+        }
+    }
+}
+
+function ClearHiddenDataTypeValidationsCitizenshipInformation() {
+    $("[id$='txtDocumentExpirationDate'] input[type='text']").bind("hide", function () {
+        if (isValidDateFormat($(this).val()) == false || isValidCalendarDate($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+}
+
+// END - SCR_NC_34 – Citizenship Statistical Information
+
+// BEGIN - SCR_NC_80 - Other Information
+
+function InitalizeOtherInformationEvents() {
+    DisplayPensionInformation();
+    DisplayWorkersCompensation();
+    DisplaySchoolInformation();
+    UpdateSchoolOrTrainingQuestions($("#optTrainingProgram select").val());
+    DisplayCoorperationRoleInformation();
+    ClearHiddenDataTypeValidationsOtherInformation();	
+
+    $("[id$='optReceivingPension'] input[type=radio]").change(function () {
+        DisplayPensionInformation();
+    });
+
+    $("[id$='optReceiveWorkComp'] input[type=radio]").change(function () {
+        DisplayWorkersCompensation();
+    });
+
+    $("[id$='optAttendingSchoolOrTraining'] input[type=radio]").change(function () {
+        DisplaySchoolInformation();
+    });
+
+    $("#optTrainingProgram").on("change", "select", function () {
+        UpdateSchoolOrTrainingQuestions($(this).val());
+    });
+
+    $("[id$='optTeachingCredential']").change(function () {
+        DisplayTeacherSeekingCredentialing();
+    });
+
+    $("[id$='optCorpUnionOfficer'] input[type=radio]").change(function () {
+        DisplayCoorperationRoleInformation();
+    });
+
+    $("[id$='optAttendingSchoolOrTraining'] input[type=radio]").trigger('change');
+
+    //function to display pension related information
+
+    function DisplayPensionInformation() {
+        var rbOpt = $("[id$='optReceivingPension'] input[type=radio]");
+        //var rbOpt = $("#optReceivingPension input[type=radio]");
+        if (rbOpt.length > 0) {
+            if (rbOpt[0].checked == true) {
+                $(".ReceivingPension").show();
+                $("[id$='OtherInfoReceivingPension']").show(); 
+            }
+            else {
+                $(".ReceivingPension").hide();
+                $("[id$='OtherInfoReceivingPension']").hide();
+            }
+        }
+    }
+
+    // function to display worker related compensation
+
+    function DisplayWorkersCompensation() {
+        var rbOpt = $("[id$='optReceiveWorkComp'] input[type=radio]");
+        //var rbOpt = $("#optReceiveWorkComp input[type=radio]");
+        if (rbOpt.length > 0) {
+            if (rbOpt[0].checked == true) {
+                $(".ReceiveWorkComp").show();
+                $("[id$='OtherInfoReceiveWorkComp']").show();
+            }
+            else {
+                $(".ReceiveWorkComp").hide();
+                $("[id$='OtherInfoReceiveWorkComp']").hide();
+            }
+        }
+    }
+
+    //function to display school related information
+
+    function DisplaySchoolInformation() {
+        var rbOpt = $("[id$='optAttendingSchoolOrTraining'] input[type=radio]");
+        //var rbOpt = $("#optAttendingSchoolOrTraining input[type=radio]");
+        if (rbOpt.length > 0) {
+            if (rbOpt[0].checked == true) {
+                $(".AttendingSchoolOrTraining").show();
+                //                $(".trWIOA").hide();
+                //                $(".trETP").hide();
+                //                $(".trTAA").hide();
+                //                $(".trCalWORKS").hide();
+                //                $(".trSFAAP").hide();
+                //                $(".trUTAJLM").hide();
+                //                $(".trEST").hide();
+                $("#optTrainingProgram select").trigger('change');
+                $("[id$='OtherInfoAttendingSchoolOrTraining']").show();
+                
+                //$(".TeachingCredential").hide();
+                DisplayTeacherSeekingCredentialing();
+                //$(".TeachingCredential").show();
+            }
+            else {
+                $(".AttendingSchoolOrTraining").hide();
+                $(".trWIOA").hide();
+                $(".trETP").hide();
+                $(".trTAA").hide();
+                $(".trCalWORKS").hide();
+                $(".trSFAAP").hide();
+                $(".trUTAJLM").hide();
+                $(".trEST").hide();
+                $(".TeachingCredential").hide();
+                //DisplayTeacherSeekingCredentialing();
+                $("[id$='OtherInfoAttendingSchoolOrTraining']").hide();
+            }
+        }
+    }
+
+    function UpdateSchoolOrTrainingQuestions(value) {
+        //console.log("UpdateSchoolOrTrainingQuestions function: val - " + value);
+
+        if (value != undefined) {
+            switch (parseInt(value, 10)) {
+                case SchoolAuthorizedFundedType.WorkforceInnovationandOpportunityAct:
+                    //  console.log("entering WIOA");
+                    $(".trWIOA").show();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case SchoolAuthorizedFundedType.EmploymentTrainingPanel:
+                    //  console.log("entering ETP");
+                    $(".trWIOA").hide();
+                    $(".trETP").show();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case SchoolAuthorizedFundedType.TradeAdjustmentAssistance:
+                    //  console.log("entering TAA");
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").show();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case SchoolAuthorizedFundedType.CaliforniaWorkOpportunityandResponsibilitytoKids:
+                    // console.log("entering CalWORKS");
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").show();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case SchoolAuthorizedFundedType.StateorFederalApprovedApprenticeshipProgram:
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").show();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case SchoolAuthorizedFundedType.JourneyLevelMember:
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").show();
+                    $(".trEST").hide();
+                    break;
+                case SchoolAuthorizedFundedType.EmployerSponsoredTraining:
+                    // console.log("entering EST");
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").show();
+                    break;
+                default:
+                    //  console.log("default case");
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+            }
+        }
+    }
+
+    //function to display Teacher credential related information
+
+    function DisplayTeacherSeekingCredentialing() {
+        var rbOpt = $("[id$='optTeachingCredential'] input[type=radio]");
+        //var rbOpt = $("#optTeachingCredential input[type=radio]");
+        if (rbOpt.length > 0) {
+            if (rbOpt[0].checked == true) {
+                $(".TeachingCredential").show();
+            }
+            else {
+                $(".TeachingCredential").hide();
+            }
+        }
+    }
+
+    //function to display Teacher credential related information
+
+    function DisplayCoorperationRoleInformation() {
+        var rbOpt = $("[id$='optCorpUnionOfficer'] input[type=radio]");
+        //var rbOpt = $("#optCorpUnionOfficer input[type=radio]");
+        if (rbOpt.length > 0) {
+            if (rbOpt[0].checked == true) {
+                $(".CorpUnionOfficer").show();
+                $("[id$='OtherInfoCorpUnionOfficer']").show();
+            }
+            else {
+                $(".CorpUnionOfficer").hide();
+                $("[id$='OtherInfoCorpUnionOfficer']").hide();
+            }
+        }
+    }
+}
+
+function ClearHiddenDataTypeValidationsOtherInformation() {
+    $("[id$='txtWCClaimDateFrom'] input[type='text']").bind("hide", function () {
+        if (isValidDateFormat($(this).val()) == false || isValidCalendarDate($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+    $("[id$='txtWCClaimDateTo'] input[type='text']").bind("hide", function () {
+        if (isValidDateFormat($(this).val()) == false || isValidCalendarDate($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+    $("[id$='txtSchoolStartDate'] input[type='text']").bind("hide", function () {
+        if (isValidDateFormat($(this).val()) == false || isValidCalendarDate($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+    $("[id$='txtSchoolEndDate'] input[type='text']").bind("hide", function () {
+        if (isValidDateFormat($(this).val()) == false || isValidCalendarDate($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+}
+
+// END - SCR_NC_80 - Other Information
+
+// BEGIN - UTILITY FUNCTIONS
+
+function MultilineTextBoxMaxLengthLimit() {
+    $("textarea").each(function () {
+        $(this).bind('input propertychange paste change', function () {
+            var maxlength = parseInt($(this).parent().attr("maxlength"));
+            var currLength = $(this).val().length;          
+            if (currLength > maxlength) {
+                $(this).val($(this).val().substring(0, 150));
+            }
+        });
+        $(this).attr('maxlength', $(this).parent().attr('maxlength'));
+    });
+}
+
+function SurveyMultilineTextBoxMaxLengthLimit() {
+    $("textarea").each(function () {
+        $(this).bind('input propertychange paste change', function () {
+            var maxlength = parseInt($(this).parent().attr("maxlength"));
+            var currLength = $(this).val().length;          
+            if (currLength > maxlength) {
+                $(this).val($(this).val().substring(0, maxlength));
+            }
+        });
+        $(this).attr('maxlength', $(this).parent().attr('maxlength'));
+    });
+}
+
+function AddAriaLabelForEditLinksOnSummary() {
+    var elements = $('[id*="_lnk"][type="submit"].btn.btn-secondary.standard-button');
+
+    elements.each(function () {
+        var headingText = $(this).prev('h2').find('span').text();
+        var ariaLabel = 'Edit ' + headingText;
+        $(this).attr('aria-label', ariaLabel);
+    });
+}
+
+function MultilineTextBoxDivWidth() {
+    $(".MaxCharactersRight").each(function () {
+        var textAreaWidth = $(this).closest("td").find("textarea").outerWidth();
+        if ($(this).parent().is("div")) {
+            $(this).parent().width(textAreaWidth);
+        }
+    });
+}
+
+function RadioCheck(rb, gridViewID, rbOuterID) {
+    var gv = document.getElementById(gridViewID);
+    if (gv != undefined || gv != null) {
+        var rbs = gv.getElementsByTagName("input");
+
+        // Below unchecks (if checked) the optional outer radio button (example. "Employer not listed above")
+        var rbOuter;
+        if (rbOuterID != undefined) {
+            rbOuter = document.getElementById(rbOuterID);
+            rbOuter.checked = false;
+        }
+
+        var row = rb.parentNode.parentNode;
+        for (var i = 0; i < rbs.length; i++) {
+            if (rbs[i].type == "radio") {
+                if (rbs[i].checked && rbs[i] != rb) {
+                    rbs[i].checked = false;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+// BEGIN - SCR_NC_60 School Employee Information
+function InitializeSchoolEmployeeInformationEvents() {
+    DisplaySchoolEmployeeInformation();
+
+    $("[id$='prtCurrentlyWorking'] input[type=radio]").change(function () {
+        DisplaySchoolEmployeeInformation();
+    });
+}
+
+function DisplaySchoolEmployeeInformation() {
+    var rbOpt = $("[id$='prtCurrentlyWorking'] input[type=radio]");
+    //var rbOpt = $("#prtCurrentlyWorking input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".providSchoolEmployeeInfo").show();
+        $("[id$='EnterSchoolEmpInfoprovidSchoolEmployeeInfo']").show();       
+    }
+    else if (rbOpt.length != 0) {
+        $(".providSchoolEmployeeInfo").hide();
+        $("[id$='EnterSchoolEmpInfoprovidSchoolEmployeeInfo']").hide();
+    }
+}
+// END - SCR_NC_60 School Employee Information
+
+function isValidCalendarDate(txtDate) {
+    var currVal = txtDate;
+    if (currVal == '')
+        return false;
+
+    //Declare Regex
+    var dtArray = currVal.split('/'); // is format OK?
+
+    //Checks for mm/dd/yyyy format.
+    if (dtArray.length !== 3) {
+        return false;
+    }
+    dtMonth = dtArray[0];
+    dtDay = dtArray[1];
+    dtYear = dtArray[2];
+
+    if (dtMonth < 1 || dtMonth > 12)
+        return false;
+    else if (dtDay < 1 || dtDay > 31)
+        return false;
+    else if ((dtMonth == 4 || dtMonth == 6 || dtMonth == 9 || dtMonth == 11) && dtDay == 31)
+        return false;
+    else if (dtMonth == 2) {
+        var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
+        if (dtDay > 29 || (dtDay == 29 && !isleap))
+            return false;
+    }
+    return true;
+}
+
+function isValidInteger(value) {
+    var validIntegerFormat = new RegExp("^[-]?[\\d]*$");
+    var returnValue = false;
+    if (value != undefined) {
+        if (validIntegerFormat.test(value)) {
+            returnValue = true;
+        }
+    }
+    return returnValue;
+}
+
+// END - UTILITY FUNCTIONS
+
+// READ-ONLY Functions
+function InitializeApplicantInformationReadOnly() {
+    var prtIsNameSameAsSSN = $("#prtIsNameSameAsSSN");
+    if (prtIsNameSameAsSSN.length != 0 && prtIsNameSameAsSSN.text().indexOf(ReadOnlyLabels.RadioButtonNo) != -1) {
+        $(".trProvideNameSSN").show();
+    }
+    else if (prtIsNameSameAsSSN.length != 0) {
+        $(".trProvideNameSSN").hide();
+    }
+    $('#divSSNLabel').removeClass("m-b-0");
+}
+
+function InitializeDMVInformationReadOnly() {
+    var prtHasStateId = $("#prtHasStateId");
+    if (prtHasStateId.length != 0 && prtHasStateId.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".providDMVInfo").show();
+    }
+    else if (prtHasStateId.length != 0) {
+        $(".providDMVInfo").hide();
+    }
+}
+
+function InitializePriorClaimInformationReadOnly() {
+    var prtFileUIDIPastTwoYears = $('#prtFileUIDIPastTwoYears');
+    if (prtFileUIDIPastTwoYears.length != 0 && prtFileUIDIPastTwoYears.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".trRecentClaimAndDateInfo").show();
+    }
+    else if (prtFileUIDIPastTwoYears.length != 0) {
+        $(".trRecentClaimAndDateInfo").hide();
+    }
+} 
+
+function InitializeContactInformationReadOnly() {
+    var prtIsResdAndMailingAddressSame = $("[id$='prtIsResdAndMailingAddressSame']"); 
+    if (prtIsResdAndMailingAddressSame.length != 0 && prtIsResdAndMailingAddressSame.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $("[id$='pnlResdAddress']").hide();      
+    }
+    else if (prtIsResdAndMailingAddressSame.length != 0) {
+        $("[id$='pnlResdAddress']").show();        
+    }  
+}
+
+
+function InitializeDigitalPaymentOptionInformationReadOnly() {
+    var prtCanDigitalPaymentOptionId =  $("[id$='prtCanDigitalPaymentOptionId']"); 
+    var prtHasStateId = $("#prtHasStateId");    
+    if (prtCanDigitalPaymentOptionId.length != 0 && prtCanDigitalPaymentOptionId.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $("[id$='digitalPaymentOptionInfo']").show();
+    }
+    else if (prtCanDigitalPaymentOptionId.length != 0) {
+        $("[id$='digitalPaymentOptionInfo']").hide();
+    }  
+}
+function InitializeCitizenshipInformationReadOnly() {
+    var optUSCitizen = $("[id$=optUSCitizen]");
+    if (optUSCitizen.length > 0) {
+        if (optUSCitizen.text().indexOf(ReadOnlyLabels.RadioButtonNo) != -1) {
+            $(".provideForeignInfo").show();
+            $("[id$='CitizenshipInfoProvideForeignInfo']").show();
+        }
+        else {
+            $(".provideForeignInfo").hide();
+            $(".provideUSCISInfo").hide();
+            $("[id$='CitizenshipInfoProvideForeignInfo']").hide();
+        }
+    }
+
+    var optUSCISRegistered = $("[id$=optUSCISRegistered]");
+    if (optUSCISRegistered.length > 0) {
+        if (optUSCISRegistered.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+            $(".provideUSCISInfo").show();
+        }
+        else {
+            $(".provideUSCISInfo").hide();
+        }
+    }
+}
+
+function InitializeLastEmployerInformationReadOnly() {
+    var firstDay, lastDay, currentDay, ldwDate;
+    var lastDateWorkedNonClean = $("#prtLastDateWorked").text();
+    var lastDateWorked = lastDateWorkedNonClean.trim();
+
+    if (lastDateWorked != "") {
+        // If Claimant entered a date and it is in a valid format (MM/DD/YYYY)
+        var newClaimPauseInd = $("#hdnNewClaimPauseInd").val();
+
+        if (newClaimPauseInd == "True") {
+
+            firstDay = getFirstDayOfTheWeek(new Date(lastDateWorked));
+            lastDay = getLastDayOfTheWeek(new Date(lastDateWorked));
+            currentDay = lastDateWorked;
+            ldwDate = new $("#hdnLDWDate").val();
+            if (lastDateWorked >= ldwDate) {
+                if ($("#hdnDateFormat").val() == "") {
+                    var dateFormatCollection = [
+                        $("#lblLastWageDay1").text(),
+                        $("#lblLastWageDay2").text(),
+                        $("#lblLastWageDay3").text(),
+                        $("#lblLastWageDay4").text(),
+                        $("#lblLastWageDay5").text(),
+                        $("#lblLastWageDay6").text(),
+                        $("#lblLastWageDay7").text()];
+                    $("#hdnDateFormat").val(JSON.stringify(dateFormatCollection));
+                }
+                dateFormatCollection = JSON.parse($("#hdnDateFormat").val());
+                $("#lblLastWageDay1").text(dateFormatCollection[0].replace("{0}", Adddate(new Date(firstDay), 0)));
+                $("#lblLastWageDay2").text(dateFormatCollection[1].replace("{0}", Adddate(new Date(firstDay), 1)));
+                $("#lblLastWageDay3").text(dateFormatCollection[2].replace("{0}", Adddate(new Date(firstDay), 2)));
+                $("#lblLastWageDay4").text(dateFormatCollection[3].replace("{0}", Adddate(new Date(firstDay), 3)));
+                $("#lblLastWageDay5").text(dateFormatCollection[4].replace("{0}", Adddate(new Date(firstDay), 4)));
+                $("#lblLastWageDay6").text(dateFormatCollection[5].replace("{0}", Adddate(new Date(firstDay), 5)));
+                $("#lblLastWageDay7").text(dateFormatCollection[6].replace("{0}", Adddate(new Date(firstDay), 6)));
+            }
+        }
+        else {
+            firstDay = $("#hdnEffectiveDate").val();
+            lastDay = $("#hdnWeekEndDate").val();
+            currentDay = $("#hdnCurrentDate").val();
+        }
+
+        var dayIndex = new Date(lastDateWorked).getDay();
+        var enable = false;
+        if (isValidCalendarDate(lastDateWorked) == true) {
+            enable = (compareDates("GreaterThanEqual", lastDateWorked, firstDay) && compareDates("LessThanEqual", lastDateWorked, lastDay) && compareDates("LessThanEqual", lastDateWorked, currentDay));
+        }
+        if (newClaimPauseInd == "True") {
+            if (isValidCalendarDate(lastDateWorked) == true) {
+                var currentDate = $("#hdnCurrentDate").val();
+                if (compareDates("LessThan", lastDateWorked, ldwDate) || compareDates("GreaterThan", lastDateWorked, currentDate))
+                    enable = false;
+            }
+        }
+
+        if (enable) {
+            // Display the wages text boxes; disable those that are less than the current day.
+            $(".trWagesInfo").show();
+            $("[id*='prtDailyGrossWages'] span").each(function (index) {
+                if (index <= dayIndex) {
+                    $(this).show()
+                }
+                else {
+                    $(this).hide()
+                }
+            });
+        }
+        else {
+            // hide the wages text boxes
+            $(".trWagesInfo").hide();
+        }
+    }
+}
+
+function InitializeEmploymentInformationReadOnly() {
+    DisplayAddEmployerInformationReadOnly();
+    $("#gvBasePeriodEmployers tr").each(function (index) {
+        if (index > 0) {
+            var rbReadOnlyValList = $(this).find(".radioButtonTopAlign");
+            var isAdditionalInformationProvided = $(this).find("#hdnIsAdditionalInformationProvided");
+
+            var additionalInformationStatus = $(this).find("#lblIsAdditionalInformationProvided");
+            additionalInformationStatus.text(EmployerAdditionalInformationStatusReadOnly(rbReadOnlyValList, ConvertToBoolean(isAdditionalInformationProvided.val())));
+        }
+    });
+}
+
+function DisplayAddEmployerInformationReadOnly() {
+    var prtWorkedForAnyEmployer = $("#prtWorkedForAnyEmployer");
+    if (prtWorkedForAnyEmployer.length != 0 && prtWorkedForAnyEmployer.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".addEmployerInformationGroup").show();
+    }
+    else if (prtWorkedForAnyEmployer.length != 0) {
+        $(".addEmployerInformationGroup").hide();
+    }
+}
+
+function EmployerAdditionalInformationStatusReadOnly(rbReadOnlyValList, isAdditionalInformationProvided) {
+    var returnVal = "";
+
+    var currSelection;
+    if (rbReadOnlyValList.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        currSelection = true;
+    }
+    else if (rbReadOnlyValList.text().indexOf(ReadOnlyLabels.RadioButtonNo) != -1) {
+        currSelection = false;
+    }
+
+    if (currSelection != undefined) {
+        if (currSelection == true) {
+            if (isAdditionalInformationProvided == true) {
+                returnVal = ReadOnlyLabels.StatusComplete;
+            }
+            else {
+                returnVal = ReadOnlyLabels.StatusIncomplete;
+            }
+        }
+        else {
+            returnVal = ReadOnlyLabels.StatusNotApplicable;
+        }
+    }
+    else {
+        returnVal = ReadOnlyLabels.StatusIncomplete;
+    }
+
+    return returnVal;
+}
+
+function InitializeSchoolEmployeeInformationReadOnly() {
+    var prtCurrentlyWorking = $("[id$='prtCurrentlyWorking']");
+    if (prtCurrentlyWorking.length != 0 && prtCurrentlyWorking.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".providSchoolEmployeeInfo").show();
+        $("[id$='EnterSchoolEmpInfoprovidSchoolEmployeeInfo']").show();
+    }
+    else if (prtCurrentlyWorking.length != 0) {
+        $(".providSchoolEmployeeInfo").hide();
+        $("[id$='EnterSchoolEmpInfoprovidSchoolEmployeeInfo']").hide();
+    }
+}
+
+function InitializeAvailabilityInformationReadOnly() {
+    var optSeasonalWork = $("[id$='optSeasonalWork']");
+    if (optSeasonalWork.length != 0 && optSeasonalWork.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".SeasonalWork").show();   
+        $("[id$='WorkAvailabilitySeasonalWork']").show();
+    }
+    else if (optSeasonalWork.length != 0) {
+        $(".SeasonalWork").hide(); 
+        $("[id$='WorkAvailabilitySeasonalWork']").hide();
+    }
+
+    var optReturnToWork = $("[id$='optReturnToWork']");
+    if (optReturnToWork.length != 0 && optReturnToWork.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".Returnworkdate").show();
+        $("[id$='WorkAvailabilityReturnworkdate']").show();
+    }
+    else if (optReturnToWork.length != 0) {
+        $(".Returnworkdate").hide();
+        $("[id$='WorkAvailabilityReturnworkdate']").hide();
+    }
+
+    var optAvailableFullTime = $("[id$='optAvailableFullTime']");
+    if (optAvailableFullTime.length != 0 && optAvailableFullTime.text().indexOf(ReadOnlyLabels.RadioButtonNo) != -1) {
+        $(".CannotWorkFT").show();
+        $("[id$='WorkAvailabilityCannotWorkFT']").show();
+    }
+    else {
+        $(".ModifyCannotWorkFT").hide();
+        $(".CannotWorkFT").hide();
+        $(".CannotWorkPT").hide();
+        $(".CanWorkPT").hide();
+        $(".Over50PercentPT").hide();
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+        $("[id$='WorkAvailabilityCannotWorkFT']").hide();
+    }
+
+    var optWillingAvailableFullTime = $("[id$='optWillingAvailableFullTime']");
+    if (optWillingAvailableFullTime.length != 0 && optWillingAvailableFullTime.text().indexOf(ReadOnlyLabels.RadioButtonNo) != -1) {
+        $(".ModifyCannotWorkFT").show();
+    }
+    else {
+        $(".ModifyCannotWorkFT").hide();
+        $(".CannotWorkPT").hide();
+        $(".CanWorkPT").hide();
+        $(".Over50PercentPT").hide();
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+    }
+
+    var optAvailablePartTime = $("[id$='optAvailablePartTime']");
+    if (optAvailablePartTime.length != 0 && optAvailablePartTime.text().indexOf(ReadOnlyLabels.RadioButtonNo) != -1) {
+        $(".CannotWorkPT").show();
+        $(".CanWorkPT").hide();
+        $(".Over50PercentPT").hide();
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+    }
+    else if (optAvailablePartTime.length != 0 && optAvailablePartTime.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".CanWorkPT").show();
+        $(".CannotWorkPT").hide();
+    }
+    else {
+        $(".CanWorkPT").hide();
+        $(".CannotWorkPT").hide();
+        $(".Over50PercentPT").hide();
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+    }
+
+    var optSameHoursPT = $("[id$='optSameHoursPT']");
+    if (optSameHoursPT.length != 0 && optSameHoursPT.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".SameHoursPTYes").show();
+        $(".SameHoursPTNo").hide();
+    }
+    else if (optSameHoursPT.length != 0 && optSameHoursPT.text().indexOf(ReadOnlyLabels.RadioButtonNo) != -1) {
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").show();
+    }
+    else {
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+    }
+
+    var optSelfEmployed = $("[id$='optSelfEmployed']");
+    if (optSelfEmployed.length != 0 && optSelfEmployed.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".SelfEmployed").show();
+        $("[id$='WorkAvailabilitySelfEmployed']").show();
+    }
+    else {
+        $(".SelfEmployed").hide();
+        $(".ModifySelfEmployed").hide();
+        $("[id$='WorkAvailabilitySelfEmployed']").hide();
+    }
+
+    var optModifySelfEmployed = $("[id$='optModifySelfEmployed']");
+    if (optModifySelfEmployed.length != 0 && optModifySelfEmployed.text().indexOf(ReadOnlyLabels.RadioButtonNo) != -1) {
+        $(".ModifySelfEmployed").show()
+    }
+
+    else {
+        $(".ModifySelfEmployed").hide();
+    }
+
+    var optUnion = $("[id$='optUnion']");
+    if (optUnion.length != 0 && optUnion.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".Union").show();
+        $("[id$='WorkAvailabilityUnion']").show(); 
+    }
+
+    else {
+        $(".Union").hide();
+        $("[id$='WorkAvailabilityUnion']").hide(); 
+    }
+    var lstOver50PercentPT = $("#lstOver50PercentPT");
+    if ((lstOver50PercentPT.length != 0 && lstOver50PercentPT.text().indexOf(ReadOnlyLabels.DdlYesSelected) != -1) || (lstOver50PercentPT.length != 0 && lstOver50PercentPT.text().indexOf(ReadOnlyLabels.DdlUnsureSelected) != -1)) {
+        $(".Over50PercentPT").show();
+
+        var optSameHoursPT = $("[id$='optSameHoursPT']");
+        if (optSameHoursPT.length != 0 && optSameHoursPT.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+            $(".SameHoursPTYes").show();
+            $(".SameHoursPTNo").hide();
+        }
+        else if (optSameHoursPT.length != 0 && optSameHoursPT.text().indexOf(ReadOnlyLabels.RadioButtonNo) != -1) {
+            $(".SameHoursPTYes").hide();
+            $(".SameHoursPTNo").show();
+        }
+        else {
+            $(".SameHoursPTYes").hide();
+            $(".SameHoursPTNo").hide();
+        }
+    }
+
+    else {
+        $(".Over50PercentPT").hide();
+        $(".SameHoursPTYes").hide();
+        $(".SameHoursPTNo").hide();
+    }
+}
+
+function InitalizeOtherInformationReadOnly() {
+    DisplayPensionInformation();
+    DisplayWorkersCompensation();
+    DisplaySchoolInformation();
+    UpdateSchoolOrTrainingQuestions($("[id$='optTrainingProgram']").text());
+    DisplayTeacherSeekingCredentialing()
+    DisplayCoorperationRoleInformation();
+
+    //function to display pension related information
+    function DisplayPensionInformation() {
+        var rbOpt = $("[id$='optReceivingPension']");
+        if (rbOpt.length > 0) {
+            if (rbOpt.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+                $(".ReceivingPension").show();
+                $("[id$='OtherInfoReceivingPension']").show();
+            }
+            else {
+                $(".ReceivingPension").hide();
+                $("[id$='OtherInfoReceivingPension']").hide();
+            }
+        }
+    }
+
+    // function to display worker related compensation
+    function DisplayWorkersCompensation() {
+        var rbOpt = $("[id$='optReceiveWorkComp']");
+        if (rbOpt.length > 0) {
+            if (rbOpt.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+                $(".ReceiveWorkComp").show();
+                $("[id$='OtherInfoReceiveWorkComp']").show();
+            }
+            else {
+                $(".ReceiveWorkComp").hide();
+                $("[id$='OtherInfoReceiveWorkComp']").hide();
+            }
+        }
+    }
+
+    //function to display school related information
+    function DisplaySchoolInformation() {
+        var rbOpt = $("[id$='optAttendingSchoolOrTraining']");
+        if (rbOpt.length > 0) {
+            if (rbOpt.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+                $(".AttendingSchoolOrTraining").show();
+                $(".trWIOA").hide();
+                $(".trETP").hide();
+                $(".trTAA").hide();
+                $(".trCalWORKS").hide();
+                $(".trSFAAP").hide();
+                $(".trUTAJLM").hide();
+                $(".trEST").hide();
+                DisplayTeacherSeekingCredentialing();
+                $("[id$='OtherInfoAttendingSchoolOrTraining']").show();
+            }
+            else {
+                $(".AttendingSchoolOrTraining").hide();
+                $(".trWIOA").hide();
+                $(".trETP").hide();
+                $(".trTAA").hide();
+                $(".trCalWORKS").hide();
+                $(".trSFAAP").hide();
+                $(".trUTAJLM").hide();
+                $(".trEST").hide();
+                $(".TeachingCredential").hide();
+                $("[id$='OtherInfoAttendingSchoolOrTraining']").hide();
+            }
+        }
+    }
+
+    function UpdateSchoolOrTrainingQuestions(value) {
+        if (value != undefined) {
+            switch (value.trim()) {
+                case ReadOnlyLabels.WorkforceInnovationandOpportunityAct:
+                    $(".trWIOA").show();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case ReadOnlyLabels.EmploymentTrainingPanel:
+                    $(".trWIOA").hide();
+                    $(".trETP").show();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case ReadOnlyLabels.TradeAdjustmentAssistance:
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").show();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case ReadOnlyLabels.CaliforniaWorkOpportunityandResponsibilitytoKids:
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").show();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case ReadOnlyLabels.StateorFederalApprovedApprenticeshipProgram:
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").show();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+                case ReadOnlyLabels.JourneyLevelMember:
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").show();
+                    $(".trEST").hide();
+                    break;
+                case ReadOnlyLabels.EmployerSponsoredTraining:
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").show();
+                    break;
+                default:
+                    $(".trWIOA").hide();
+                    $(".trETP").hide();
+                    $(".trTAA").hide();
+                    $(".trCalWORKS").hide();
+                    $(".trSFAAP").hide();
+                    $(".trUTAJLM").hide();
+                    $(".trEST").hide();
+                    break;
+            }
+        }
+    }
+
+    //function to display Teacher credential related information
+    function DisplayTeacherSeekingCredentialing() {
+        var rbOpt = $("[id$='optTeachingCredential']");
+        if (rbOpt.length > 0) {
+            if (rbOpt.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+                $(".TeachingCredential").show();
+            }
+            else {
+                $(".TeachingCredential").hide();
+            }
+        }
+    }
+
+    //function to display Teacher credential related information
+    function DisplayCoorperationRoleInformation() {
+        var rbOpt = $("[id$='optCorpUnionOfficer']");
+        if (rbOpt.length > 0) {
+            if (rbOpt.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+                $(".CorpUnionOfficer").show();
+                $("[id$='OtherInfoCorpUnionOfficer']").show();
+            }
+            else {
+                $(".CorpUnionOfficer").hide();
+                $("[id$='OtherInfoCorpUnionOfficer']").hide();
+            }
+        }
+    }
+}
+
+function InitializeDisasterUnemploymentInformationReadOnly() {
+    DisplayDisasterUnemploymentInformationReadOnly();
+    DisplayDisasterUnemploymentDueToTravelReadOnly();
+    DisplayPublicHealthInformationReadOnly();
+}
+
+//function to display Unemployment Due to disaster information
+function DisplayDisasterUnemploymentInformationReadOnly() {
+    var rbOpt = $("[id$='optDisaster']");
+    if (rbOpt.length != 0 && rbOpt.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".UnemployedDueToDisaster").show();
+        $("[id$='DisasterInfoUnemployedDueToDisaster']").show();
+        DisplayDisasterUnemploymentDueToTravel();
+    }
+    else {
+        $(".UnemployedDueToDisaster").hide();
+        $(".DisasterTypePublicHealth").hide();
+        $(".UnemployedDueToTravelFromDisasterCounty").hide();
+        $("[id$='DisasterInfoUnemployedDueToDisaster']").hide();
+    }
+}
+
+// function to display Unemployment Due to travel from disaster Information
+function DisplayDisasterUnemploymentDueToTravelReadOnly() {
+    var rbOpt = $("[id$='optDisasterCommute']");
+    if (rbOpt.length != 0 && rbOpt.text().indexOf(ReadOnlyLabels.RadioButtonYes) != -1) {
+        $(".UnemployedDueToTravelFromDisasterCounty").show();
+    }
+    else {
+        $(".UnemployedDueToTravelFromDisasterCounty").hide();
+    }
+}
+
+// function to display Public Health disaster Information
+function DisplayPublicHealthInformationReadOnly() {
+    var disasterTypeReadOnly = $("[id$='lstDisasterType']").text();
+    if (disasterTypeReadOnly != undefined && disasterTypeReadOnly.trim() == ReadOnlyLabels.PublicHealth) {
+        $(".DisasterTypePublicHealth").show();
+    }
+    else {
+        $(".DisasterTypePublicHealth").hide();
+    }
+}
+// END - READ-ONLY Functions
+
+// BEGIN - SCR_NC_81 – Disaster Unemployment Information
+function InitializeDisasterUnemploymentInformationEvents() {
+    DisplayDisasterUnemploymentInformation();
+    DisplayDisasterUnemploymentDueToTravel();
+    DisplayDisasterWorkerTypeInformation();
+    DisplayPublicHealthInformation();
+    ClearHiddenDataTypeValidationsDisasterUnemploymentInformation();
+
+    $("[id$='optDisaster'] input[type=radio]").change(function () {
+        DisplayDisasterUnemploymentInformation();
+    });
+
+    $("[id$='optDisasterCommute'] input[type=radio]").change(function () {
+        DisplayDisasterUnemploymentDueToTravel();
+    });
+
+	$("[id$='prtDisasterWorkerType']").on("change", "select", function () {
+        $(".UnemployedDueToDisaster input[type='text']").val("");
+        $("[id$='optDisasterState'] select").val("0");
+        $("[id$='txtDisasterExplanation'] textarea").val("");
+        DisplayDisasterWorkerTypeInformation();
+    });
+
+    InitializeDisasterWorkerTypeInformationEvent();
+
+    $("[id$='lstDisasterType']").on("change", "select", function () {
+        DisplayPublicHealthInformation();
+    });
+}
+
+//function to display Unemployment Due to disaster information
+
+function DisplayDisasterUnemploymentInformation() {
+    var rbOpt = $("[id$='optDisaster'] input[type=radio]");
+
+    if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".UnemployedDueToDisaster").show();
+        $("[id$='DisasterInfoUnemployedDueToDisaster']").show();
+        
+        DisplayDisasterUnemploymentDueToTravel();
+        DisplayDisasterWorkerTypeInformation();
+        DisplayPublicHealthInformation();
+    }
+    else {
+        $(".UnemployedDueToDisaster").hide();
+        $(".DisasterTypePublicHealth").hide();
+        $(".UnemployedDueToTravelFromDisasterCounty").hide();
+        $("[id$='DisasterInfoUnemployedDueToDisaster']").hide();
+    }
+}
+
+// function to display Unemployment Due to travel from disaster Information
+
+function DisplayDisasterUnemploymentDueToTravel() {
+    var rbOpt = $("[id$='optDisasterCommute'] input[type=radio]");
+    //var rbOpt = $("#optDisasterCommute input[type=radio]");
+    if (rbOpt.length != 0 && rbOpt[0].checked == true) {
+        $(".UnemployedDueToTravelFromDisasterCounty").show();
+    }
+    else {
+        $(".UnemployedDueToTravelFromDisasterCounty").hide();
+    }
+}
+
+function InitializeDisasterWorkerTypeInformationEvent() {
+    $("[id$='prtDisasterWorkerType']").on("change", "select", function () {
+        DisplayDisasterWorkerTypeInformation();
+    });
+
+    DisplayDisasterWorkerTypeInformation();
+}
+
+//function to display Disaster WorkerType Information
+
+function DisplayDisasterWorkerTypeInformation() {
+    var ddOpt = $("[id$='prtDisasterWorkerType'] select");
+    if (ddOpt.length > 0 && !ddOpt.is(":disabled")) {
+        if ((ddOpt.val() == DisasterWorkerType.UnemployedWorker)) {
+            $("[id$='txtDisasterHrsPerWeek'] input").removeAttr("disabled");
+            $("[id$='txtDisasterExplanation'] textarea, [id$='txtDisasterStreet'] input, [id$='txtDisasterCity'] input, [id$='txtDisasterZip'] input, [id$='optDisasterState'] select").attr("disabled", "disabled");
+        }
+
+        if ((ddOpt.val() == DisasterWorkerType.UnemployedSelfemployedIndividual)) {
+            $("[id$='txtDisasterExplanation'] textarea, [id$='txtDisasterStreet'] input, [id$='txtDisasterCity'] input, [id$='txtDisasterZip'] input, [id$='optDisasterState'] select, [id$='txtDisasterHrsPerWeek'] input").removeAttr("disabled");
+        }
+        if ((ddOpt.val() == DisasterWorkerType.UnemployedSelfemployedIndividualWithProspectiveSelfEmployment)) {
+            $("[id$='txtDisasterExplanation'] textarea, [id$='txtDisasterStreet'] input, [id$='txtDisasterCity'] input, [id$='txtDisasterZip'] input, [id$='optDisasterState'] select").removeAttr("disabled");
+            $("[id$='txtDisasterHrsPerWeek'] input").attr("disabled", "disabled");
+        }
+        if ((ddOpt.val() == DisasterWorkerType.UnemployedWorkerWithProspectiveEmployment) || (ddOpt.val() == DisasterWorkerType.HeadofHouseholdAsaResultoftheDisaster) || ddOpt.val() == 0) {
+            $("[id$='txtDisasterExplanation'] textarea, [id$='txtDisasterStreet'] input, [id$='txtDisasterCity'] input, [id$='txtDisasterZip'] input, [id$='optDisasterState'] select, [id$='txtDisasterHrsPerWeek'] input").attr("disabled", "disabled");
+        }
+    }
+}
+
+//function to display Public Heath Information
+function DisplayPublicHealthInformation() {
+    var ddSelectedDisaster = $("[id$='lstDisasterType'] select");
+    if (ddSelectedDisaster.length > 0 && ddSelectedDisaster.val() == DisasterType.PublicHealth) {
+        $(".DisasterTypePublicHealth").show();
+    }
+    else {
+        $(".DisasterTypePublicHealth").hide();
+    }
+}
+
+function ClearHiddenDataTypeValidationsDisasterUnemploymentInformation() {
+    $("[id$='txtDisasterHrsPerWeek'] input[type='text']").bind("hide", function () {
+        if (isValidInteger($(this).val()) == false) {
+            $(this).val("");
+        }
+    });
+}
+
+// END - SCR_NC_81 – Disaster Unemployment Information
+
+// START - Print Function
+function ConfirmationPrint() {
+
+    // Format All Controls as is required before printing
+    InitializeApplicantInformationReadOnly();
+    //commented for ID.me
+    //InitializeDMVInformationReadOnly();
+    //InitializePriorClaimInformationReadOnly();
+    InitializeContactInformationReadOnly();
+    InitializeDigitalPaymentOptionInformationReadOnly();
+    InitializeCitizenshipInformationReadOnly();
+    InitializeLastEmployerInformationReadOnly();
+    InitializeEmploymentInformationReadOnly();
+    InitializeSchoolEmployeeInformationReadOnly();
+    InitializeAvailabilityInformationReadOnly();
+    InitalizeOtherInformationReadOnly();
+    InitializeDisasterUnemploymentInformationReadOnly();
+    HidingScrollbarinprintpreview();
+    window.print();
+}
+  //Hiding the Vertical scrollbar on Click of Print
+function HidingScrollbarinprintpreview() {
+    $('body').css("overflow", "hidden");
+    $('body').css("height", "100%");
+}
+
+function getFirstDayOfTheWeek(date) {
+
+    var firstday = date.getDate() - (date.getDay());
+    return new Date(date.setDate(firstday));
+
+}
+function getLastDayOfTheWeek(date) {
+
+    var lastday = date.getDate() - (date.getDay()) + 6;
+    return new Date(date.setDate(lastday));
+
+}
+
+function Adddate(date, days) {
+    date.setDate(date.getDate() + days);
+    var yyyy = date.getFullYear().toString();
+    var mm = (date.getMonth() + 1).toString(); // getMonth() is zero-based
+    var dd = date.getDate().toString();
+    return (mm[1] ? mm : "0" + mm[0]) + "/" + (dd[1] ? dd : "0" + dd[0]) + "/" + yyyy;
+}
+
+// END - Print Function
