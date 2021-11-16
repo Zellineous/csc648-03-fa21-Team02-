@@ -39,11 +39,12 @@ def browse():
 @application.route('/results', methods=['GET', 'POST'])
 def results():
     search = request.args.get('search',None)
-    cursor.execute("SELECT name, subject, number FROM course WHERE name LIKE '%" + search + "%' ")
+    cursor.execute("SELECT name, subject, number FROM course WHERE name  LIKE '%" + search + "%' OR CONCAT(subject, ' ' , number) LIKE '%" + search + "%';")
     data = cursor.fetchall()
     names = []
     codes = []
     for course in data:
+        print(course)
         names.append(course[0])
         codes.append(course[1] + ' ' + course[2])
     length = len(codes)
