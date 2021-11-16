@@ -37,5 +37,19 @@ def team_member_about(member):
     return render_template('team/' + member + '.html')
 
 
+@application.route('/register')
+def register():
+    return render_template('register.html')
+
+
+@application.route('/login/')
+def login():
+    return render_template('index.html')
+
+
+@application.route('/test')
+def hometest():
+    return render_template('test.html')
+
 if __name__ == '__main__':
     application.run(debug=True)
