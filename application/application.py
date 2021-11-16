@@ -19,9 +19,9 @@ cursor = conn.cursor()
 def index():
     print(request.method)
     if request.method == 'POST':
-        print(request.form)
         search = request.form.get('search')
-        return redirect(url_for('results', search=search))
+        search_category = request.form.get('search_category')
+        return redirect(url_for('results', search=search, search_category=search_category))
 
     return render_template('home.html')
 
@@ -39,9 +39,16 @@ def browse():
 @application.route('/results', methods=['GET', 'POST'])
 def results():
     search = request.args.get('search',None)
-    cursor.execute("SELECT name, subject, number FROM course WHERE name  LIKE '%" + search + "%' OR CONCAT(subject, ' ' , number) LIKE '%" + search + "%';") # query to get from database from searching
-    data = cursor.fetchall()
-
+    search_category = request.args.get('search_category',None)
+    print(search_category)
+    if search_category == 'Subject':
+        cursor.execute("SELECT name, subject, number FROM course WHERE subject  LIKE '%" + search + "%';")
+    elif search_category == 'Class':
+        cursor.execute("SELECT name, subject, number FROM course WHERE name LIKE '%" + search + "%';")
+    else:
+        cursor.execute("SELECT name, subject, number FROM course WHERE name  LIKE '%" + search + "%' OR CONCAT(subject, ' ' , number) LIKE '%" + search + "%';") # query to get from database from searching
+    
+    data = cursor.fetchall()    
     names = []      # e.g. 'software engineering'
     codes = []      # e.g. csc 648
     for course in data:
