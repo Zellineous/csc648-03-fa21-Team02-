@@ -1,7 +1,12 @@
+
 {% extends "layout.html" %}
 {% block content %}
 
 <h2 class="description"><p>Searched for: {{ search }}</p>
-    Results page... There should be some tutors around</h2>
+    Results:
 
+    {% for i in range(0,len) %}
+         <p><li>{{ codes[i] }}  -  {{ names[i] }}</li></p>
+    {% endfor %}
+</h2>
 {% endblock %}

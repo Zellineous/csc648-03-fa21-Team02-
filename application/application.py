@@ -1,8 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for
+import pymysql
+
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
 
+conn = pymysql.connect(
+        host= 'team2-database.c8md5pg3obvk.us-west-1.rds.amazonaws.com', 
+        port = 3306,
+        user = 'csc64803team2', 
+        password = 'password123',
+        db = 'tutorDB',
+)
+cursor = conn.cursor()
 
 # in .html files, make sure to href= to these routes, not the location of the .html files themselves
 @application.route('/', methods=['GET','POST'])
@@ -29,7 +39,16 @@ def browse():
 @application.route('/results', methods=['GET', 'POST'])
 def results():
     search = request.args.get('search',None)
-    return render_template('results.html', search=search)
+    cursor.execute("SELECT name, subject, number FROM course WHERE name LIKE '%" + search + "%' ")
+    data = cursor.fetchall()
+    names = []
+    codes = []
+    for course in data:
+        names.append(course[0])
+        codes.append(course[1] + ' ' + course[2])
+    length = len(codes)
+
+    return render_template('results.html', search=search, names=names, codes=codes, len=length)
 
 
 @application.route('/team/<member>_about')
