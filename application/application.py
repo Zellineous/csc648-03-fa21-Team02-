@@ -87,9 +87,13 @@ def search():
 
 
 # shailendra - implement
-@application.route('/messages')
-def messages():
-    return render_template('messages.html')
+# @application.route('/messages')
+# def messages():
+#     return render_template('message.html')
+
+@application.route('/inbox')
+def inbox():
+    return render_template('inbox.html')
 
 # shailendra - implement
 @application.route('/message')
