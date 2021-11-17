@@ -20,28 +20,37 @@
 
 <body>
 
-    <!-- nav bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fw-bold navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="/">Golden Tutors</a>
-            <button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#main-nav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse" id="main-nav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/browse">Browse</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+  <!-- nav bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fw-bold navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="/">Golden Tutors</a>
+      <button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#main-nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" style="padding-left: 20px;" id="main-nav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/browse">Browse</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Sign Up</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
     {% block content %}{% endblock %}
 
