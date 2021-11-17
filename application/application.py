@@ -65,19 +65,36 @@ def team_member_about(member):
     return render_template('team/' + member + '.html')
 
 
+@application.route('/tutor')
+def tutor():
+    return render_template('tutor.html')
+
+
 @application.route('/register')
 def register():
     return render_template('register.html')
 
-
+# alberto - implement
 @application.route('/login/')
 def login():
-    return render_template('index.html')
+    return render_template('login.html')
 
 
-@application.route('/test')
-def hometest():
-    return render_template('test.html')
+# alberto - implement
+@application.route('/search')
+def search():
+    return render_template('search.html')
+
+
+# shailendra - implement
+@application.route('/messages')
+def messages():
+    return render_template('messages.html')
+
+# shailendra - implement
+@application.route('/message')
+def message():
+    return render_template('message.html')
 
 if __name__ == '__main__':
     application.run(debug=True)
