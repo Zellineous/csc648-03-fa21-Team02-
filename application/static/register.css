@@ -5,6 +5,7 @@
 	justify-content: center
 }
 
+
 /* register */
 
 .registration-form{
@@ -14,8 +15,8 @@
 .registration-background{
 	margin-top: 50px;
 	margin-bottom: 50px;
-	box-shadow: 7px 9px 50px 18px #00000028;
-
+	/* box-shadow: 7px 9px 50px 18px #00000028; */
+	border: 1.5px solid #154d6e32;
 }
 
 .register-section{
