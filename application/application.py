@@ -99,6 +99,10 @@ def inbox():
 @application.route('/message')
 def message():
     return render_template('message.html')
+# shailendra - implement
+@application.route('/messages')
+def messages():
+    return render_template('messages.html')
 
 if __name__ == '__main__':
     application.run(debug=True)

@@ -35,11 +35,11 @@ body {
 	align-items: center;
 }
 .user__message {
-	width: 300px;
+	width: 350px;
 	border-right: 1px solid #ddd;
 	padding: 0.7rem 1rem;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 }
 .user__message__wrapper:hover {
 	background: #f9f9f9;
@@ -162,3 +162,18 @@ body {
 	background: #154d6e;
 	cursor: pointer;
 }
+.message__heading{
+	display: flex;
+}
+.message__badge{
+	height: 30px;
+	min-width: 30px;
+	background-color: #154d6e;
+	font-size: 20px;
+	color: #fff;
+	text-align: center;
+	margin-left: 8px;
+	border-radius: 10px;
+}
+
+
