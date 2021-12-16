@@ -70,7 +70,7 @@ def tutor():
     return render_template('tutor.html')
 
 
-@application.rout('/editprofile')
+@application.route('/editprofile')
 def editprofile():
     return render_template('editprofile.html')
 
