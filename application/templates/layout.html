@@ -2,20 +2,23 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- add icon later -->
-    <link rel="icon" href="">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- add icon later -->
+  <link rel="icon" href="">
 
-    <title>CSC 648 Team 2</title>
+  <title>CSC 648 Team 2</title>
 
-    <!-- Bootstrap CSS file -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS file -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS file -->
-    <link rel="stylesheet" type="text/css" href="../static/home.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+  <!-- Custom CSS file -->
+  <link rel="stylesheet" type="text/css" href="../static/home.css">
 </head>
 
 <body>
@@ -23,32 +26,32 @@
   <!-- nav bar -->
   <nav class="navbar navbar-expand-lg navbar-dark fw-bold navbar-custom">
     <div class="container">
-      <a class="navbar-brand" href="/">Golden Tutors</a>
+      <a class="navbar-brand me-5" href="/">Golden Tutors</a>
+
+      <!-- dropdown -->
       <button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#main-nav">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="navbar-collapse collapse" style="padding-left: 20px;" id="main-nav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
+
+      <!-- links -->
+      <div class="navbar-collapse collapse" id="main-nav">
+        <ul class="navbar-nav">
+          <!-- nav search -->
+          <form action="/" method="post" class="navbar-nav d-flex flex-row">
+            <input type="text" class="form-control" style="max-width: 200px;" placeholder="Find a tutor">
+            <button type="submit" class="input-group-text shadow-none px-3 btn-warning" style="max-width: 50px;">
+              <i class="bi bi-search"></i>
+            </button>
+          </form>
+        </ul>
+
+        <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <a class="nav-link" href="/about">About</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/browse">Browse</a>
           </li>
-        </ul>
-
-              <!-- nav search -->
-   <form class="nav navbar-nav">
-     <div class ="form-group">
-       <input type="text" class="form-control" placeholder="Find a tutor">
-     </div>
-     <button type="submit" class="input-group-text shadow-none px-3 btn-warning">Search
-     </button>
-
-        <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <a class="nav-link" href="/login">Login</a>
           </li>
@@ -60,12 +63,12 @@
     </div>
   </nav>
 
-    {% block content %}{% endblock %}
+  {% block content %}{% endblock %}
 
-    <!-- Bootstrap JS files -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Bootstrap JS files -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 
