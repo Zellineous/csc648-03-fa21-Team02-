@@ -26,12 +26,14 @@
 
             <!-- right side of form -->
         
-            <form method="post" action="/login" class="col-lg-6 col-md-6 col-sm-12 col-12 register-section">
+            <form action="/login" method="post" class="col-lg-6 col-md-6 col-sm-12 col-12 register-section">
                 <h1>Welcome Back!</h1>
+                <br>
+                <div class="msg">{{ msg }}</div>
 
                 <!-- email -->
                 <div class="form-group was-validated">
-                    <input type="email" name="" class="form-control register-input" placeholder="Your e-mail" required>
+                    <input id="username" name="username" type="text" class="form-control register-input" placeholder="Your Username" required>
                     <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-envelope-fill"
                         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
@@ -41,7 +43,7 @@
 
                 <!-- password -->
                 <div class="form-group was-validated">
-                    <input type="password" name="" class="form-control register-input" placeholder="Password"
+                    <input id="password" name="password" type="password" class="form-control register-input" placeholder="Password"
                         required>
                     <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-lock-fill" fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg">
@@ -52,7 +54,7 @@
 
                 <!-- register / login buttons -->
                 <div class="register-login-btn">
-                    <a href="" class="btn btn-primary indv-btn">Sign In</a>
+                    <input type="submit" class="btn btn-primary indv-btn" value="Sign In"></br></br>
                     <a href="" class="btn btn-primary indv-btn">Forgot Password?</a>
                 </div>
             </form>

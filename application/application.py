@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import pymysql
 
 
@@ -11,6 +11,7 @@ conn = pymysql.connect(
         user = 'csc64803team2', 
         password = 'password123',
         db = 'tutorDB',
+        cursorclass=pymysql.cursors.DictCursor
 )
 cursor = conn.cursor()
 
@@ -65,14 +66,16 @@ def team_member_about(member):
     return render_template('team/' + member + '.html')
 
 
+
+
 @application.route('/tutor')
 def tutor():
     return render_template('tutor.html')
 
-
 @application.route('/editprofile')
 def editprofile():
     return render_template('editprofile.html')
+
 
 
 
@@ -83,23 +86,42 @@ def register():
 @application.route('/register', methods=['POST'])
 def register_post():
     # TODO: validate and add user to database
-    return redirect(url_for('auth.login'))
+    return redirect('dashboard.html')
 
 
-@application.route('/login/')
+
+
+@application.route('/login', methods =['GET', 'POST'], strict_slashes=False)
 def login():
-    return render_template('login.html')
+    msg = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        cursor.execute('SELECT * FROM user WHERE username = % s AND password = % s', (username, password, ))
+        account = cursor.fetchone()
+        if account:
+            session['loggedin'] = True
+            session['id'] = account['user_id']
+            session['username'] = account['username']
+            msg = 'Logged in successfully !'
+            return render_template('dashboard.html', msg = msg)
+        else:
+            msg = 'Incorrect username / password !'
+    return render_template('login.html', msg = msg)
 
-@application.route('/login', methods=['POST'])
-def login_post():
-    # TODO: get login information, check if user exists / has right credentials
-    return redirect(url_for('main.profile'))
+
+@application.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+
 
 
 # alberto - implement
 @application.route('/search')
 def search():
     return render_template('search.html')
+
 
 
 # shailendra - implement
