@@ -19,7 +19,7 @@
 
   <!-- Custom CSS file -->
   <link rel="stylesheet" type="text/css" href="../static/home.css">
-  
+
 
 </head>
 
@@ -73,29 +73,28 @@
     <div class="overlay"></div>
 
     <!-- text and search bar -->
-    <div class="description">
+    <div class="description" style="padding-top: 70px;">
       <h1>Get better grades with our tutors.</h1>
       <br>
       <div class="d-flex flex-wrap justify-content-center">
         <!-- Search Bar -->
         <div class="col-sm-12">
-          <form action="/" method="post">
+          <form action="/" method="post" class="d-flex flex-row">
             <div class="input-group">
               <!-- Categories -->
-              <div class="input-group-prepend">
+              <div class="input-group-prepend" style="max-width: 200px;">
                 <select class="form-select form-select-lg shadow-none bg-light border-0" id="search_category"
                   name="search_category">
-                  <option>Categories</option>
+                  <option>Majors</option>
                   <option>Accounting</option>
                   <option>Business</option>
                   <option>Computer Science</option>
                   <option>Economics</option>
                   <option>Math</option>
-                  <option>Philosophy</option>
                 </select>
               </div>
               <!-- Search -->
-              <input type="text" class="form-control" placeholder="What do you need help with?" id="search"
+              <input type="text" class="form-control" placeholder="Enter class number (e.g. 101)" id="search"
                 name="search">
               <!-- Submit Button -->
               <button class="input-group-text shadow-none px-4 btn-warning">
@@ -103,18 +102,29 @@
               </button>
             </div>
           </form>
+          <br>
+          <br>
         </div>
 
-        <!-- Scroll Down -->
         <div>
-          <br>
-          <a href="#scroll-target" style="text-decoration:none">
-            <h4 
-              style="color:white">See how it works
-              <br>
-              <i class="bi bi-arrow-down"></i>
-            </h4>
-          </a>
+          <!-- tutor apply -->
+          <div class="links">
+            <a href="/register" style="text-decoration:none">
+              <h4 style="color:white">Apply to be a tutor.
+              </h4>
+            </a>
+            <br>
+          </div>
+
+          <!-- Scroll Down -->
+          <div class="links">
+            <a href="#scroll-target" style="text-decoration:none">
+              <h4 style="color:white">See how it works
+                <br>
+                <i class="bi bi-arrow-down"></i>
+              </h4>
+            </a>
+          </div>
         </div>
 
       </div>
