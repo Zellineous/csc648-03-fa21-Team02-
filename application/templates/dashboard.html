@@ -1,13 +1,33 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div>
-    <div class="border">
-          <h1 class="bottom">
-               Hi {{session.username}}!!</br></br> Welcome! 
-          </h1>
-          <a href="/logout" class="btn">Logout</a>              
+<link rel="stylesheet" type="text/css" href="../../static/dashboard.css">
+
+<div class="container">
+    <div class="welcome">
+        <h1 class="">
+            Welcome {{session.username}} !
+        </h1>
     </div>
+</div>
+
+<div class="container">
+
+    <div class="row">
+        <a href="/message" class="col-md options" style="text-decoration: none;">
+            <i class="bi bi-envelope"></i>
+            <h2>Inbox</h2>
+        </a>
+        <a href="/editprofile" class="col-md options">
+            <i class="bi bi-pen"></i>
+            <h2>Edit Profile</h2>
+        </a>
+        <a href="/tutor" class="col-md options">
+            <i class="bi bi-person-circle"></i>
+            <h2>View Profile</h2>
+        </a>
+    </div>
+
 </div>
 
 {% endblock %}
