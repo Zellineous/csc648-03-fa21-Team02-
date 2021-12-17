@@ -166,10 +166,10 @@ def search():
 def inbox():
     return render_template('inbox.html')
 
-
-@application.route('/message.html')
-def message():
-    return render_template('message.html')
+@application.route('/messaging')
+def messaging():
+    return render_template('messaging.html')
+    
 
 
 
