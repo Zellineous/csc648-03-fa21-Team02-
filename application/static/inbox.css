@@ -81,5 +81,9 @@ body {
 	color: rgb(139, 139, 139);
 }
 
+.view-height {
+	min-height: 500px;
+}
+
 
 

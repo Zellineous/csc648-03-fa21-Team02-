@@ -160,6 +160,10 @@ def inbox():
 @application.route('/messaging')
 def messaging():
     return render_template('messaging.html')
+
+@application.route('/viewmessage')
+def viewmessage():
+    return render_template('viewmessage.html')
     
 
 
