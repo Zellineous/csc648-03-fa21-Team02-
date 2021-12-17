@@ -45,11 +45,12 @@
 					<a class="nav-link" href="/register">Sign Up</a>
 				  </li>
 				</ul>
-			  </div>
 			</div>
-		  </nav>
-
-		<div class="message__container">
+		</div>
+	</nav>
+	
+	<form action="/messages" method="post">
+	<div class="message__container">
 			<div class="container">
 				<div class="message__heading">
 					<h1>New Messages</h1>
@@ -59,11 +60,12 @@
                 </div>
                 <div class="messagebtn">
                     <div class="d-flex justify-content-between">
-                        <a href="#" class="btn btn-primary mt-5" style="background-color: #154e6e;">Send Message</a>
-                        <a href="/tutor" class="btn btn-primary mt-5" style="background-color: #154e6e;">Back</a>
-                    </div>
-                </div>
-            </div>
-		</div>
+							<button type="submit"><a class="btn btn-primary mt-5" style="background-color: #154e6e;">Send Message</a></button>
+							<button><a href="/tutor" class="btn btn-primary mt-5" style="background-color: #154e6e;">Back</a></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 	</body>
 </html>

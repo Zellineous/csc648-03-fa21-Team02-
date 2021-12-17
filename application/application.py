@@ -114,10 +114,12 @@ def inbox():
 # shailendra - implement
 @application.route('/message')
 def message():
-    return render_template('message.html')
-# shailendra - implement
-@application.route('/messages')
+    return render_template('message.html')# shailendra - implement
+@application.route('/messages', methods = ['GET','POST'])
 def messages():
+    if request.method == "POST":
+        message = request.form.get("message")
+        print(message)
     return render_template('messages.html')
 
 if __name__ == '__main__':
