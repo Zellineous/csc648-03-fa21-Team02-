@@ -1,19 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import pymysql
+import database as db
 import re
 import helpers
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
-
-conn = pymysql.connect(
-        host= 'team2-database.c8md5pg3obvk.us-west-1.rds.amazonaws.com', 
-        port = 3306,
-        user = 'csc64803team2', 
-        password = 'password123',
-        db = 'tutorDB'
-)
+conn = db.connect()
 cursor = conn.cursor()
+
 # in .html files, make sure to href= to these routes, not the location of the .html files themselves
 @application.route('/', methods=['GET','POST'])
 def index():
