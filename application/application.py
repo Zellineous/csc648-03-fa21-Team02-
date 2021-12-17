@@ -28,6 +28,16 @@ def index():
     return render_template('home.html')
 
 
+@application.route('/layout', methods=['GET','POST'])
+def nav_search():
+    print(request.method)
+    if request.method == 'POST':
+        search = request.form.get('search')
+        return redirect(url_for('results', search=search))
+
+    return render_template('home.html')
+
+
 @application.route('/about')
 def about():
     return render_template('about.html')
@@ -154,25 +164,17 @@ def search():
 
 
 
-# shailendra - implement
-# @application.route('/messages')
-# def messages():
-#     return render_template('message.html')
 
 @application.route('/inbox')
 def inbox():
     return render_template('inbox.html')
 
-# shailendra - implement
-@application.route('/message')
+
+@application.route('/message.html')
 def message():
-    return render_template('message.html')# shailendra - implement
-@application.route('/messages', methods = ['GET','POST'])
-def messages():
-    if request.method == "POST":
-        message = request.form.get("message")
-        print(message)
-    return render_template('messages.html')
+    return render_template('message.html')
+
+
 
 if __name__ == '__main__':
     application.run(debug=True)
