@@ -1,0 +1,85 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	list-style: none;
+}
+
+
+.heading {
+	padding-top: 50px;
+	padding-bottom: 20px;
+}
+
+.inbox {
+	padding-left: 100px;
+	padding-right: 100px;
+}
+
+a {
+	text-decoration: none;
+}
+
+img {
+	width: 100%;
+}
+
+body {
+	background: #f9f9f9;
+}
+
+.main__message {
+	background: white;
+	border: 1px solid #ddd;
+	margin-top: 1rem;
+	/* min-height: 600px; */
+}
+
+.user__message__wrapper {
+	display: flex;
+	border-bottom: 1px solid #ddd;
+	align-items: center;
+}
+
+.user__message {
+	width: 200px;
+	border-right: 1px solid #ddd;
+	padding: 0.7rem 1rem;
+	display: flex;
+	flex-shrink: 0;
+	align-items: flex-start;
+}
+
+.user__message__wrapper:hover {
+	background: #f9f9f9;
+	transition: 0.5s;
+}
+
+.user__pic img {
+	height: 45px;
+	width: 45px;
+	border-radius: 50%;
+}
+
+.user__name {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-left: 7px;
+}
+
+.user__name small {
+	color: rgb(189, 188, 188);
+}
+
+.user__message__preview {
+	padding: 0rem 1.4rem;
+}
+
+.user__message__preview p {
+	color: rgb(139, 139, 139);
+}
+
+
+
