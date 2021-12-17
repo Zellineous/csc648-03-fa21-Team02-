@@ -97,11 +97,7 @@ def register():
         password = request.form['password']
         email = request.form['email']
         sfsu_id = request.form['sfsu_id']
-        cursor.execute("SELECT * FROM user WHERE user.name = 'thomas123'")
-        users = cursor.fetchall()
-        print(users)
-        id = 10
-        cursor.execute(f"SELECT sfsu_id FROM user WHERE name='{username}' OR sfsu_id={sfsu_id}")
+        cursor.execute(f"SELECT sfsu_id FROM user WHERE name='{username}' OR sfsu_id={sfsu_id} OR sfsu_email='{email}'")
         account = cursor.fetchone()
         if account:
             msg = 'Account already exists!'
