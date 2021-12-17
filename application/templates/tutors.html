@@ -18,8 +18,12 @@
                                 d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12z" />
                         </svg>
                         <h3 style="padding-top: 20px;">John Doe</h3>
+                        <!-- <h3 style="padding-top: 20px;">{{tutor.name}}</h3> -->
                         <p>Tutor</p>
                     </div>
+
+                    <!-- message -->
+                    <a href="messages" class="btn btn-warning">Message</a>
 
                     <div class="personal-info">
                         <h3>Personal Information</h3>
@@ -27,17 +31,32 @@
                             <li><i class="fas fa-genderless"></i><span>Gender: Male</span></li>
                             <li><i class="far fa-envelope "></i><span>Email: xxx@xxxx.com</span></li>
                             <li><i class="fas fa-mobile "></i><span>Phone Number: 1234567</span></li>
+                            <!-- 
+                                <li><i class="fas fa-genderless"></i><span>Gender: {{tutor.gender}}</span></li>
+                                <li><i class="far fa-envelope "></i><span>Email: {{tutor.email}}</span></li>
+                                <li><i class="fas fa-mobile "></i><span>Phone Number: {{tutor.phone}}</span></li> 
+                            -->
                         </ul>
                     </div>
                     <div class="skill">
                         <h3>Subjects</h3>
                         <p>Computer Science</p>
                         <p>Math</p>
+                        <!-- 
+                        {% for i in range(0,len) %}
+                            <p><li>{{ tutor.subjects[i] }}</li></p>
+                        {% endfor %} 
+                        -->
                     </div>
                     <div class="languages">
                         <h3>Availability</h3>
                         <p>Monday 3-6 p.m.</p>
                         <p>Thursday 5-8 p.m.</p>
+                        <!-- 
+                        {% for i in range(0,len) %}
+                            <p><li>{{ tutor.availability[i] }}</li></p>
+                        {% endfor %} 
+                        -->
                     </div>
                 </div>
             </div>
@@ -54,6 +73,7 @@
                             Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
                             mollit anim id est laborum.
                         </p>
+                        <!-- <p> {{ tutor.about }} </p> -->
                     </div>
                     <div class="work-container">
                         <h3>Teaching Experience</h3>
@@ -64,6 +84,7 @@
                             Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
                             mollit anim id est laborum.
                         </p>
+                        <!-- <p> {{ tutor.experience }} </p> -->
                     </div>
                     <div class="work-container">
                         <h3>Education</h3>
@@ -74,11 +95,7 @@
                             Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
                             mollit anim id est laborum.
                         </p>
-                    </div>
-
-                    <div class="d-flex justify-content-end">
-                        <!-- message -->
-                        <a href="/messaging" class="btn btn-warning">Message</a>
+                        <!-- <p> {{ tutor.education }} </p> -->
                     </div>
                 </div>
             </div>
