@@ -3,7 +3,6 @@ import pymysql
 import re
 import helpers
 
-
 application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
 
@@ -15,7 +14,6 @@ conn = pymysql.connect(
         db = 'tutorDB'
 )
 cursor = conn.cursor()
-
 # in .html files, make sure to href= to these routes, not the location of the .html files themselves
 @application.route('/', methods=['GET','POST'])
 def index():
@@ -108,7 +106,7 @@ def register():
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
         else:
-            cursor.execute(f"INSERT INTO user (name,password,sfsu_email,sfsu_id) VALUES ('{username}','{password}','{email}','{sfsu_id}')")
+            cursor.execute(f"INSERT INTO user (name,password,sfsu_email,sfsu_id) VALUES ('{username}','{helpers.encryptPass(password)}','{email}','{sfsu_id}')")
             conn.commit()
             msg = 'You have successfully registered !'
             

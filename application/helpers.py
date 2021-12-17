@@ -1,8 +1,12 @@
 import re
+from passlib.hash import sha256_crypt
 
 def isValidSfsuEmail(s):
-    if(re.search('sfsu.edu$',s)):
-        print('has sfsu.edu at the end')
-    if(re.match(r'[^@]+@[^@]+\.[^@]+',s)):
-        print('is an email')
     return( (re.search('sfsu.edu$',s)) and re.match(r'[^@]+@[^@]+\.[^@]+',s)) #returns None if failure
+
+def encryptPass(s):
+    return sha256_crypt.encrypt(s)
+
+def checkPasswordOfUser(username, password):
+    
+    return True
