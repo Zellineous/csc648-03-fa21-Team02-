@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import pymysql
 import re
+import helpers
 
 
 application = Flask(__name__)
@@ -11,8 +12,7 @@ conn = pymysql.connect(
         port = 3306,
         user = 'csc64803team2', 
         password = 'password123',
-        db = 'tutorDB',
-        cursorclass=pymysql.cursors.DictCursor
+        db = 'tutorDB'
 )
 cursor = conn.cursor()
 
@@ -82,27 +82,30 @@ def editprofile():
 @application.route('/register', methods =['GET', 'POST'])
 def register():
     msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form :
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form and 'sfsu_id' in request.form:
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
         sfsu_id = request.form['sfsu_id']
-        # cursor.execute("SELECT user_id FROM user ORDER BY user_id DESC LIMIT 1;") + 1
+        cursor.execute("SELECT * FROM user WHERE user.name = 'thomas123'")
+        users = cursor.fetchall()
+        print(users)
         id = 10
-        cursor.execute('SELECT * FROM user WHERE username = % s', (username, ))
+        cursor.execute(f"SELECT sfsu_id FROM user WHERE name='{username}' OR sfsu_id={sfsu_id}")
         account = cursor.fetchone()
         if account:
-            msg = 'Account already exists !'
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address !'
+            msg = 'Account already exists!'
+        elif not helpers.isValidSfsuEmail(email):
+            msg = 'Invalid email address! Enter your SFSU email'
         elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'Username must contain only characters and numbers !'
+            msg = 'Username must contain only characters and numbers!'
         elif not username or not password or not email:
-            msg = 'Please fill out the form !'
+            msg = 'Please fill out the form!'
         else:
-            cursor.execute('INSERT INTO user VALUES (% s , % s, % s, % s, % s)', (id, username, password, email, sfsu_id, ))
+            cursor.execute(f"INSERT INTO user (name,password,sfsu_email,sfsu_id) VALUES ('{username}','{password}','{email}','{sfsu_id}')")
             conn.commit()
             msg = 'You have successfully registered !'
+            
     elif request.method == 'POST':
         msg = 'Please fill out the form !'
     return render_template('register.html', msg = msg)

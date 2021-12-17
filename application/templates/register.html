@@ -28,7 +28,10 @@
             <form action="/register" method="post" class="col-lg-6 col-md-6 col-sm-12 col-12 register-section">
                 <h1>Welcome!</h1>
 
-                <div class="msg">{{ msg }}</div>
+                <div id="formAlert" class="alert hide">   
+                    <strong>{{msg}}</strong> 
+                  </div>
+          
 
                 <!-- name -->
                 <div class="form-group was-validated">
@@ -77,7 +80,7 @@
                 <!-- register / login buttons -->
                 <div class="register-login-btn">
                     <input type="submit" class="btn btn-primary indv-btn" Create account>
-                    <a href="/login" class="btn btn-primary indv-btn">Sign in</a>
+                    <a href="/login" class="btn btn-primary indv-btn">Already have an account?</a>
                 </div>
             </form>
         </div>
