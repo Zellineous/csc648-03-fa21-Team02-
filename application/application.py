@@ -12,7 +12,7 @@ conn = pymysql.connect(
         user = 'csc64803team2', 
         password = 'password123',
         db = 'tutorDB',
-        cursorclass=pymysql.cursors.DictCursor
+        # cursorclass=pymysql.cursors.DictCursor
 )
 cursor = conn.cursor()
 
@@ -24,6 +24,16 @@ def index():
         search = request.form.get('search')
         search_category = request.form.get('search_category')
         return redirect(url_for('results', search=search, search_category=search_category))
+
+    return render_template('home.html')
+
+
+@application.route('/layout', methods=['GET','POST'])
+def nav_search():
+    print(request.method)
+    if request.method == 'POST':
+        search = request.form.get('search')
+        return redirect(url_for('results', search=search))
 
     return render_template('home.html')
 
@@ -151,25 +161,17 @@ def search():
 
 
 
-# shailendra - implement
-# @application.route('/messages')
-# def messages():
-#     return render_template('message.html')
 
 @application.route('/inbox')
 def inbox():
     return render_template('inbox.html')
 
-# shailendra - implement
-@application.route('/message')
+
+@application.route('/message.html')
 def message():
-    return render_template('message.html')# shailendra - implement
-@application.route('/messages', methods = ['GET','POST'])
-def messages():
-    if request.method == "POST":
-        message = request.form.get("message")
-        print(message)
-    return render_template('messages.html')
+    return render_template('message.html')
+
+
 
 if __name__ == '__main__':
     application.run(debug=True)
