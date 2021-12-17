@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import pymysql
+import re
 
 
 application = Flask(__name__)
@@ -78,15 +79,33 @@ def editprofile():
 
 
 
-
-@application.route('/register')
+@application.route('/register', methods =['GET', 'POST'])
 def register():
-    return render_template('register.html')
-
-@application.route('/register', methods=['POST'])
-def register_post():
-    # TODO: validate and add user to database
-    return redirect('dashboard.html')
+    msg = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form :
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        sfsu_id = request.form['sfsu_id']
+        # cursor.execute("SELECT user_id FROM user ORDER BY user_id DESC LIMIT 1;") + 1
+        id = 10
+        cursor.execute('SELECT * FROM user WHERE username = % s', (username, ))
+        account = cursor.fetchone()
+        if account:
+            msg = 'Account already exists !'
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            msg = 'Invalid email address !'
+        elif not re.match(r'[A-Za-z0-9]+', username):
+            msg = 'Username must contain only characters and numbers !'
+        elif not username or not password or not email:
+            msg = 'Please fill out the form !'
+        else:
+            cursor.execute('INSERT INTO user VALUES (% s , % s, % s, % s, % s)', (id, username, password, email, sfsu_id, ))
+            conn.commit()
+            msg = 'You have successfully registered !'
+    elif request.method == 'POST':
+        msg = 'Please fill out the form !'
+    return render_template('register.html', msg = msg)
 
 
 
@@ -108,6 +127,14 @@ def login():
         else:
             msg = 'Incorrect username / password !'
     return render_template('login.html', msg = msg)
+
+
+@application.route('/logout')
+def logout():
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
+    return redirect('/')
 
 
 @application.route('/dashboard')

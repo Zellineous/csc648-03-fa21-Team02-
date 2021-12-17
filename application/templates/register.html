@@ -25,12 +25,15 @@
             </div>
 
             <!-- right side of form -->
-            <form method="post" action="/register" class="col-lg-6 col-md-6 col-sm-12 col-12 register-section">
+            <form action="/register" method="post" class="col-lg-6 col-md-6 col-sm-12 col-12 register-section">
                 <h1>Welcome!</h1>
+
+                <div class="msg">{{ msg }}</div>
 
                 <!-- name -->
                 <div class="form-group was-validated">
-                    <input type="text" name="" class="form-control register-input" placeholder="Your name" required>
+                    <input id="username" name="username" type="text" class="form-control register-input"
+                        placeholder="Your Username" required>
                     <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
@@ -40,7 +43,19 @@
 
                 <!-- email -->
                 <div class="form-group was-validated">
-                    <input type="email" name="" class="form-control register-input" placeholder="Your e-mail" required>
+                    <input id="email" name="email" type="text" class="form-control register-input"
+                        placeholder="Your e-mail" required>
+                    <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-envelope-fill"
+                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z" />
+                    </svg>
+                </div>
+
+                <!-- SFSU ID -->
+                <div class="form-group was-validated">
+                    <input id="sfsu_id" name="sfsu_id" type="text" class="form-control register-input"
+                        placeholder="Your SFSU ID" required>
                     <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-envelope-fill"
                         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
@@ -50,8 +65,8 @@
 
                 <!-- password -->
                 <div class="form-group was-validated">
-                    <input type="password" name="" class="form-control register-input" placeholder="Create password"
-                        required>
+                    <input id="password" name="password" type="password" class="form-control register-input"
+                        placeholder="Create password" required>
                     <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-lock-fill" fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg">
                         <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z" />
@@ -61,7 +76,7 @@
 
                 <!-- register / login buttons -->
                 <div class="register-login-btn">
-                    <a href="" class="btn btn-primary indv-btn">Create account</a>
+                    <input type="submit" class="btn btn-primary indv-btn" Create account>
                     <a href="/login" class="btn btn-primary indv-btn">Sign in</a>
                 </div>
             </form>
