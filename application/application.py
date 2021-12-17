@@ -70,14 +70,30 @@ def tutor():
     return render_template('tutor.html')
 
 
+@application.route('/editprofile')
+def editprofile():
+    return render_template('editprofile.html')
+
+
+
 @application.route('/register')
 def register():
     return render_template('register.html')
 
-# alberto - implement
+@application.route('/register', methods=['POST'])
+def register_post():
+    # TODO: validate and add user to database
+    return redirect(url_for('auth.login'))
+
+
 @application.route('/login/')
 def login():
     return render_template('login.html')
+
+@application.route('/login', methods=['POST'])
+def login_post():
+    # TODO: get login information, check if user exists / has right credentials
+    return redirect(url_for('main.profile'))
 
 
 # alberto - implement
