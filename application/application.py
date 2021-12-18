@@ -141,8 +141,42 @@ def tutor():
                            avail=avail, email=email, gender=gender)
 
 
-@application.route('/editprofile')
+@application.route('/editprofile', methods=['GET', 'POST'])
 def editprofile():
+    user_id = session['id']
+    forms = ['name', 'gender', 'email', 'phone', 'major', 'availability',
+        'about', 'experience', 'education']
+    valid_forms = []
+    values = []
+    if request.method == 'POST':
+        # name = request.form['name']
+        # gender = request.form['gender']
+        # email = request.form['email']
+        # phone = request.form['phone']
+        # major = request.form['major']
+        # avail = request.form['avail']
+        # about = request.form['about']
+        # experience = request.form['experience']
+        # education = request.form['education']
+
+        cnt = 0
+
+        for f in forms:
+            value = request.form.get(f , None)
+            if value:
+                print("value")
+                values.append(value)
+                valid_forms.append(cnt)
+            cnt += 1    
+
+        count = 0
+
+        for v in values:
+            sql = "UPDATE user_profile SET {0} = '{1}' WHERE sfsu_id={2}".format(forms[valid_forms[count]], v, user_id)
+            count += 1
+            cursor.execute(sql)
+            conn.commit()
+
     return render_template('editprofile.html')
 
 

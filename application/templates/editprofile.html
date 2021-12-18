@@ -21,15 +21,17 @@
                         <br>
                         <br>
                         <!-- upload picture -->
+                        <!-- TODO: NEED TO UPLOAD PICS -->
                         <form action="/editprofile" method="post">
                             <label class="form-label" for="customFile">Upload Picture</label>
                             <input type="file" class="form-control" id="customFile" />
                         </form>
                         <br>
+
                         <form action="/editprofile" method="post" class="form-control-sm" style="padding-top: 20px;">
                             <div class="input-group">
-                                <!-- Search -->
-                                <input type="text" class="form-control text-center col-xs-2" placeholder="Name"
+                                <!-- Name -->
+                                <input id="name" name="name" type="text" class="form-control text-center col-xs-2" placeholder="Name"
                                     id="search" name="search">
                                 <!-- Submit Button -->
                                 <button class="input-group-text shadow-none px-2 btn-warning">
@@ -45,8 +47,7 @@
                         <form action="/editprofile" method="post" class="form-control-sm" style="padding-top: 20px;">
                             <!-- gender -->
                             <div class="input-group">
-                                <input type="text" class="form-control text-center col-xs-2" placeholder="Gender"
-                                    id="search" name="search">
+                                <input id="gender" name="gender" class="form-control text-center col-xs-2" placeholder="Gender">
                                 <button class="input-group-text shadow-none px-2 btn-warning">
                                     <i class="bi bi-check"></i>
                                 </button>
@@ -54,8 +55,7 @@
 
                             <!-- email -->
                             <div class="input-group" style="padding-top: 10px;">
-                                <input type="text" class="form-control text-center col-xs-2" placeholder="Email"
-                                    id="search" name="search">
+                                <input id="email" name="email" type="text" class="form-control text-center col-xs-2" placeholder="Email">
                                 <button class="input-group-text shadow-none px-2 btn-warning">
                                     <i class="bi bi-check"></i>
                                 </button>
@@ -63,8 +63,7 @@
 
                             <!-- phone -->
                             <div class="input-group" style="padding-top: 10px;">
-                                <input type="text" class="form-control text-center col-xs-2" placeholder="Phone Number"
-                                    id="search" name="search">
+                                <input id="phone" name="phone" type="text" class="form-control text-center col-xs-2" placeholder="Phone Number">
                                 <button class="input-group-text shadow-none px-2 btn-warning">
                                     <i class="bi bi-check"></i>
                                 </button>
@@ -80,7 +79,7 @@
                         <form action="/editprofile" method="post" class="form-control-sm" style="padding-top: 20px;">
                             <div class="input-group">
                                 <!-- Search -->
-                                <input type="text" class="form-control text-center col-xs-2" placeholder="Subjects"
+                                <input id="subject" name="subject" type="text" class="form-control text-center col-xs-2" placeholder="Subjects"
                                     id="search" name="search">
                                 <!-- Submit Button -->
                                 <button class="input-group-text shadow-none px-2 btn-warning">
@@ -97,7 +96,7 @@
                         <form action="/editprofile" method="post" class="form-control-sm" style="padding-top: 20px;">
                             <div class="input-group">
                                 <!-- Search -->
-                                <input type="text" class="form-control text-center col-xs-2" placeholder="Availability"
+                                <input id="avail" name="avail" type="text" class="form-control text-center col-xs-2" placeholder="Availability"
                                     id="search" name="search">
                                 <!-- Submit Button -->
                                 <button class="input-group-text shadow-none px-2 btn-warning">
@@ -116,7 +115,7 @@
                     <div class="work-container">
                         <h3>About Me</h3>
                         <form action="/editprofile" method="post">
-                            <input type="text" class="form-control" style="height: 150px;">
+                            <input id="about" name="about" type="text" class="form-control" style="height: 150px;">
                             <button class="input-group-text shadow-none px-2 btn-warning small-btn ms-auto">
                                 Submit
                             </button>
@@ -126,7 +125,7 @@
                     <div class="work-container">
                         <h3>Teaching Experience</h3>
                         <form action="/editprofile" method="post">
-                            <input type="text" class="form-control" style="height: 150px;">
+                            <input id="experience" name="experience" type="text" class="form-control" style="height: 150px;">
                             <button class="input-group-text shadow-none px-2 btn-warning small-btn ms-auto">
                                 Submit
                             </button>
@@ -136,7 +135,7 @@
                     <div class="work-container">
                         <h3>Education</h3>
                         <form action="/editprofile" method="post">
-                            <input type="text" class="form-control" style="height: 150px;">
+                            <input id="education" name="education" type="text" class="form-control" style="height: 150px;">
                             <button class="input-group-text shadow-none px-2 btn-warning small-btn ms-auto">
                                 Submit
                             </button>
