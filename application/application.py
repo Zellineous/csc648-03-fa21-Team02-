@@ -7,7 +7,7 @@ application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
 conn = db.connect()
 cursor = conn.cursor()
-
+print(helpers.key)
 # in .html files, make sure to href= to these routes, not the location of the .html files themselves
 @application.route('/', methods=['GET','POST'])
 def index():
@@ -109,24 +109,23 @@ def register():
     return render_template('register.html', msg = msg)
 
 
-
-
 @application.route('/login', methods =['GET', 'POST'], strict_slashes=False)
 def login():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
         password = request.form['password']
-        cursor.execute('SELECT * FROM user WHERE username = % s AND password = % s', (username, password, ))
-        account = cursor.fetchone()
-        if account:
-            session['loggedin'] = True
-            session['id'] = account['user_id']
-            session['username'] = account['username']
-            msg = 'Logged in successfully !'
-            return render_template('dashboard.html', msg = msg)
-        else:
-            msg = 'Incorrect username / password !'
+        if(helpers.checkPasswordOfUser(username,password)):
+            cursor.execute(f"SELECT * FROM user WHERE name='{username}'")
+            account = cursor.fetchone()
+            if account:
+                session['loggedin'] = True
+                session['id'] = account['sfsu_id']
+                session['username'] = account['name']
+                msg = 'Logged in successfully !'
+                return render_template('dashboard.html', msg = msg)
+            else:
+                msg = 'Incorrect username / password !'
     return render_template('login.html', msg = msg)
 
 
