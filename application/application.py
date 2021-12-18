@@ -212,8 +212,12 @@ def logout():
 
 @application.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    print(request.method)
-    return render_template('dashboard.html')
+    username = session['username']
+    user = helpers.getUserData(username)
+    id = user['sfsu_id']
+    user_profile = helpers.getUserProfile(id)
+    name = user_profile['name']
+    return render_template('dashboard.html', name=name)
 
 
 # alberto - implement
