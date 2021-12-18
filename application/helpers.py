@@ -79,8 +79,48 @@ def getUserProfile(id):
     cursor.execute(f"SELECT * FROM user_profile WHERE sfsu_id={id}")
     return cursor.fetchone()
 
+
 def makeUserProfile(sfsu_id):
     user = getUserData(sfsu_id)
     cursor.execute(f"INSERT INTO user_profile (name,sfsu_id) VALUE ('{user['name']}',{user['sfsu_id']})")
     cursor.commit()
     print(getUserProfile(sfsu_id))
+
+
+# returns all courses
+def getAllCourses():
+    cursor.execute(f"SELECT * FROM course")
+    return cursor.fetchall()
+
+# returns courses that are similar to search term
+def getSearch(search):
+    cursor.execute(f"SELECT * FROM course WHERE name LIKE '%" + search + "%'")
+    return cursor.fetchall()
+
+
+# returns corresponding major id
+def getMajor(search_category):
+    cursor.execute(f"SELECT * FROM major WHERE name LIKE '%" + search_category + "%'")
+    return cursor.fetchone()
+
+
+# returns courses that belong to correct major
+def getMajorSearch(id):
+    cursor.execute(f"SELECT * FROM course WHERE major_id={id}")
+    return cursor.fetchall()
+
+
+# returns courses that match both major and search term
+def getMCSearch(search, id):
+    cursor.execute(f"SELECT * FROM course WHERE major_id={id} AND name LIKE '%" + search + "%'")
+    return cursor.fetchall()
+
+
+
+def getTutorId(course_id):
+    cursor.execute(f"SELECT * FROM teaches WHERE course={course_id}")
+    return cursor.fetchone()
+
+def getTutorInfo(tutor_id):
+    cursor.execute(f"SELECT * FROM user_profile WHERE sfsu_id={tutor_id}")
+    return cursor.fetchone()

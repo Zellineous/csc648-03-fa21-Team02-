@@ -1,19 +1,26 @@
-
 {% extends "layout.html" %}
 {% block content %}
 
-<h2><p>Searched for: {{ search }}</p>
+<link rel="stylesheet" type="text/css" href="../../static/browse.css">
+
+<!-- <h2>
+    <p>Searched for: {{ search }}</p>
+
     Results:
 
     {% for i in range(0,len) %}
-         <p><li>{{ codes[i] }}  -  {{ names[i] }}</li></p>
+    <p>
+        <li>{{ tutors[i] }} : {{ codes[i] }} - {{ names[i] }}</li>
+    </p>
     {% endfor %}
 
-</h2>
+</h2> -->
 
-<link rel="stylesheet" type="text/css" href="../../static/browse.css">
+<div class="container mt-3 mb-4 d-flex align-items-center justify-content-center flex-column">
+    <div class="heading">
+        <h1>Searched for {{ search }} in {{ search_category }}.</h1>
+    </div>
 
-<div class="container mt-3 mb-4 d-flex align-items-center justify-content-center">
     <div class="col-lg-9 mt-4 mt-lg-0">
         <div class="row">
             <div class="col-md-12">
@@ -22,13 +29,14 @@
                         <!-- results header -->
                         <thead>
                             <tr>
-                                <th class="action text-left">{{len}} Results found Tutors for: {{ search }}</th>
-                                <th class="text-center">Course(s) Taught</th>
-                                <th class="action text-right">Contact</th>
+                                <th>Tutor</th>
+                                <th class="text-center">Subject</th>
+                                <th class="action text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- tutor listing result (1) -->
+                            {% for i in range(0,len) %}
                             <tr class="candidates-list">
                                 <td class="title">
                                     <div class="thumb">
@@ -38,7 +46,7 @@
                                     <div class="candidate-list-details">
                                         <div class="candidate-list-info">
                                             <div class="candidate-list-title">
-                                                <h5 class="mb-0"><a href="#">Tutor Name</a></h5>
+                                                <h5 class="mb-0"><a href="{{ url_for('tutor') }}">{{ tutors[i] }}</a></h5>
                                             </div>
                                             <div>
                                                 <p> Short tutor description.</p>
@@ -47,40 +55,13 @@
                                     </div>
                                 </td>
                                 <td class="candidate-list-favourite-time text-center">
-                                    <p>({{codes[0]}}) {{ names[0] }}</p>
+                                    <p>{{ codes[i] }} - {{ names[i] }}</p>
                                 </td>
                                 <td>
-                                    <a href="/messages" style="background-color: #154e6e;" class="btn btn-primary">Message</a>
+                                    <a href="/messages" class="btn btn-warning">Message</a>
                                 </td>
                             </tr>
-                        <!-- tutor listing result (2) -->
-                        <tr class="candidates-list">
-                                <td class="title">
-                                    <div class="thumb">
-                                        <!-- need picture here -->
-                                        <img class="img-fluid" src="../static/images/blank_profile.png" alt="">
-                                    </div>
-                                    <div class="candidate-list-details">
-                                        <div class="candidate-list-info">
-                                            <div class="candidate-list-title">
-                                                <h5 class="mb-0"><a href="#">Tutor Name</a></h5>
-                                            </div>
-                                            <div>
-                                                <p> Short tutor description.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="candidate-list-favourite-time text-center">
-                                    <p>({{codes[1]}}) {{ names[1] }}</p>
-                                </td>
-                                <td>
-                                    <a href="/messages" style="background-color: #154e6e;" class="btn btn-primary">Message</a>
-                                </td>
-                            </tr>
-
-
-
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -88,4 +69,6 @@
         </div>
     </div>
 </div>
+
+
 {% endblock %}
