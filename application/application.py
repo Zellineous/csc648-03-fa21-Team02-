@@ -48,27 +48,30 @@ def browse():
 def results():
     search = request.args.get('search', None)
     search_category = request.args.get('search_category', None)
-
+    print(search_category)
     if search_category == 'Majors':
+        print('case1')
         if search:
             data = helpers.getSearch(search)
         else:
             data = helpers.getAllCourses()
 
-    if not search_category:
-        if search:
-            data = helpers.getSearch(search)
-        else:
-            data = helpers.getAllCourses()
+    # if not search_category:
+    #     print('case3')
+    #     if search:
+    #         data = helpers.getSearch(search)
+    #     else:
+    #         data = helpers.getAllCourses()
     
     elif search_category:
+        print('case2')
         major = helpers.getMajor(search_category)
         major_id = major['id']
         data = helpers.getMajorSearch(major_id)
 
     elif search and search_category:
         major = helpers.getMajor(search_category)
-        major_id = major['id']
+        print(major)
         data = helpers.getMCSearch(search, major_id)
      
     tutors = []     # tutor names
@@ -277,8 +280,8 @@ def viewmessage():
     message = request.form.get('message')
     session['message'] = message                # message to send
     print(session['message'])
-    receivingUser = session['message_to_name']  # receiver
-    sendingUser = session['username']           # sender
+    receivingUser = session['message_to_name']  # receiver name
+    sendingUser = session['username']           # sender name
 
     helpers.createMessage(message,sendingUser,receivingUser)
 
