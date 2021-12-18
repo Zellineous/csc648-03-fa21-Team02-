@@ -323,7 +323,7 @@ def viewmessage():
         realName = userProfile['name']
         phone = userProfile['phone']
         major = userProfile['major']
-        gender = userProfile['gender']
+        email = userData['sfsu_email']
         
 
     else:
@@ -335,10 +335,10 @@ def viewmessage():
         realName = userProfile['name']
         phone = userProfile['phone']
         major = userProfile['major']
-        gender = userProfile['gender']
+        email = userData['sfsu_email']
     
 
-    return render_template('viewmessage.html',realName=realName,phone=phone,major=major,gender=gender,text=text)
+    return render_template('viewmessage.html',realName=realName,phone=phone,major=major,email=email,text=text)
 
 
 if __name__ == '__main__':
