@@ -35,7 +35,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- tutor listing result (1) -->
+                            <!-- tutor listing result -->
                             {% for i in range(0,len) %}
                             <tr class="candidates-list">
                                 <td class="title">
@@ -46,7 +46,7 @@
                                     <div class="candidate-list-details">
                                         <div class="candidate-list-info">
                                             <div class="candidate-list-title">
-                                                <h5 class="mb-0"><a href="{{ url_for('tutor') }}">{{ tutors[i] }}</a></h5>
+                                                <h5 class="mb-0"><a href="{{ url_for('tutor', user=usernames[i]) }}">{{ tutors[i] }}</a></h5>
                                             </div>
                                             <div>
                                                 <p> Short tutor description.</p>
@@ -57,9 +57,19 @@
                                 <td class="candidate-list-favourite-time text-center">
                                     <p>{{ codes[i] }} - {{ names[i] }}</p>
                                 </td>
+
+                                {% if not session['username'] %}
+                                <td>
+                                    <a href="/register" class="btn btn-warning">Message</a>
+                                </td>
+                                {% endif %}
+                      
+                                {% if session['username'] %}
                                 <td>
                                     <a href="/messages" class="btn btn-warning">Message</a>
                                 </td>
+                                {% endif %}
+
                             </tr>
                             {% endfor %}
                         </tbody>

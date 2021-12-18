@@ -38,9 +38,10 @@ def about():
     return render_template('about.html')
 
 
-@application.route('/browse')
-def browse():
-    return render_template('browse.html')
+# @application.route('/browse')
+# def browse():
+#     return render_template('browse.html')
+
 
 
 @application.route('/layout', methods=['GET', 'POST'])
@@ -48,35 +49,34 @@ def browse():
 def results():
     search = request.args.get('search', None)
     search_category = request.args.get('search_category', None)
-    print(search_category)
+
     if search_category == 'Majors':
-        print('case1')
         if search:
             data = helpers.getSearch(search)
         else:
             data = helpers.getAllCourses()
-    
+
     elif search_category:
-        print('case2')
         major = helpers.getMajor(search_category)
         major_id = major['id']
         data = helpers.getMajorSearch(major_id)
 
     elif search and search_category:
         major = helpers.getMajor(search_category)
-        print(major)
+        major_id = major['id']
         data = helpers.getMCSearch(search, major_id)
 
-    if not search_category or not search :
-        print('case3')
+    elif not search_category:
         if search:
             data = helpers.getSearch(search)
         else:
             data = helpers.getAllCourses()
-     
+
     tutors = []     # tutor names
+    usernames = []   # tutor usernames
     names = []      # e.g. 'software engineering'
     codes = []      # e.g. 648
+
     for course in data:
         # retrieving tutor info
         course_id = course['id']
@@ -89,12 +89,23 @@ def results():
             tutor = helpers.getTutorInfo(tutor_id)
             # add tutor name
             tutors.append(tutor['name'])
+
+            # get tutor username
+            tutor_user = helpers.getUserDataWithId(tutor_id)
+            username = tutor_user['name']
+            usernames.append(username)
         else:
             tutors.append('No Tutors')
+            usernames.append('notutor')
 
         names.append(course['name'])
         codes.append(course['number'])
+<<<<<<< HEAD
     length = len(tutors)
+=======
+
+    length = len(codes)
+>>>>>>> e62e7152ef2ec6974e2b54d505103f236c714af1
 
     # for styling header in results.html
     if not search:
@@ -104,7 +115,8 @@ def results():
     if not search_category:
         search_category = 'all majors'
 
-    return render_template('results.html', search=search, search_category=search_category, names=names, codes=codes, tutors=tutors, len=length)
+    return render_template('results.html', search=search, search_category=search_category,
+        names=names, codes=codes, tutors=tutors, usernames=usernames, len=length)
 
 
 @application.route('/team/<member>_about')
@@ -112,7 +124,7 @@ def team_member_about(member):
     return render_template('team/' + member + '.html')
 
 
-@application.route('/tutor', methods =['GET', 'POST'])
+@application.route('/tutor', methods=['GET', 'POST'])
 def tutor():
     username = request.args.get('user')
     user = helpers.getUserData(username)
@@ -130,11 +142,16 @@ def tutor():
         email = user['sfsu_email']
         gender = user_profile['gender']
 
+<<<<<<< HEAD
 
     return render_template('tutor.html', name=name, major=major, phone=phone, status=status, 
         avail=avail, email=email, gender=gender,username=username)
 
 
+=======
+    return render_template('tutor.html', name=name, major=major, phone=phone, status=status,
+                           avail=avail, email=email, gender=gender)
+>>>>>>> e62e7152ef2ec6974e2b54d505103f236c714af1
 
 
 @application.route('/editprofile')
@@ -142,8 +159,7 @@ def editprofile():
     return render_template('editprofile.html')
 
 
-
-@application.route('/register', methods =['GET', 'POST'])
+@application.route('/register', methods=['GET', 'POST'])
 def register():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form and 'sfsu_id' in request.form:
@@ -151,7 +167,8 @@ def register():
         password = request.form['password']
         email = request.form['email']
         sfsu_id = request.form['sfsu_id']
-        cursor.execute(f"SELECT sfsu_id FROM user WHERE name='{username}' OR sfsu_id={sfsu_id} OR sfsu_email='{email}'")
+        cursor.execute(
+            f"SELECT sfsu_id FROM user WHERE name='{username}' OR sfsu_id={sfsu_id} OR sfsu_email='{email}'")
         account = cursor.fetchone()
         if account:
             msg = 'Account already exists!'
@@ -162,39 +179,40 @@ def register():
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
         else:
-            cursor.execute(f"INSERT INTO user (name,password,sfsu_email,sfsu_id) VALUES ('{username}','{helpers.encryptPass(password)}','{email}','{sfsu_id}')")
+            cursor.execute(
+                f"INSERT INTO user (name,password,sfsu_email,sfsu_id) VALUES ('{username}','{helpers.encryptPass(password)}','{email}','{sfsu_id}')")
             conn.commit()
-            cursor.execute(f"INSERT INTO user_profile (name,sfsu_id) VALUE ('{username}',{sfsu_id})")
+            cursor.execute(
+                f"INSERT INTO user_profile (name,sfsu_id) VALUE ('{username}',{sfsu_id})")
             conn.commit()
             msg = 'You have successfully registered!'
-            
+
     elif request.method == 'POST':
         msg = 'Please fill out the form !'
-    return render_template('register.html', msg = msg)
+    return render_template('register.html', msg=msg)
 
 
-@application.route('/login', methods =['GET', 'POST'], strict_slashes=False)
+@application.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
-        
 
         password = request.form['password']
         account = helpers.getUserData(username)
         if account:
             # print(account)
-            if(helpers.checkPasswordOfUser(username,password)):
+            if(helpers.checkPasswordOfUser(username, password)):
                 session['loggedin'] = True
                 session['id'] = account['sfsu_id']
                 session['username'] = account['name']
                 msg = 'Logged in successfully!'
-                return render_template('dashboard.html', msg = msg)
+                return render_template('dashboard.html', msg=msg)
             else:
                 msg = 'Incorrect username or password!'
         else:
             msg = 'Account does not exist!'
-    return render_template('login.html', msg = msg)
+    return render_template('login.html', msg=msg)
 
 
 @application.route('/logout')
@@ -205,12 +223,14 @@ def logout():
     return redirect('/')
 
 
-@application.route('/dashboard', methods =['GET', 'POST'])
+@application.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    print(request.method)
-    return render_template('dashboard.html')
-
-
+    username = session['username']
+    user = helpers.getUserData(username)
+    id = user['sfsu_id']
+    user_profile = helpers.getUserProfile(id)
+    name = user_profile['name']
+    return render_template('dashboard.html', name=name)
 
 
 # alberto - implement
@@ -219,22 +239,21 @@ def search():
     return render_template('search.html')
 
 
-
-
-@application.route('/inbox', methods =['GET', 'POST'])
+@application.route('/inbox', methods=['GET', 'POST'])
 def inbox():
     print(request.method)
     data = request.args.get('user')
     data = helpers.getUserData(data)
     print(data)
     user_id = data['sfsu_id']
-    #print(user_id)
-    #get list of all users that have sent a message
-    cursor.execute(f"SELECT * FROM message WHERE id IN (SELECT MAX(id) FROM message GROUP BY conversation)")
+    # print(user_id)
+    # get list of all users that have sent a message
+    cursor.execute(
+        f"SELECT * FROM message WHERE id IN (SELECT MAX(id) FROM message GROUP BY conversation)")
     messages = cursor.fetchall()
     #print("messages from: ")
-    #print(messages)
-    people = [] #penpal?
+    # print(messages)
+    people = []  # penpal?
     lastMessages = []
     dates = []
     conversations = []
@@ -242,38 +261,44 @@ def inbox():
     # get conversation partner names
     for message in messages:
         convoID = message['conversation']
-        #print(f"conversation # {convoID}")
+        # print(f"conversation # {convoID}")
         cursor.execute(f"SELECT * FROM conversation WHERE id={convoID}")
         conversations.append(cursor.fetchone())
-    
-    
+
     print(conversations)
     for convo in conversations:
         if convo['user1'] == user_id:
-            cursor.execute(f"SELECT name FROM user WHERE sfsu_id={convo['user2']}")
+            cursor.execute(
+                f"SELECT name FROM user WHERE sfsu_id={convo['user2']}")
             name = cursor.fetchone()['name']
             people.append(name)
         elif convo['user2'] == user_id:
-            cursor.execute(f"SELECT name FROM user WHERE sfsu_id={convo['user1']}")
+            cursor.execute(
+                f"SELECT name FROM user WHERE sfsu_id={convo['user1']}")
             name = cursor.fetchone()['name']
             people.append(name)
     for message in messages:
         dates.append(message['datetime'].strftime('%Y-%m-%d %H:%M:%S'))
         lastMessages.append(message['message'])
-        cursor.execute(f"SELECT name FROM user WHERE sfsu_id={message['sending_user']}")
+        cursor.execute(
+            f"SELECT name FROM user WHERE sfsu_id={message['sending_user']}")
         lastSenders.append(cursor.fetchone()['name'])
-        
+
     # get only most recent message from another user
 
-    
+    return render_template('inbox.html', people=people, dates=dates, lastMessages=lastMessages, len=len(people), lastSenders=lastSenders)
 
-    return render_template('inbox.html', people=people,dates=dates,lastMessages=lastMessages,len=len(people),lastSenders=lastSenders)
 
-@application.route('/messaging', methods =['GET', 'POST'])
+@application.route('/messaging', methods=['GET', 'POST'])
 def messaging():
+    user1 = helpers.getUserData(request.args.get('user'))['sfsu_id']
+    user2 = helpers.getUserData(session['username'])['sfsu_id']
+    print(helpers.getConversationMessages(user1, user2))
+
     return render_template('messaging.html')
 
-@application.route('/viewmessage',methods =['GET', 'POST'])
+
+@application.route('/viewmessage', methods=['GET', 'POST'])
 def viewmessage():
     print(request.method)
     if request.method == 'POST':
@@ -301,6 +326,7 @@ def viewmessage():
    
     
 
+    return render_template('viewmessage.html')
 
 
 if __name__ == '__main__':
