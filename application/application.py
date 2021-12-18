@@ -86,7 +86,7 @@ def results():
             tutor_profile = helpers.getTutorInfo(tutor_id)
 
             listings.append({'courseName':course['name'], 'real_name' : tutor_profile['name'], 'username' : tutor['name'], 'code' : course['code']})
-
+    listings = newlist = sorted(listings, key=lambda d: d['username']) 
     for listing in listings:
         courseNames.append(listing['courseName'])
         real_names.append(listing['real_name'])
