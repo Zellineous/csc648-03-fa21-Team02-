@@ -34,10 +34,11 @@
                                     <div class="candidate-list-details">
                                         <div class="candidate-list-info">
                                             <div class="candidate-list-title">
-                                                <h5 class="mb-0"><a href="{{ url_for('tutor', user=usernames[i])}}">{{ courseNames[i] }}</a></h5>
+                                                <h3><a href="{{ url_for('tutor', user=usernames[i])}}">{{ usernames[i] }}</a></h3>
                                             </div>
                                             <div>
-                                                <p>{{ courseCodes[i] }}</p> <small>taught by {{ usernames[i] }}</small>
+                                                <h4 class="mb-1">{{ courseNames[i] }}</h4>
+                                                <p>{{ courseCodes[i] }}</p> 
                                             </div>
                                         </div>
                                     </div>

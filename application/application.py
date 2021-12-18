@@ -37,12 +37,6 @@ def about():
     return render_template('about.html')
 
 
-# @application.route('/browse')
-# def browse():
-#     return render_template('browse.html')
-
-
-
 @application.route('/layout', methods=['GET', 'POST'])
 @application.route('/results', methods=['GET', 'POST'])
 def results():
@@ -86,8 +80,13 @@ def results():
 
     for course in data:
         tutors = helpers.getTutorsTeaching(course['id'])
+
         for tutor in tutors:
-            listings.append({'courseName':course['name'], 'tutor' : tutor['name'], 'code' : course['code']})
+            # getting tutor's real name
+            tutor_id = tutor['sfsu_id']
+            tutor_profile = helpers.getTutorInfo(tutor_id)
+
+            listings.append({'courseName':course['name'], 'tutor' : tutor_profile['name'], 'code' : course['code']})
 
     for listing in listings:
         courseNames.append(listing['courseName'])
