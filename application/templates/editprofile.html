@@ -2,7 +2,7 @@
 {% block content %}
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
-<link href="../static/tutor.css" rel="stylesheet">
+<link href="../static/user.css" rel="stylesheet">
 
 
 <div class="container profile">
@@ -21,7 +21,7 @@
                         <br>
                         <br>
                         <!-- upload picture -->
-                        <form action="{{url_for(tutor)}}" method="post">
+                        <form action="{{url_for('tutor')}}" method="post">
                             <label class="form-label" for="customFile">Upload Picture</label>
                             <input type="file" class="form-control" id="customFile" />
                         </form>
@@ -74,11 +74,11 @@
                     <br>
 
                     <div>
-                        <h3>Subjects</h3>
+                        <h3>Major</h3>
                         <form action="/editprofile" method="post" class="form-control-sm" style="padding-top: 20px;">
                             <div class="input-group">
                                 <!-- Search -->
-                                <input id="subject" name="subject" type="text" class="form-control text-center col-xs-2" placeholder="Subjects"
+                                <input id="major" name="major" type="text" class="form-control text-center col-xs-2" placeholder="Major"
                                     id="search" name="search">
                                 <!-- Submit Button -->
                                 <button class="input-group-text shadow-none px-2 btn-warning">

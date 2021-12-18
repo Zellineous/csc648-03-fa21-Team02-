@@ -50,6 +50,17 @@ body {
 	align-items: flex-start;
 }
 
+.message_view {
+	width: 200px;
+	border-right: 1px solid #ddd;
+	padding: 0.7rem 1rem;
+	min-height: 500px;
+	display: flex;
+	flex-direction: column;
+	align-items: middle;
+	justify-content: center;
+}
+
 .user__message__wrapper:hover {
 	background: #f9f9f9;
 	transition: 0.5s;
@@ -74,7 +85,8 @@ body {
 }
 
 .user__message__preview {
-	padding: 0rem 1.4rem;
+	padding: 0rem 5rem;
+	width: 100%
 }
 
 .user__message__preview p {
@@ -85,5 +97,20 @@ body {
 	min-height: 500px;
 }
 
+.center {
+	display: flex;
+	flex-direction: column;
+	align-items: middle;
+	text-align: center;
+	justify-content: center;
+}
 
+.center_message {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: middle;
+	text-align: center;
+	padding-bottom: 20%;
+}
 

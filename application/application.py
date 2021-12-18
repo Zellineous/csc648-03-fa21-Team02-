@@ -39,12 +39,6 @@ def about():
     return render_template('about.html')
 
 
-# @application.route('/browse')
-# def browse():
-#     return render_template('browse.html')
-
-
-
 @application.route('/layout', methods=['GET', 'POST'])
 @application.route('/results', methods=['GET', 'POST'])
 def results():
@@ -83,17 +77,24 @@ def results():
     numResults = 0
     courseNames = []
     courseCodes = []
+    real_names = []
     usernames = []
     listings = []
 
     for course in data:
         tutors = helpers.getTutorsTeaching(course['id'])
+
         for tutor in tutors:
-            listings.append({'courseName':course['name'], 'tutor' : tutor['name'], 'code' : course['code']})
+            # getting tutor's real name
+            tutor_id = tutor['sfsu_id']
+            tutor_profile = helpers.getTutorInfo(tutor_id)
+
+            listings.append({'courseName':course['name'], 'real_name' : tutor_profile['name'], 'username' : tutor['name'], 'code' : course['code']})
 
     for listing in listings:
         courseNames.append(listing['courseName'])
-        usernames.append(listing['tutor'])
+        real_names.append(listing['real_name'])
+        usernames.append(listing['username'])
         courseCodes.append(listing['code'])
         numResults+=1
 
@@ -105,7 +106,8 @@ def results():
     if not search_category:
         search_category = 'all majors'
 
-    return render_template('results.html', search=search, search_category=search_category, len = numResults, courseNames = courseNames, usernames=usernames, courseCodes=courseCodes)
+    return render_template('results.html', search=search, search_category=search_category, len = numResults, 
+        real_names=real_names, courseNames = courseNames, usernames=usernames, courseCodes=courseCodes)
 
 
 @application.route('/team/<member>_about')
@@ -113,7 +115,7 @@ def team_member_about(member):
     return render_template('team/' + member + '.html')
 
 
-@application.route('/tutor', methods=['GET', 'POST'])
+@application.route('/user', methods=['GET', 'POST'])
 def tutor():
     username = request.args.get('user')
     user = helpers.getUserData(username)
@@ -132,7 +134,7 @@ def tutor():
         gender = user_profile['gender']
 
 
-    return render_template('tutor.html', name=name, major=major, phone=phone, status=status, 
+    return render_template('user.html', name=name, major=major, phone=phone, status=status, 
         avail=avail, email=email, gender=gender,username=username)
 
 
@@ -263,6 +265,7 @@ def inbox():
     #print("messages from: ")
     # print(messages)
     people = []  # penpal?
+    real_names = []
     lastMessages = []
     dates = []
     conversations = []
@@ -277,15 +280,27 @@ def inbox():
     print(conversations)
     for convo in conversations:
         if convo['user1'] == user_id:
-            cursor.execute(
-                f"SELECT name FROM user WHERE sfsu_id={convo['user2']}")
+            # get username
+            cursor.execute(f"SELECT name FROM user WHERE sfsu_id={convo['user2']}")
             name = cursor.fetchone()['name']
             people.append(name)
+
+            # get real name
+            cursor.execute(f"SELECT name FROM user_profile WHERE sfsu_id={convo['user2']}")
+            real_name = cursor.fetchone()['name']
+            real_names.append(real_name)
+
         elif convo['user2'] == user_id:
-            cursor.execute(
-                f"SELECT name FROM user WHERE sfsu_id={convo['user1']}")
+            # get username
+            cursor.execute(f"SELECT name FROM user WHERE sfsu_id={convo['user1']}")
             name = cursor.fetchone()['name']
             people.append(name)
+
+            # get real name
+            cursor.execute(f"SELECT name FROM user_profile WHERE sfsu_id={convo['user1']}")
+            real_name = cursor.fetchone()['name']
+            real_names.append(real_name)
+
     for message in messages:
         dates.append(message['datetime'].strftime('%Y-%m-%d %H:%M:%S'))
         lastMessages.append(message['message'])
@@ -295,7 +310,8 @@ def inbox():
 
     # get only most recent message from another user
 
-    return render_template('inbox.html', people=people, dates=dates, lastMessages=lastMessages, len=len(people), lastSenders=lastSenders)
+    return render_template('inbox.html', people=people, real_names=real_names, dates=dates, lastMessages=lastMessages,
+         len=len(people), lastSenders=lastSenders)
 
 
 @application.route('/messaging', methods=['GET', 'POST'])
@@ -325,7 +341,7 @@ def viewmessage():
         realName = userProfile['name']
         phone = userProfile['phone']
         major = userProfile['major']
-        gender = userProfile['gender']
+        email = userData['sfsu_email']
         
 
     else:
@@ -337,10 +353,10 @@ def viewmessage():
         realName = userProfile['name']
         phone = userProfile['phone']
         major = userProfile['major']
-        gender = userProfile['gender']
+        email = userData['sfsu_email']
     
 
-    return render_template('viewmessage.html',realName=realName,phone=phone,major=major,gender=gender,text=text)
+    return render_template('viewmessage.html',realName=realName,phone=phone,major=major,email=email,text=text)
 
 
 if __name__ == '__main__':
