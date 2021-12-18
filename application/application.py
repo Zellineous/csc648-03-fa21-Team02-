@@ -94,7 +94,7 @@ def results():
 
         names.append(course['name'])
         codes.append(course['number'])
-    length = len(codes)
+    length = len(tutors)
 
     # for styling header in results.html
     if not search:
@@ -119,6 +119,7 @@ def tutor():
     id = user['sfsu_id']
     user_profile = helpers.getUserProfile(id)
     session['message_to_name'] = user['name']
+    username =  user['name']
     if user_profile:
         name = user_profile['name']
         major = user_profile['major']
@@ -131,7 +132,7 @@ def tutor():
 
 
     return render_template('tutor.html', name=name, major=major, phone=phone, status=status, 
-        avail=avail, email=email, gender=gender)
+        avail=avail, email=email, gender=gender,username=username)
 
 
 
@@ -222,6 +223,7 @@ def search():
 
 @application.route('/inbox', methods =['GET', 'POST'])
 def inbox():
+    print(request.method)
     data = request.args.get('user')
     data = helpers.getUserData(data)
     print(data)

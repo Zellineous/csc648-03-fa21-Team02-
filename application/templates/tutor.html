@@ -78,8 +78,9 @@
 
                     <div class="d-flex justify-content-end">
                         <!-- message -->
+                        {% if session['username']|string() != username|string() %}
                             <a href="{{ url_for('messaging', user=name) }}" class="btn btn-warning">Message</a>
-                        
+                        {% endif %}
                     </div>
                 </div>
             </div>

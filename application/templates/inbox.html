@@ -28,7 +28,7 @@
 						<p>{{lastSenders[i]}}: {{lastMessages[i]}}</p>
 					</div>
 				</div>
-			
+				<a href="{{ url_for('viewmessage', user=people[i]) }}" class="btn btn-warning">Message</a>
 			</div>
 		{% endfor %}
 	</div>
