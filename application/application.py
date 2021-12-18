@@ -113,7 +113,7 @@ def team_member_about(member):
     return render_template('team/' + member + '.html')
 
 
-@application.route('/tutor', methods=['GET', 'POST'])
+@application.route('/user', methods=['GET', 'POST'])
 def tutor():
     username = request.args.get('user')
     user = helpers.getUserData(username)
@@ -132,7 +132,7 @@ def tutor():
         gender = user_profile['gender']
 
 
-    return render_template('tutor.html', name=name, major=major, phone=phone, status=status, 
+    return render_template('user.html', name=name, major=major, phone=phone, status=status, 
         avail=avail, email=email, gender=gender,username=username)
 
 
