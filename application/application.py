@@ -155,6 +155,7 @@ def register():
         else:
             cursor.execute(f"INSERT INTO user (name,password,sfsu_email,sfsu_id) VALUES ('{username}','{helpers.encryptPass(password)}','{email}','{sfsu_id}')")
             conn.commit()
+            makeUserProfile(sfsu_id)
             msg = 'You have successfully registered!'
             
     elif request.method == 'POST':
@@ -226,13 +227,14 @@ def inbox():
     lastMessages = []
     dates = []
     conversations = []
+    lastSenders = []
     #get conversation partner names
     for message in messages:
         convoID = message['conversation']
         print(f"conversation # {convoID}")
         cursor.execute(f"SELECT * FROM conversation WHERE id={convoID}")
         conversations.append(cursor.fetchone())
-        
+    
     
     print(conversations)
     for convo in conversations:
@@ -247,12 +249,14 @@ def inbox():
     for message in messages:
         dates.append(message['datetime'].strftime('%Y-%m-%d %H:%M:%S'))
         lastMessages.append(message['message'])
+        cursor.execute(f"SELECT name FROM user WHERE sfsu_id={message['sending_user']}")
+        lastSenders.append(cursor.fetchone()['name'])
         
     #get only most recent message from another user
 
     
 
-    return render_template('inbox.html', people=people,dates=dates,lastMessages=lastMessages,len=len(people))
+    return render_template('inbox.html', people=people,dates=dates,lastMessages=lastMessages,len=len(people),lastSenders=lastSenders)
 
 @application.route('/messaging', methods =['GET', 'POST'])
 def messaging():
