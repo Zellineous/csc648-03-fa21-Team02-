@@ -38,7 +38,6 @@
                         <h3>Availability</h3>
                         <!-- TODO: NOT SHOWING UP -->
                         <p>{{ avail }}</p>
-                        <p>Thursday 5-8 p.m.</p>
                     </div>
                 </div>
             </div>
@@ -79,7 +78,8 @@
 
                     <div class="d-flex justify-content-end">
                         <!-- message -->
-                        <a href="/messaging" class="btn btn-warning">Message</a>
+                            <a href="{{ url_for('messaging', user=name) }}" class="btn btn-warning">Message</a>
+                        
                     </div>
                 </div>
             </div>

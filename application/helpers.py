@@ -1,4 +1,5 @@
 import re
+import datetime
 from flask import Flask
 import database as db
 from cryptography.fernet import Fernet
@@ -24,6 +25,16 @@ def decryptPass(s): #input an encrypted string
     #print("from decrypt:" + decryptedPass + "  " + s)
     return decryptedPass
 
+def createMessage(msg, sender, receiver):
+    user1 = getUserData(sender)
+    user2 = getUserData(receiver)
+    print(f"sending {msg} from {user1['name']} to {user2['name']}")
+
+    cursor.execute(f"INSERT INTO message (msg, sending_user, datetime, conversation) VALUES ({msg},{user1['sfsu_id']},{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')},{getConversation(user1,user2)})")
+
+    
+    
+
 def checkPasswordOfUser(entered_username, entered_password): #checks password of entered user from login
     cursor.execute(f"SELECT password FROM user WHERE name='{entered_username}'")
     password = cursor.fetchone()['password']
@@ -32,7 +43,29 @@ def checkPasswordOfUser(entered_username, entered_password): #checks password of
         return True
     
     return False
+def getConversationMessages(user1,user2): #(sfsu_id,sfsu_id)
+    convo = getConversation(user1,user2)
+    messages = []
+    if convo:
+        print(convo)
+        cursor.execute(f"SELECT message,conversation FROM message WHERE conversation = {convo['id']}")
+        messages = cursor.fetchall()
 
+    print(messages)
+    return messages
+
+def getConversation(user1,user2):
+    cursor.execute(f"SELECT * FROM conversation WHERE user1={user1} AND user2={user2}")
+    convo = cursor.fetchone()
+    if convo:
+        return convo
+    else:
+        cursor.execute(f"SELECT * FROM conversation WHERE user1={user2} AND user2={user1}")
+        convo = cursor.fetchone()
+        if convo:
+            return convo
+    return None
+    
 
 def getUserData(entered_user):
     cursor.execute(f"SELECT * FROM user WHERE name='{entered_user}'")
