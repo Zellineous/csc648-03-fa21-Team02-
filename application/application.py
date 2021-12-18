@@ -286,16 +286,31 @@ def messaging():
 
 @application.route('/viewmessage', methods=['GET', 'POST'])
 def viewmessage():
-    message = request.form.get('message')
-    session['message'] = message                # message to send
-    print(session['message'])
-    receivingUser = session['message_to_name']  # receiver name
-    sendingUser = session['username']           # sender name
+    print(request.method)
+    if request.method == 'POST':
+        message = request.form.get('message')
+        session['message'] = message                # message to send
+        print(session['message'])
+        receivingUser = session['message_to_name']  # receiver name
+        sendingUser = session['username']           # sender name
 
-    helpers.createMessage(message, sendingUser, receivingUser)
+        newMessage = helpers.createMessage(message,sendingUser,receivingUser)
+        text = newMessage['message']
+        time = newMessage['datetime']
+        
+        userData = helpers.getUserData(receivingUser)
+        userProfile = helpers.getUserProfile(userData['sfsu_id'])
+        realName = userProfile['name']
+        phone = userProfile['phone']
+        major = userProfile['major']
+        gender = userProfile['gender']
 
-    sendingUserId = helpers.getUserId(sendingUser)['sfsu_id']
-    #cursor.execute(f"INSERT INTO message (sending_user, message,conversation) VALUEs ({sendingUserId},'{message}')")
+
+
+        #cursor.execute(f"INSERT INTO message (sending_user, message,conversation) VALUEs ({sendingUserId},'{message}')")
+    return render_template('viewmessage.html',realName=realName,text=text,time=time,phone=phone,major=major,gender=gender)
+   
+    
 
     return render_template('viewmessage.html')
 

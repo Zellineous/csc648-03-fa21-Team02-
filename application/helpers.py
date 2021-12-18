@@ -1,5 +1,5 @@
 import re
-import datetime
+from datetime import datetime
 from flask import Flask
 import database as db
 from cryptography.fernet import Fernet
@@ -28,11 +28,21 @@ def decryptPass(s): #input an encrypted string
 def createMessage(msg, sender, receiver):
     user1 = getUserData(sender)
     user2 = getUserData(receiver)
-    print(f"sending {msg} from {user1['name']} to {user2['name']}")
+    print(sender,receiver)
+    print(f"sending {msg} from {user1['sfsu_id']} to {user2['name']}")
+    print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    cursor.execute("SELECT max(id) FROM message")
+    recentID=cursor.fetchone()['max(id)'] +1
+    print(recentID)
+    cursor.execute(f"INSERT INTO message (id,message, sending_user, datetime, conversation)                                    \
+                     VALUES ({recentID},'{msg}',{user1['sfsu_id']},'{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}',        \
+                     {getConversation(user1['sfsu_id'],user2['sfsu_id'])['id']})")
+    conn.commit()
 
-    cursor.execute(f"INSERT INTO message (msg, sending_user, datetime, conversation) VALUES ({msg},{user1['sfsu_id']},{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')},{getConversation(user1,user2)})")
+    print(getConversationMessages(user1['sfsu_id'],user2['sfsu_id']))
+    cursor.execute(f"SELECT * FROM message WHERE id={recentID}")
+    return cursor.fetchone()
 
-    
     
 
 def checkPasswordOfUser(entered_username, entered_password): #checks password of entered user from login
