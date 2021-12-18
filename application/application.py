@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import database as db
 import re
 import helpers
-import datetime
+import time
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
@@ -115,7 +115,7 @@ def tutor():
     user = helpers.getUserData(username)
     id = user['sfsu_id']
     user_profile = helpers.getUserProfile(id)
-
+    session['message_to_name'] = user['name']
     if user_profile:
         name = user_profile['name']
         major = user_profile['major']
@@ -128,7 +128,7 @@ def tutor():
 
 
     return render_template('tutor.html', name=name, major=major, phone=phone, status=status, 
-        availability=avail, email=email, gender=gender)
+        avail=avail, email=email, gender=gender)
 
 
 
@@ -160,7 +160,8 @@ def register():
         else:
             cursor.execute(f"INSERT INTO user (name,password,sfsu_email,sfsu_id) VALUES ('{username}','{helpers.encryptPass(password)}','{email}','{sfsu_id}')")
             conn.commit()
-            makeUserProfile(sfsu_id)
+            cursor.execute(f"INSERT INTO user_profile (name,sfsu_id) VALUE ('{username}',{sfsu_id})")
+            conn.commit()
             msg = 'You have successfully registered!'
             
     elif request.method == 'POST':
@@ -222,12 +223,12 @@ def inbox():
     data = helpers.getUserData(data)
     print(data)
     user_id = data['sfsu_id']
-    print(user_id)
-    # get list of all users that have sent a message
+    #print(user_id)
+    #get list of all users that have sent a message
     cursor.execute(f"SELECT * FROM message WHERE id IN (SELECT MAX(id) FROM message GROUP BY conversation)")
     messages = cursor.fetchall()
-    print("messages from: ")
-    print(messages)
+    #print("messages from: ")
+    #print(messages)
     people = [] #penpal?
     lastMessages = []
     dates = []
@@ -236,7 +237,7 @@ def inbox():
     # get conversation partner names
     for message in messages:
         convoID = message['conversation']
-        print(f"conversation # {convoID}")
+        #print(f"conversation # {convoID}")
         cursor.execute(f"SELECT * FROM conversation WHERE id={convoID}")
         conversations.append(cursor.fetchone())
     
@@ -265,13 +266,29 @@ def inbox():
 
 @application.route('/messaging', methods =['GET', 'POST'])
 def messaging():
-    toUser = helpers.getUserData(session['username'])
-
-
+    user1 = helpers.getUserData(request.args.get('user'))['sfsu_id']
+    user2 = helpers.getUserData(session['username'])['sfsu_id']
+    print(helpers.getConversationMessages(user1,user2))
+    
     return render_template('messaging.html')
 
-@application.route('/viewmessage')
+@application.route('/viewmessage',methods =['GET', 'POST'])
 def viewmessage():
+    message = request.form.get('message')
+    session['message'] = message                # message to send
+    print(session['message'])
+    receivingUser = session['message_to_name']  # receiver
+    sendingUser = session['username']           # sender
+
+    helpers.createMessage(message,sendingUser,receivingUser)
+
+
+
+
+
+    sendingUserId = helpers.getUserId(sendingUser)['sfsu_id']
+    #cursor.execute(f"INSERT INTO message (sending_user, message,conversation) VALUEs ({sendingUserId},'{message}')")
+    
     return render_template('viewmessage.html')
     
 
