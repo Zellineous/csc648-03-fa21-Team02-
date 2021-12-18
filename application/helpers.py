@@ -119,6 +119,9 @@ def getUserProfile(id):
     cursor.execute(f"SELECT * FROM user_profile WHERE sfsu_id={id}")
     return cursor.fetchone()
 
+def getCoursesTaughtBy(user_id):
+    cursor.execute(f"SELECT * FROM course WHERE id IN (SELECT course FROM teaches WHERE tutor={user_id})")
+    return cursor.fetchall()
 
 def makeUserProfile(sfsu_id):
     user = getUserData(sfsu_id)

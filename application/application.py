@@ -246,16 +246,28 @@ def createListing():
 
 @application.route('/listingRequest',methods=['GET','POST'])
 def listingRequest():
+
     courseName = request.args.get('course')
-    cursor.execute(f"SELECT id FROM course WHERE name LIKE '%{courseName}%'")
-    
-    courseID=cursor.fetchone()['id']
+    cursor.execute(f"SELECT * FROM course WHERE name LIKE '%{courseName}%'")
+    course = cursor.fetchone()
+
+    courseName = course['name']
+    courseID = course['id']
+
+
     user = session['username']
     userID = helpers.getUserId(user)['sfsu_id']
-    print(courseID,userID)
 
+    userCourses = helpers.getCoursesTaughtBy(userID)
+    for course in userCourses:
+        if courseID == course['id']:
+            msg = "You already teach this course"
+            return render_template('listingRequest.html',msg=msg)
+    
+    msg = f"Request to tutor a course has been sent for thomas to tutor Probability and Statistics with Computing."
+    cursor.execute(f"INSERT INTO teaches(tutor,course) VALUES({userID},{courseID})")
 
-    return render_template('listingRequest.html')
+    return render_template('listingRequest.html',msg=msg)
 
 
 
