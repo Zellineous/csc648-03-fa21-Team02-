@@ -242,14 +242,16 @@ def createListing():
 def listingRequest():
     courseName = request.args.get('course')
     cursor.execute(f"SELECT id FROM course WHERE name LIKE '%{courseName}%'")
-    
-    courseID=cursor.fetchone()['id']
+    course = cursor.fetchone()
+    courseName = course['name']
+    courseID = course['id']
     user = session['username']
     userID = helpers.getUserId(user)['sfsu_id']
     print(courseID,userID)
 
+    
 
-    return render_template('listingRequest.html')
+    return render_template('listingRequest.html',user=user,courseName=courseName)
 
 
 @application.route('/logout')
