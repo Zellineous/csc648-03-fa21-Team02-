@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, redirect, url_for, session
 import database as db
 import re
@@ -7,7 +8,8 @@ application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
 conn = db.connect()
 cursor = conn.cursor()
-
+helpers.insertImage(1,"C:\\Users\\thoma\\Downloads\\FREEBODY.png")
+helpers.openImage(1)
 # in .html files, make sure to href= to these routes, not the location of the .html files themselves
 
 
@@ -76,7 +78,7 @@ def results():
             data = helpers.getSearch(search)
         else:
             data = helpers.getAllCourses()
-
+    
     print(data)
     numResults = 0
     courseNames = []

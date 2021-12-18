@@ -4,6 +4,8 @@ from flask import Flask
 import database as db
 from cryptography.fernet import Fernet
 import base64
+from PIL import Image
+import PIL.Image
 
 conn = db.connect()
 cursor = conn.cursor()
@@ -11,14 +13,23 @@ key = base64.b64encode('12345678912345678912345678912345'.encode("utf-8"))
 
 fernet = Fernet(key)
 
-# def insertImage(userID, imgfile):
-#     file = open(imgfile,'rb').read()
-#     file = base64.b64encode(file)
-#     userProfile = getUserProfile(userID)
-#     cursor.execute(f"UPDATE user_profile SET picture={file} WHERE sfsu_id={userID}")
-#     print(file)
-#     conn.commit()
 
+
+def convertData(filename):
+   
+    with open(filename, 'rb') as f:
+        photo = f.read()
+    return photo
+
+
+def insertImage(userID, imgfile):
+    data = convertData(imgfile)
+    print(data)
+    print(userID)
+    cursor.execute(f"INSERT INTO user_profile(picture) VALUE() picture={data} WHERE sfsu_id={userID}")
+    conn.commit()
+
+    
 
 def isValidSfsuEmail(s):
     return( (re.search('sfsu.edu$',s)) and re.match(r'[^@]+@[^@]+\.[^@]+',s)) #returns None if failure
