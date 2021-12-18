@@ -211,22 +211,29 @@ def login():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
-
         password = request.form['password']
         account = helpers.getUserData(username)
+
         if account:
             # print(account)
             if(helpers.checkPasswordOfUser(username, password)):
                 session['loggedin'] = True
                 session['id'] = account['sfsu_id']
                 session['username'] = account['name']
+
+                user_profile = helpers.getUserProfile(session['id'])
+                name = user_profile['name']
+
                 msg = 'Logged in successfully!'
-                return render_template('dashboard.html', msg=msg)
+                return render_template('dashboard.html', name=name)
+
             else:
                 msg = 'Incorrect username or password!'
         else:
             msg = 'Account does not exist!'
+        
     return render_template('login.html', msg=msg)
+
 
 
 @application.route('/logout')
