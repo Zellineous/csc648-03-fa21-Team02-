@@ -33,10 +33,6 @@ def checkPasswordOfUser(entered_username, entered_password): #checks password of
     return False
 
 
-
-    
-    
-
 def getUserData(entered_user):
     cursor.execute(f"SELECT * FROM user WHERE name='{entered_user}'")
     return cursor.fetchone()

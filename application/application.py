@@ -44,24 +44,8 @@ def browse():
 def results():
     search = request.args.get('search',None)
     search_category = request.args.get('search_category',None)
-    print(search_category)
-    if search_category == 'Subject':
-        cursor.execute("SELECT name, subject, number FROM course WHERE subject  LIKE '%" + search + "%';")
-    elif search_category == 'Class':
-        cursor.execute("SELECT name, subject, number FROM course WHERE name LIKE '%" + search + "%';")
-    else:
-        cursor.execute("SELECT name, subject, number FROM course WHERE name  LIKE '%" + search + "%' OR CONCAT(subject, ' ' , number) LIKE '%" + search + "%';") # query to get from database from searching
-    
-    data = cursor.fetchall()    
-    names = []      # e.g. 'software engineering'
-    codes = []      # e.g. csc 648
-    for course in data:
-        print(course)
-        names.append(course[0])
-        codes.append(course[1] + ' ' + course[2])
-    length = len(codes)
-
-    return render_template('results.html', search=search, names=names, codes=codes, len=length)
+    print("SEARCH CATEGORY " + search_category)
+    return render_template('browse.html', search=search, names=names, codes=codes, len=length)
 
 
 @application.route('/team/<member>_about')
@@ -71,7 +55,7 @@ def team_member_about(member):
 
 
 
-@application.route('/tutor')
+@application.route('/tutor',methods =['GET', 'POST'])
 def tutor():
     return render_template('tutor.html')
 
@@ -102,7 +86,7 @@ def register():
         else:
             cursor.execute(f"INSERT INTO user (name,password,sfsu_email,sfsu_id) VALUES ('{username}','{helpers.encryptPass(password)}','{email}','{sfsu_id}')")
             conn.commit()
-            msg = 'You have successfully registered !'
+            msg = 'You have successfully registered!'
             
     elif request.method == 'POST':
         msg = 'Please fill out the form !'
@@ -116,16 +100,16 @@ def login():
         username = request.form['username']
         password = request.form['password']
         if(helpers.checkPasswordOfUser(username,password)):
-            cursor.execute(f"SELECT * FROM user WHERE name='{username}'")
-            account = cursor.fetchone()
+            account = helpers.getUserData(username)
+            print(account)
             if account:
                 session['loggedin'] = True
                 session['id'] = account['sfsu_id']
                 session['username'] = account['name']
-                msg = 'Logged in successfully !'
+                msg = 'Logged in successfully!'
                 return render_template('dashboard.html', msg = msg)
             else:
-                msg = 'Incorrect username / password !'
+                msg = 'Incorrect username or password!'
     return render_template('login.html', msg = msg)
 
 
@@ -152,12 +136,15 @@ def search():
 
 
 
-@application.route('/inbox')
+@application.route('/inbox', methods =['GET', 'POST'])
 def inbox():
+    
     return render_template('inbox.html')
 
-@application.route('/messaging')
+@application.route('/messaging', methods =['GET', 'POST'])
 def messaging():
+    print(session)
+    toUser = helpers.getUserData(session['username'])
     return render_template('messaging.html')
 
 @application.route('/viewmessage')
