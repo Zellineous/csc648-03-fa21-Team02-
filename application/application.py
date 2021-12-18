@@ -77,11 +77,23 @@ def results():
         else:
             data = helpers.getAllCourses()
 
-    usernames = []   # tutor usernames
-    names = []      # e.g. 'software engineering'
-    codes = []      # e.g. 648
+    print(data)
     numResults = 0
+    courseNames = []
+    courseCodes = []
+    usernames = []
+    listings = []
 
+    for course in data:
+        tutors = helpers.getTutorsTeaching(course['id'])
+        for tutor in tutors:
+            listings.append({'courseName':course['name'], 'tutor' : tutor['name'], 'code' : course['code']})
+
+    for listing in listings:
+        courseNames.append(listing['courseName'])
+        usernames.append(listing['tutor'])
+        courseCodes.append(listing['code'])
+        numResults+=1
 
     # for styling header in results.html
     if not search:
@@ -91,8 +103,7 @@ def results():
     if not search_category:
         search_category = 'all majors'
 
-    return render_template('results.html', search=search, search_category=search_category,
-        names=names, codes=codes, tutors=tutors, usernames=usernames, len=length)
+    return render_template('results.html', search=search, search_category=search_category, len = numResults, courseNames = courseNames, usernames=usernames, courseCodes=courseCodes)
 
 
 @application.route('/team/<member>_about')

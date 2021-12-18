@@ -11,6 +11,15 @@ key = base64.b64encode('12345678912345678912345678912345'.encode("utf-8"))
 
 fernet = Fernet(key)
 
+# def insertImage(userID, imgfile):
+#     file = open(imgfile,'rb').read()
+#     file = base64.b64encode(file)
+#     userProfile = getUserProfile(userID)
+#     cursor.execute(f"UPDATE user_profile SET picture={file} WHERE sfsu_id={userID}")
+#     print(file)
+#     conn.commit()
+
+
 def isValidSfsuEmail(s):
     return( (re.search('sfsu.edu$',s)) and re.match(r'[^@]+@[^@]+\.[^@]+',s)) #returns None if failure
 
@@ -101,24 +110,31 @@ def makeUserProfile(sfsu_id):
     print(getUserProfile(sfsu_id))
 
 
-# returns all courses
+
+# returns all courses with from major majorID
 def getAllCoursesFromMajor(majorID):
     cursor.execute(f"SELECT * FROM course WHERE id IN (SELECT course FROM major_has_course WHERE major={majorID})")
     return cursor.fetchall()
 
 # returns courses that are similar to search term
 def getSearch(search):
-    cursor.execute(f"SELECT * FROM course WHERE name,code LIKE '%" + search + "%'")
+    cursor.execute(f"SELECT * FROM course WHERE code LIKE '%{search}%' OR name LIKE '%{search}%'")
     return cursor.fetchall()
 
 
 # returns corresponding major id
 def getMajor(search_category):
-    cursor.execute(f"SELECT * FROM major WHERE name LIKE '%" + search_category + "%'")
+    cursor.execute(f"SELECT * FROM major WHERE name LIKE '%{search_category}%'")
     return cursor.fetchone()
 
 def getAllCourses():
+    print('all courses')
     cursor.execute(f"SELECT * FROM course")
+    return cursor.fetchall()
+
+def getTutorsTeaching(courseID):
+    cursor.execute(f"SELECT * FROM user WHERE sfsu_id IN (SELECT tutor FROM teaches WHERE course={courseID})")
+    return cursor.fetchall()
 
 # returns courses that belong to correct major
 def getMajorSearch(id):
@@ -130,7 +146,6 @@ def getMajorSearch(id):
 def getMCSearch(search, id):
     cursor.execute(f"SELECT * FROM course WHERE major_id={id} AND name LIKE '%" + search + "%'")
     return cursor.fetchall()
-
 
 
 def getTutorId(course_id):
