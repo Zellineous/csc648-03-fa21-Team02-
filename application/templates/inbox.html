@@ -8,138 +8,29 @@
 		<div class="heading">
 			<h1>Messages</h1>
 		</div>
-		<div class="main__message">
-			<div class="user__message__wrapper">
-				<div class="user__message">
-					<div class="user__pic">
-						<img src="../static/images/300.jpg" alt="avatar" />
-					</div>
-					<div class="user__name">
-						<div class="user__data">
-							<h4>Alisha K</h4>
-							<small>CSC 301</small>
-							<br>
-							<small>01 Nov 7:20am</small>
+		{% for i in range(0,len) %}
+			<div class="main__message">
+				<div class="user__message__wrapper">
+					<div class="user__message">
+						<div class="user__pic">
+							<img src="../static/images/300.jpg" alt="avatar" />
+						</div>
+						
+						<div class="user__name">
+							<div class="user__data">
+								<h4>{{people[i]}}</h4>
+								<br>
+								<small>{{dates[i]}}</small>
+							</div>
 						</div>
 					</div>
+					<div class="user__message__preview">
+						<p>{{lastMessages[i]}}</p>
+					</div>
 				</div>
-				<div class="user__message__preview">
-					<p>Lets meet at 5:00! </p>
-				</div>
+			
 			</div>
-			<div class="user__message__wrapper">
-				<div class="user__message">
-					<div class="user__pic">
-						<img src="../static/images/300 (1).jpg" alt="avatar" />
-					</div>
-					<div class="user__name">
-						<div class="user__data">
-							<h4>Lelse H</h4>
-							<small>CSC 220</small>
-							<br>
-							<small>01 Nov 7:20am</small>
-						</div>
-					</div>
-				</div>
-				<div class="user__message__preview">
-					<p>
-						Thanks for the interest, I can help!
-					</p>
-				</div>
-			</div>
-			<div class="user__message__wrapper">
-				<div class="user__message">
-					<div class="user__pic">
-						<img src="../static/images/300 (2).jpg" alt="avatar" />
-					</div>
-					<div class="user__name">
-						<div class="user__data">
-							<h4>Tommy Jim</h4>
-							<small>PHYS 232</small>
-							<br>
-							<small>01 Nov 7:20am</small>
-						</div>
-					</div>
-				</div>
-				<div class="user__message__preview">
-					<p>
-						Well meet in the library at 2:00.
-					</p>
-				</div>
-			</div>
-			<div class="user__message__wrapper">
-				<div class="user__message">
-					<div class="user__pic">
-						<img src="../static/images/300 (6).jpg" alt="avatar" />
-					</div>
-					<div class="user__name">
-						<div class="user__data">
-							<h4>Kat L</h4>
-							<small>MATH 324</small>
-							<br>
-							<small>01 Nov 7:20am</small>
-						</div>
-					</div>
-				</div>
-				<div class="user__message__preview">
-					<p>
-						Call me to discuss your homework. I will help
-					</p>
-				</div>
-			</div>
-			<div class="user__message__wrapper">
-				<div class="user__message">
-					<div class="user__pic">
-						<img src="img/300 (4).jpg" alt="avatar" />
-					</div>
-					<div class="user__name">
-						<div class="user__data">
-							<h4>Micheal Hope</h4>
-							<small>HED 455</small>
-							<br>
-							<small>01 Nov 7:20am</small>
-						</div>
-					</div>
-				</div>
-				<div class="user__message__preview">
-					<p>I will email you my information</p>
-				</div>
-			</div>
-			<!-- <div class="user__message__wrapper">
-				<div class="user__message">
-					<div class="user__pic">
-						<img src="img/300 (5).jpg" alt="avatar" />
-					</div>
-					<div class="user__name">
-						<div class="user__data">
-							<h4>John Cena</h4>
-							<small>HIST 240</small>
-						</div>
-						<small>01 Nov 7:20am</small>
-					</div>
-				</div>
-				<div class="user__message__preview">
-					<p>Lets meet in the park!</p>
-				</div>
-			</div>
-			<div class="user__message__wrapper">
-				<div class="user__message">
-					<div class="user__pic">
-						<img src="img/300 (6).jpg" alt="avatar" />
-					</div>
-					<div class="user__name">
-						<div class="user__data">
-							<h4>Ramsey</h4>
-							<small>CSC 240</small>
-						</div>
-						<small>09 Nov 2:29am</small>
-					</div>
-				</div>
-				<div class="user__message__preview">
-					<p>Thanks for your interest, I'll send you my virtual room link! </p>
-				</div>
-			</div> -->
-		</div>
+		{% endfor %}
 	</div>
 </div>
 

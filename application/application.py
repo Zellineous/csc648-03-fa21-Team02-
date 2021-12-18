@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import database as db
 import re
 import helpers
+import datetime
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
@@ -121,7 +122,7 @@ def login():
         password = request.form['password']
         account = helpers.getUserData(username)
         if account:
-            print(account)
+            #print(account)
             if(helpers.checkPasswordOfUser(username,password)):
                 session['loggedin'] = True
                 session['id'] = account['sfsu_id']
@@ -161,12 +162,53 @@ def search():
 
 @application.route('/inbox', methods =['GET', 'POST'])
 def inbox():
-    print(request.form.get())
-    return render_template('inbox.html')
+    data = request.args.get('user')
+    data = helpers.getUserData(data)
+    print(data)
+    user_id = data['sfsu_id']
+    print(user_id)
+    #get list of all users that have sent a message
+    cursor.execute(f"SELECT * FROM message WHERE id IN (SELECT MAX(id) FROM message GROUP BY conversation)")
+    messages = cursor.fetchall()
+    print("messages from: ")
+    print(messages)
+    people = [] #penpal?
+    lastMessages = []
+    dates = []
+    conversations = []
+    #get conversation partner names
+    for message in messages:
+        convoID = message['conversation']
+        print(f"conversation # {convoID}")
+        cursor.execute(f"SELECT * FROM conversation WHERE id={convoID}")
+        conversations.append(cursor.fetchone())
+        
+    
+    print(conversations)
+    for convo in conversations:
+        if convo['user1'] == user_id:
+            cursor.execute(f"SELECT name FROM user WHERE sfsu_id={convo['user2']}")
+            name = cursor.fetchone()['name']
+            people.append(name)
+        elif convo['user2'] == user_id:
+            cursor.execute(f"SELECT name FROM user WHERE sfsu_id={convo['user1']}")
+            name = cursor.fetchone()['name']
+            people.append(name)
+    for message in messages:
+        dates.append(message['datetime'].strftime('%Y-%m-%d %H:%M:%S'))
+        lastMessages.append(message['message'])
+        
+    #get only most recent message from another user
+
+    
+
+    return render_template('inbox.html', people=people,dates=dates,lastMessages=lastMessages,len=len(people))
 
 @application.route('/messaging', methods =['GET', 'POST'])
 def messaging():
     toUser = helpers.getUserData(session['username'])
+
+
     return render_template('messaging.html')
 
 @application.route('/viewmessage')
