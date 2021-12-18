@@ -100,12 +100,7 @@ def results():
 
         names.append(course['name'])
         codes.append(course['number'])
-<<<<<<< HEAD
     length = len(tutors)
-=======
-
-    length = len(codes)
->>>>>>> e62e7152ef2ec6974e2b54d505103f236c714af1
 
     # for styling header in results.html
     if not search:
@@ -142,16 +137,11 @@ def tutor():
         email = user['sfsu_email']
         gender = user_profile['gender']
 
-<<<<<<< HEAD
 
     return render_template('tutor.html', name=name, major=major, phone=phone, status=status, 
         avail=avail, email=email, gender=gender,username=username)
 
 
-=======
-    return render_template('tutor.html', name=name, major=major, phone=phone, status=status,
-                           avail=avail, email=email, gender=gender)
->>>>>>> e62e7152ef2ec6974e2b54d505103f236c714af1
 
 
 @application.route('/editprofile')
@@ -310,7 +300,6 @@ def viewmessage():
 
         newMessage = helpers.createMessage(message,sendingUser,receivingUser)
         text = newMessage['message']
-        time = newMessage['datetime']
         
         userData = helpers.getUserData(receivingUser)
         userProfile = helpers.getUserProfile(userData['sfsu_id'])
@@ -318,15 +307,21 @@ def viewmessage():
         phone = userProfile['phone']
         major = userProfile['major']
         gender = userProfile['gender']
+        
 
-
-
-        #cursor.execute(f"INSERT INTO message (sending_user, message,conversation) VALUEs ({sendingUserId},'{message}')")
-    return render_template('viewmessage.html',realName=realName,text=text,time=time,phone=phone,major=major,gender=gender)
-   
+    else:
+        username = request.args.get('user')
+        text = request.args.get('message')
+        
+        userData = helpers.getUserData(username)
+        userProfile = helpers.getUserProfile(userData['sfsu_id'])
+        realName = userProfile['name']
+        phone = userProfile['phone']
+        major = userProfile['major']
+        gender = userProfile['gender']
     
 
-    return render_template('viewmessage.html')
+    return render_template('viewmessage.html',realName=realName,phone=phone,major=major,gender=gender,text=text)
 
 
 if __name__ == '__main__':
