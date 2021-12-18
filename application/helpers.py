@@ -47,6 +47,14 @@ def getUserProfile(id):
     return cursor.fetchone()
 
 
+def makeUserProfile(sfsu_id):
+    user = getUserData(sfsu_id)
+    cursor.execute(f"INSERT INTO user_profile (name,sfsu_id) VALUE ('{user['name']}',{user['sfsu_id']})")
+    cursor.commit()
+    print(getUserProfile(sfsu_id))
+
+
+# returns all courses
 def getAllCourses():
     cursor.execute(f"SELECT * FROM course")
     return cursor.fetchall()
@@ -75,8 +83,11 @@ def getMCSearch(search, id):
     return cursor.fetchall()
 
 
-def makeUserProfile(sfsu_id):
-    user = getUserData(sfsu_id)
-    cursor.execute(f"INSERT INTO user_profile (name,sfsu_id) VALUE ('{user['name']}',{user['sfsu_id']})")
-    cursor.commit()
-    print(getUserProfile(sfsu_id))
+
+def getTutorId(course_id):
+    cursor.execute(f"SELECT * FROM teaches WHERE course={course_id}")
+    return cursor.fetchone()
+
+def getTutorInfo(tutor_id):
+    cursor.execute(f"SELECT * FROM user WHERE sfsu_id={tutor_id}")
+    return cursor.fetchone()

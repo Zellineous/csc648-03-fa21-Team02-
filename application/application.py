@@ -41,31 +41,6 @@ def browse():
     return render_template('browse.html')
 
 
-# @application.route('/results', methods=['GET', 'POST'])
-# def results():
-#     search = request.args.get('search',None)
-#     search_category = request.args.get('search_category',None)
-
-#     if search_category == 'Majors':
-#         if search:
-#             result = helpers.getSearch(search)
-#         else:
-#             result = helpers.getAllCourses()
-
-#     elif search_category:
-#         major_id = helpers.getMajorId(search_category)
-#         result = helpers.getMajorSearch(major_id)
-
-#     elif search and search_category:
-#         major_id = helpers.getMajorId(search_category)
-#         result = helpers.getMCSearch(search, major_id)
-
-#     if result:
-#         name = result['name']
-
-#     print("SEARCH CATEGORY " + search_category)
-#     return render_template('results.html', search=search, result=result, name=name)
-
 @application.route('/results', methods=['GET', 'POST'])
 def results():
     search = request.args.get('search',None)
@@ -86,17 +61,27 @@ def results():
         major = helpers.getMajor(search_category)
         major_id = major['id']
         data = helpers.getMCSearch(search, major_id)
-    
-    # data = cursor.fetchall()    
+     
+    tutors = []
     names = []      # e.g. 'software engineering'
     codes = []      # e.g. 648
     for course in data:
-        print(course)
+        # retrieving tutor info
+        course_id = course['id']
+        teaches = helpers.getTutorId(course_id)
+
+        if teaches:
+            tutor_id = teaches['tutor']
+            tutor = helpers.getTutorInfo(tutor_id)
+            tutors.append(tutor['name'])
+        else:
+            tutors.append('No Tutors')
+
         names.append(course['name'])
         codes.append(course['number'])
     length = len(codes)
 
-    return render_template('results.html', search=search, names=names, codes=codes, len=length)
+    return render_template('results.html', search=search, names=names, codes=codes, tutors=tutors, len=length)
 
 
 @application.route('/team/<member>_about')
