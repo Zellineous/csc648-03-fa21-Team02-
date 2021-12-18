@@ -46,3 +46,8 @@ def getUserProfile(id):
     cursor.execute(f"SELECT * FROM user_profile WHERE sfsu_id={id}")
     return cursor.fetchone()
 
+def makeUserProfile(sfsu_id):
+    user = getUserData(sfsu_id)
+    cursor.execute(f"INSERT INTO user_profile (name,sfsu_id) VALUE ('{user['name']}',{user['sfsu_id']})")
+    cursor.commit()
+    print(getUserProfile(sfsu_id))
