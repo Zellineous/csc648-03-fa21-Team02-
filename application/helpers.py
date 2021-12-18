@@ -89,5 +89,5 @@ def getTutorId(course_id):
     return cursor.fetchone()
 
 def getTutorInfo(tutor_id):
-    cursor.execute(f"SELECT * FROM user WHERE sfsu_id={tutor_id}")
+    cursor.execute(f"SELECT * FROM user_profile WHERE sfsu_id={tutor_id}")
     return cursor.fetchone()

@@ -62,7 +62,7 @@ def results():
         major_id = major['id']
         data = helpers.getMCSearch(search, major_id)
      
-    tutors = []
+    tutors = []     # tutor names
     names = []      # e.g. 'software engineering'
     codes = []      # e.g. 648
     for course in data:
@@ -71,8 +71,11 @@ def results():
         teaches = helpers.getTutorId(course_id)
 
         if teaches:
+            # get tutor id
             tutor_id = teaches['tutor']
+            # get tutor model from users
             tutor = helpers.getTutorInfo(tutor_id)
+            # add tutor name
             tutors.append(tutor['name'])
         else:
             tutors.append('No Tutors')
@@ -81,7 +84,13 @@ def results():
         codes.append(course['number'])
     length = len(codes)
 
-    return render_template('results.html', search=search, names=names, codes=codes, tutors=tutors, len=length)
+    # for styling header in results.html
+    if not search:
+        search = 'all'
+    if search_category == 'Majors':
+        search_category = 'all majors'
+
+    return render_template('results.html', search=search, search_category=search_category, names=names, codes=codes, tutors=tutors, len=length)
 
 
 @application.route('/team/<member>_about')
