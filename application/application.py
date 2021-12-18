@@ -55,13 +55,6 @@ def results():
             data = helpers.getSearch(search)
         else:
             data = helpers.getAllCourses()
-
-    # if not search_category:
-    #     print('case3')
-    #     if search:
-    #         data = helpers.getSearch(search)
-    #     else:
-    #         data = helpers.getAllCourses()
     
     elif search_category:
         print('case2')
@@ -73,6 +66,12 @@ def results():
         major = helpers.getMajor(search_category)
         print(major)
         data = helpers.getMCSearch(search, major_id)
+
+    elif not search_category:
+        if search:
+            data = helpers.getSearch(search)
+        else:
+            data = helpers.getAllCourses()
      
     tutors = []     # tutor names
     names = []      # e.g. 'software engineering'
