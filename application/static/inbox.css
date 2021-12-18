@@ -86,6 +86,7 @@ body {
 
 .user__message__preview {
 	padding: 0rem 5rem;
+	width: 100%
 }
 
 .user__message__preview p {
