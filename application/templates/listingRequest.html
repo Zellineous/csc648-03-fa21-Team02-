@@ -1,15 +1,22 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<link rel="stylesheet" type="text/css" href="../../static/dashboard.css">
 
+<div class="container d-flex justify-content-center" style="margin-top: 10%; margin-bottom: 10%;">
+  <div class="welcome d-flex flex-column">
+      <h1 class="">
+          Request to be a tutor has been sent!
+          <br>
+          Please wait for admin review.
+      </h1>
+      <br>
+      <a href="/dashboard" class="col-md options" style="text-decoration: none;">
+        <h2 style="margin-top: 10px; margin-bottom: 10px;">Go back to dashboard</h2>
+      </a>
+  </div>
+</div>
 
-  <!-- main info -->
-  <header class="page-header header container-fluid">
-    <!-- background overlay -->
-    <div class="welcome" style="padding-top: 70px; align-content: center;">
-      <h1>Request to tutor a course has been sent.</h1>
-      
-    </div>
-
+    
 
 {% endblock %}
