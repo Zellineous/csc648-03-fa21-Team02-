@@ -263,6 +263,7 @@ def inbox():
     #print("messages from: ")
     # print(messages)
     people = []  # penpal?
+    real_names = []
     lastMessages = []
     dates = []
     conversations = []
@@ -277,15 +278,27 @@ def inbox():
     print(conversations)
     for convo in conversations:
         if convo['user1'] == user_id:
-            cursor.execute(
-                f"SELECT name FROM user WHERE sfsu_id={convo['user2']}")
+            # get username
+            cursor.execute(f"SELECT name FROM user WHERE sfsu_id={convo['user2']}")
             name = cursor.fetchone()['name']
             people.append(name)
+
+            # get real name
+            cursor.execute(f"SELECT name FROM user_profile WHERE sfsu_id={convo['user2']}")
+            real_name = cursor.fetchone()['name']
+            real_names.append(real_name)
+
         elif convo['user2'] == user_id:
-            cursor.execute(
-                f"SELECT name FROM user WHERE sfsu_id={convo['user1']}")
+            # get username
+            cursor.execute(f"SELECT name FROM user WHERE sfsu_id={convo['user1']}")
             name = cursor.fetchone()['name']
             people.append(name)
+
+            # get real name
+            cursor.execute(f"SELECT name FROM user_profile WHERE sfsu_id={convo['user1']}")
+            real_name = cursor.fetchone()['name']
+            real_names.append(real_name)
+
     for message in messages:
         dates.append(message['datetime'].strftime('%Y-%m-%d %H:%M:%S'))
         lastMessages.append(message['message'])
@@ -295,7 +308,8 @@ def inbox():
 
     # get only most recent message from another user
 
-    return render_template('inbox.html', people=people, dates=dates, lastMessages=lastMessages, len=len(people), lastSenders=lastSenders)
+    return render_template('inbox.html', people=people, real_names=real_names, dates=dates, lastMessages=lastMessages,
+         len=len(people), lastSenders=lastSenders)
 
 
 @application.route('/messaging', methods=['GET', 'POST'])
