@@ -25,10 +25,10 @@
 						</div>
 					</div>
 					<div class="user__message__preview">
-						<p>{{lastSenders[i]}}: {{lastMessages[i]}}</p>
+						<p>{{lastSenders[i]}}: {{lastMessages[i]}}</p><a href="{{ url_for('viewmessage', user=people[i], message=lastMessages[i]) }}" class="btn btn-warning">View Message</a>
 					</div>
 				</div>
-			
+				
 			</div>
 		{% endfor %}
 	</div>

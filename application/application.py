@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import database as db
 import re
 import helpers
-import time
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
@@ -50,58 +49,51 @@ def results():
     search = request.args.get('search', None)
     search_category = request.args.get('search_category', None)
 
+    print(search, search_category)
     if search_category == 'Majors':
+        print('case1')
         if search:
             data = helpers.getSearch(search)
         else:
             data = helpers.getAllCourses()
 
     elif search_category:
+        print('case2')
         major = helpers.getMajor(search_category)
         major_id = major['id']
-        data = helpers.getMajorSearch(major_id)
+        data = helpers.getAllCoursesFromMajor(major_id)
 
     elif search and search_category:
+        print('case3')
         major = helpers.getMajor(search_category)
         major_id = major['id']
-        data = helpers.getMCSearch(search, major_id)
+        data = helpers.getAllCoursesFromMajor(major_id)
+        print(data)
 
     elif not search_category:
+        print('case4')
         if search:
             data = helpers.getSearch(search)
         else:
             data = helpers.getAllCourses()
 
-    tutors = []     # tutor names
-    usernames = []   # tutor usernames
-    names = []      # e.g. 'software engineering'
-    codes = []      # e.g. 648
+    print(data)
+    numResults = 0
+    courseNames = []
+    courseCodes = []
+    usernames = []
+    listings = []
 
     for course in data:
-        # retrieving tutor info
-        course_id = course['id']
-        teaches = helpers.getTutorId(course_id)
+        tutors = helpers.getTutorsTeaching(course['id'])
+        for tutor in tutors:
+            listings.append({'courseName':course['name'], 'tutor' : tutor['name'], 'code' : course['code']})
 
-        if teaches:
-            # get tutor id
-            tutor_id = teaches['tutor']
-            # get tutor model from users
-            tutor = helpers.getTutorInfo(tutor_id)
-            # add tutor name
-            tutors.append(tutor['name'])
-
-            # get tutor username
-            tutor_user = helpers.getUserDataWithId(tutor_id)
-            username = tutor_user['name']
-            usernames.append(username)
-        else:
-            tutors.append('No Tutors')
-            usernames.append('notutor')
-
-        names.append(course['name'])
-        codes.append(course['number'])
-
-    length = len(codes)
+    for listing in listings:
+        courseNames.append(listing['courseName'])
+        usernames.append(listing['tutor'])
+        courseCodes.append(listing['code'])
+        numResults+=1
 
     # for styling header in results.html
     if not search:
@@ -111,8 +103,7 @@ def results():
     if not search_category:
         search_category = 'all majors'
 
-    return render_template('results.html', search=search, search_category=search_category,
-        names=names, codes=codes, tutors=tutors, usernames=usernames, len=length)
+    return render_template('results.html', search=search, search_category=search_category, len = numResults, courseNames = courseNames, usernames=usernames, courseCodes=courseCodes)
 
 
 @application.route('/team/<member>_about')
@@ -127,6 +118,7 @@ def tutor():
     id = user['sfsu_id']
     user_profile = helpers.getUserProfile(id)
     session['message_to_name'] = user['name']
+    username =  user['name']
     if user_profile:
         name = user_profile['name']
         major = user_profile['major']
@@ -137,8 +129,11 @@ def tutor():
         email = user['sfsu_email']
         gender = user_profile['gender']
 
-    return render_template('tutor.html', name=name, major=major, phone=phone, status=status,
-                           avail=avail, email=email, gender=gender)
+
+    return render_template('tutor.html', name=name, major=major, phone=phone, status=status, 
+        avail=avail, email=email, gender=gender,username=username)
+
+
 
 
 @application.route('/editprofile', methods=['GET', 'POST'])
@@ -149,16 +144,7 @@ def editprofile():
     valid_forms = []
     values = []
     if request.method == 'POST':
-        # name = request.form['name']
-        # gender = request.form['gender']
-        # email = request.form['email']
-        # phone = request.form['phone']
-        # major = request.form['major']
-        # avail = request.form['avail']
-        # about = request.form['about']
-        # experience = request.form['experience']
-        # education = request.form['education']
-
+        
         cnt = 0
 
         for f in forms:
@@ -262,6 +248,7 @@ def search():
 
 @application.route('/inbox', methods=['GET', 'POST'])
 def inbox():
+    print(request.method)
     data = request.args.get('user')
     data = helpers.getUserData(data)
     print(data)
@@ -330,7 +317,6 @@ def viewmessage():
 
         newMessage = helpers.createMessage(message,sendingUser,receivingUser)
         text = newMessage['message']
-        time = newMessage['datetime']
         
         userData = helpers.getUserData(receivingUser)
         userProfile = helpers.getUserProfile(userData['sfsu_id'])
@@ -338,15 +324,21 @@ def viewmessage():
         phone = userProfile['phone']
         major = userProfile['major']
         gender = userProfile['gender']
+        
 
-
-
-        #cursor.execute(f"INSERT INTO message (sending_user, message,conversation) VALUEs ({sendingUserId},'{message}')")
-    return render_template('viewmessage.html',realName=realName,text=text,time=time,phone=phone,major=major,gender=gender)
-   
+    else:
+        username = request.args.get('user')
+        text = request.args.get('message')
+        
+        userData = helpers.getUserData(username)
+        userProfile = helpers.getUserProfile(userData['sfsu_id'])
+        realName = userProfile['name']
+        phone = userProfile['phone']
+        major = userProfile['major']
+        gender = userProfile['gender']
     
 
-    return render_template('viewmessage.html')
+    return render_template('viewmessage.html',realName=realName,phone=phone,major=major,gender=gender,text=text)
 
 
 if __name__ == '__main__':

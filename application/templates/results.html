@@ -3,18 +3,6 @@
 
 <link rel="stylesheet" type="text/css" href="../../static/browse.css">
 
-<!-- <h2>
-    <p>Searched for: {{ search }}</p>
-
-    Results:
-
-    {% for i in range(0,len) %}
-    <p>
-        <li>{{ tutors[i] }} : {{ codes[i] }} - {{ names[i] }}</li>
-    </p>
-    {% endfor %}
-
-</h2> -->
 
 <div class="container mt-3 mb-4 d-flex align-items-center justify-content-center flex-column">
     <div class="heading">
@@ -30,7 +18,7 @@
                         <thead>
                             <tr>
                                 <th>Tutor</th>
-                                <th class="text-center">Subject</th>
+                                <th class="text-center"></th>
                                 <th class="action text-right">Action</th>
                             </tr>
                         </thead>
@@ -46,27 +34,27 @@
                                     <div class="candidate-list-details">
                                         <div class="candidate-list-info">
                                             <div class="candidate-list-title">
-                                                <h5 class="mb-0"><a href="{{ url_for('tutor', user=usernames[i]) }}">{{ tutors[i] }}</a></h5>
+                                                <h5 class="mb-0"><a href="{{ url_for('tutor', user=usernames[i])}}">{{ courseNames[i] }}</a></h5>
                                             </div>
                                             <div>
-                                                <p> Short tutor description.</p>
+                                                <p>{{ courseCodes[i] }}</p> <small>taught by {{ usernames[i] }}</small>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="candidate-list-favourite-time text-center">
-                                    <p>{{ codes[i] }} - {{ names[i] }}</p>
+                                    <p></p>
                                 </td>
 
                                 {% if not session['username'] %}
                                 <td>
-                                    <a href="/register" class="btn btn-warning">Message</a>
+                                    <a href="/register" class="btn btn-warning">Sign Up!</a>
                                 </td>
                                 {% endif %}
                       
                                 {% if session['username'] %}
                                 <td>
-                                    <a href="/messages" class="btn btn-warning">Message</a>
+                                    <a href="{{ url_for('messaging', user=usernames[i])}}" class="btn btn-warning">Message</a>
                                 </td>
                                 {% endif %}
 
