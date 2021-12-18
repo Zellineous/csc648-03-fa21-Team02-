@@ -11,15 +11,16 @@
 		{% for i in range(0,len) %}
 		<div class="main__message">
 			<div class="user__message__wrapper">
-				<div class="user__message">
+				<div class="user__message d-flex flex-column ">
 					<div class="user__pic">
 						<img src="../static/images/300.jpg" alt="avatar" />
 					</div>
 
+					<br>
+					
 					<div class="user__name">
 						<div class="user__data">
 							<h4>{{people[i]}}</h4>
-							<br>
 							<small>{{dates[i]}}</small>
 						</div>
 					</div>
