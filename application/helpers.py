@@ -38,3 +38,11 @@ def getUserData(entered_user):
     cursor.execute(f"SELECT * FROM user WHERE name='{entered_user}'")
     return cursor.fetchone()
 
+def getUserId(entered_user):
+    cursor.execute(f"SELECT sfsu_id FROM user WHERE name='{entered_user}'")
+    return cursor.fetchone()
+
+def getUserProfile(id):
+    cursor.execute(f"SELECT * FROM user_profile WHERE sfsu_id={id}")
+    return cursor.fetchone()
+
