@@ -130,10 +130,13 @@ def tutor():
         avail = user_profile['availability']
         email = user['sfsu_email']
         gender = user_profile['gender']
+        about = user_profile['about']
+        experience = user_profile['experience']
+        education = user_profile['education']
 
 
     return render_template('user.html', name=name, major=major, phone=phone, status=status, 
-        avail=avail, email=email, gender=gender,username=username)
+        avail=avail, email=email, gender=gender,username=username,about=about,experience=experience,education=education)
 
 
 
@@ -160,7 +163,7 @@ def editprofile():
         count = 0
 
         for v in values:
-            sql = "UPDATE user_profile SET {0} = '{1}' WHERE sfsu_id={2}".format(forms[valid_forms[count]], v, user_id)
+            sql = f"UPDATE user_profile SET {forms[valid_forms[count]]} = {helpers.parseToQuery(v)} WHERE sfsu_id={user_id}"
             count += 1
             cursor.execute(sql)
             conn.commit()
