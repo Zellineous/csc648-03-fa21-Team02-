@@ -7,7 +7,7 @@ application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
 conn = db.connect()
 cursor = conn.cursor()
-print(helpers.key)
+
 # in .html files, make sure to href= to these routes, not the location of the .html files themselves
 @application.route('/', methods=['GET','POST'])
 def index():
@@ -98,18 +98,20 @@ def login():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
+        
+
         password = request.form['password']
-        if(helpers.checkPasswordOfUser(username,password)):
-            account = helpers.getUserData(username)
+        account = helpers.getUserData(username)
+        if account:
             print(account)
-            if account:
+            if(helpers.checkPasswordOfUser(username,password)):
                 session['loggedin'] = True
                 session['id'] = account['sfsu_id']
                 session['username'] = account['name']
                 msg = 'Logged in successfully!'
                 return render_template('dashboard.html', msg = msg)
-            else:
-                msg = 'Incorrect username or password!'
+        else:
+            msg = 'Incorrect username or password!'
     return render_template('login.html', msg = msg)
 
 
@@ -121,8 +123,9 @@ def logout():
     return redirect('/')
 
 
-@application.route('/dashboard')
+@application.route('/dashboard', methods =['GET', 'POST'])
 def dashboard():
+    print(request.method)
     return render_template('dashboard.html')
 
 
@@ -138,12 +141,11 @@ def search():
 
 @application.route('/inbox', methods =['GET', 'POST'])
 def inbox():
-    
+    print(request.form.get())
     return render_template('inbox.html')
 
 @application.route('/messaging', methods =['GET', 'POST'])
 def messaging():
-    print(session)
     toUser = helpers.getUserData(session['username'])
     return render_template('messaging.html')
 
