@@ -102,13 +102,13 @@ def makeUserProfile(sfsu_id):
 
 
 # returns all courses
-def getAllCourses():
-    cursor.execute(f"SELECT * FROM course")
+def getAllCoursesFromMajor(majorID):
+    cursor.execute(f"SELECT * FROM course WHERE id IN (SELECT course FROM major_has_course WHERE major={majorID})")
     return cursor.fetchall()
 
 # returns courses that are similar to search term
 def getSearch(search):
-    cursor.execute(f"SELECT * FROM course WHERE name LIKE '%" + search + "%'")
+    cursor.execute(f"SELECT * FROM course WHERE name,code LIKE '%" + search + "%'")
     return cursor.fetchall()
 
 
@@ -117,6 +117,8 @@ def getMajor(search_category):
     cursor.execute(f"SELECT * FROM major WHERE name LIKE '%" + search_category + "%'")
     return cursor.fetchone()
 
+def getAllCourses():
+    cursor.execute(f"SELECT * FROM course")
 
 # returns courses that belong to correct major
 def getMajorSearch(id):

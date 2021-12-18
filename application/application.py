@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import database as db
 import re
 import helpers
-import time
 
 application = Flask(__name__)
 application.config['SECRET_KEY'] = '123456789'
@@ -50,57 +49,39 @@ def results():
     search = request.args.get('search', None)
     search_category = request.args.get('search_category', None)
 
+    print(search, search_category)
     if search_category == 'Majors':
+        print('case1')
         if search:
             data = helpers.getSearch(search)
         else:
             data = helpers.getAllCourses()
 
     elif search_category:
+        print('case2')
         major = helpers.getMajor(search_category)
         major_id = major['id']
-        data = helpers.getMajorSearch(major_id)
+        data = helpers.getAllCoursesFromMajor(major_id)
 
     elif search and search_category:
+        print('case3')
         major = helpers.getMajor(search_category)
         major_id = major['id']
-        data = helpers.getMCSearch(search, major_id)
+        data = helpers.getAllCoursesFromMajor(major_id)
+        print(data)
 
     elif not search_category:
+        print('case4')
         if search:
             data = helpers.getSearch(search)
         else:
             data = helpers.getAllCourses()
 
-    tutors = []     # tutor names
     usernames = []   # tutor usernames
     names = []      # e.g. 'software engineering'
     codes = []      # e.g. 648
+    numResults = 0
 
-    for course in data:
-        # retrieving tutor info
-        course_id = course['id']
-        teaches = helpers.getTutorId(course_id)
-
-        if teaches:
-            # get tutor id
-            tutor_id = teaches['tutor']
-            # get tutor model from users
-            tutor = helpers.getTutorInfo(tutor_id)
-            # add tutor name
-            tutors.append(tutor['name'])
-
-            # get tutor username
-            tutor_user = helpers.getUserDataWithId(tutor_id)
-            username = tutor_user['name']
-            usernames.append(username)
-        else:
-            tutors.append('No Tutors')
-            usernames.append('notutor')
-
-        names.append(course['name'])
-        codes.append(course['number'])
-    length = len(tutors)
 
     # for styling header in results.html
     if not search:
@@ -146,6 +127,7 @@ def tutor():
 
 @application.route('/editprofile')
 def editprofile():
+    print(request.args)
     return render_template('editprofile.html')
 
 
