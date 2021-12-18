@@ -10,7 +10,9 @@ conn = db.connect()
 cursor = conn.cursor()
 
 # in .html files, make sure to href= to these routes, not the location of the .html files themselves
-@application.route('/', methods=['GET','POST'])
+
+
+@application.route('/', methods=['GET', 'POST'])
 def index():
     print(request.method)
     if request.method == 'POST':
@@ -21,7 +23,7 @@ def index():
     return render_template('home.html')
 
 
-@application.route('/layout', methods=['GET','POST'])
+@application.route('/layout', methods=['GET', 'POST'])
 def nav_search():
     print(request.method)
     if request.method == 'POST':
@@ -41,12 +43,19 @@ def browse():
     return render_template('browse.html')
 
 
+@application.route('/layout', methods=['GET', 'POST'])
 @application.route('/results', methods=['GET', 'POST'])
 def results():
-    search = request.args.get('search',None)
-    search_category = request.args.get('search_category',None)
+    search = request.args.get('search', None)
+    search_category = request.args.get('search_category', None)
 
     if search_category == 'Majors':
+        if search:
+            data = helpers.getSearch(search)
+        else:
+            data = helpers.getAllCourses()
+
+    if not search_category:
         if search:
             data = helpers.getSearch(search)
         else:
@@ -88,6 +97,8 @@ def results():
     if not search:
         search = 'all'
     if search_category == 'Majors':
+        search_category = 'all majors'
+    if not search_category:
         search_category = 'all majors'
 
     return render_template('results.html', search=search, search_category=search_category, names=names, codes=codes, tutors=tutors, len=length)
@@ -167,7 +178,7 @@ def login():
         password = request.form['password']
         account = helpers.getUserData(username)
         if account:
-            #print(account)
+            # print(account)
             if(helpers.checkPasswordOfUser(username,password)):
                 session['loggedin'] = True
                 session['id'] = account['sfsu_id']
@@ -212,7 +223,7 @@ def inbox():
     print(data)
     user_id = data['sfsu_id']
     print(user_id)
-    #get list of all users that have sent a message
+    # get list of all users that have sent a message
     cursor.execute(f"SELECT * FROM message WHERE id IN (SELECT MAX(id) FROM message GROUP BY conversation)")
     messages = cursor.fetchall()
     print("messages from: ")
@@ -222,7 +233,7 @@ def inbox():
     dates = []
     conversations = []
     lastSenders = []
-    #get conversation partner names
+    # get conversation partner names
     for message in messages:
         convoID = message['conversation']
         print(f"conversation # {convoID}")
@@ -246,7 +257,7 @@ def inbox():
         cursor.execute(f"SELECT name FROM user WHERE sfsu_id={message['sending_user']}")
         lastSenders.append(cursor.fetchone()['name'])
         
-    #get only most recent message from another user
+    # get only most recent message from another user
 
     
 
