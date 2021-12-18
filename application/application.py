@@ -48,7 +48,7 @@ def browse():
 def results():
     search = request.args.get('search', None)
     search_category = request.args.get('search_category', None)
-    print(search_category)
+    
     if search_category == 'Majors':
         print('case1')
         if search:
