@@ -13,20 +13,21 @@ fernet = Fernet(key)
 def isValidSfsuEmail(s):
     return( (re.search('sfsu.edu$',s)) and re.match(r'[^@]+@[^@]+\.[^@]+',s)) #returns None if failure
 
-def encryptPass(s):
-    encryptedPass = fernet.encrypt(s.encode()).decode()
+def encryptPass(s): #enter a string to encrypt it and return the string
+    encryptedPass = fernet.encrypt(s.encode()).decode() 
     print(f"password: {encryptedPass}")
     return encryptedPass
 
-def decryptPass(s):
+def decryptPass(s): #input an encrypted string
+    print(s)
     decryptedPass = fernet.decrypt(s.encode()).decode()
-    print(decryptedPass)
+    print("from decrypt:" + decryptedPass + "  " + s)
     return decryptedPass
 
 def checkPasswordOfUser(entered_username, entered_password): #checks password of entered user from login
     cursor.execute(f"SELECT password FROM user WHERE name='{entered_username}'")
     password = cursor.fetchone()['password']
-    print(password)
+    print("from checkPass" + password)
     if(decryptPass(password) == entered_password):
         return True
     
