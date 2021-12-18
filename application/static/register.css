@@ -6,15 +6,17 @@
 	justify-content: center;
 	padding-top: 40px; 
 	padding-bottom: 20px;
-	color: #154d6e;
+	color: white;
+	border: 5px solid white;
+	border-right: none;
 }
 
 .details h2{
-	font-weight: 800;
+	font-weight: bold;
 }
 
 .details h3{
-	font-weight: 800;
+	font-weight: 700;
 }
 
 .login-height {
@@ -36,15 +38,13 @@
 .registration-background{
 	margin-top: 50px;
 	margin-bottom: 50px;
-	background-color: white;
-	/* border: 1.5px solid #154d6e32; */
 }
 
 body{
 	background-color: #154d6e;
 }
 .register-section{
-	background-color: #ffc107;
+	border: 5px solid white;
 	padding: 60px;
 }
 .register-section h1{
@@ -71,6 +71,11 @@ body{
 	margin-top: 60px;
 	display: flex;
 }
+
+.register-login-btn .indv-btn:hover{ 
+	backdrop-filter: brightness(125%);
+}
+
 .register-login-btn .indv-btn{
 	border-radius: 20px;
 	padding-left: 20px;
@@ -93,7 +98,7 @@ body{
 	border: 1px solid #fff !important;
 }
 
-.error-message{
-	color:rgba(255, 0, 0, 0.555);
-	padding-bottom: 5px;
+
+.error-message {
+	color: white;
 }

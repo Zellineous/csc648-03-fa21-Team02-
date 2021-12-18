@@ -54,11 +54,29 @@ def team_member_about(member):
     return render_template('team/' + member + '.html')
 
 
-
-
-@application.route('/tutor',methods =['GET', 'POST'])
+@application.route('/tutor', methods =['GET', 'POST'])
 def tutor():
-    return render_template('tutor.html')
+    username = request.args.get('user')
+    user = helpers.getUserData(username)
+    id = user['sfsu_id']
+    user_profile = helpers.getUserProfile(id)
+
+    if user_profile:
+        name = user_profile['name']
+        major = user_profile['major']
+        # class = user_profile['class']
+        phone = user_profile['phone']
+        status = user_profile['status']
+        avail = user_profile['availability']
+        email = user['sfsu_email']
+        gender = user_profile['gender']
+
+
+    return render_template('tutor.html', name=name, major=major, phone=phone, status=status, 
+        availability=avail, email=email, gender=gender)
+
+
+
 
 @application.route('/editprofile')
 def editprofile():
@@ -113,6 +131,8 @@ def login():
                 return render_template('dashboard.html', msg = msg)
             else:
                 msg = 'Incorrect username or password!'
+        else:
+            msg = 'Account does not exist!'
     return render_template('login.html', msg = msg)
 
 

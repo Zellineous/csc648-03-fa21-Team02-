@@ -24,7 +24,9 @@
             <form action="/login" method="post" class="col-lg-6 col-md-6 col-sm-12 col-12 register-section login-form">
                 <h1>Welcome Back!</h1>
 
-                <div class="text-center error-message">{{ msg }}</div>
+                <div id="formAlert" class="alert hide error-message">
+                    <strong>{{msg}}</strong>
+                </div>
 
                 <!-- username -->
                 <div class="form-group was-validated">
