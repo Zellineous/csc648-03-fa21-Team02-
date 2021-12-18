@@ -110,8 +110,8 @@ def login():
                 session['username'] = account['name']
                 msg = 'Logged in successfully!'
                 return render_template('dashboard.html', msg = msg)
-        else:
-            msg = 'Incorrect username or password!'
+            else:
+                msg = 'Incorrect username or password!'
     return render_template('login.html', msg = msg)
 
 
