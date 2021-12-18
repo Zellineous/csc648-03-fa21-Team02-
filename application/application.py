@@ -75,6 +75,7 @@ def results():
     numResults = 0
     courseNames = []
     courseCodes = []
+    real_names = []
     usernames = []
     listings = []
 
@@ -86,11 +87,12 @@ def results():
             tutor_id = tutor['sfsu_id']
             tutor_profile = helpers.getTutorInfo(tutor_id)
 
-            listings.append({'courseName':course['name'], 'tutor' : tutor_profile['name'], 'code' : course['code']})
+            listings.append({'courseName':course['name'], 'real_name' : tutor_profile['name'], 'username' : tutor['name'], 'code' : course['code']})
 
     for listing in listings:
         courseNames.append(listing['courseName'])
-        usernames.append(listing['tutor'])
+        real_names.append(listing['real_name'])
+        usernames.append(listing['username'])
         courseCodes.append(listing['code'])
         numResults+=1
 
@@ -102,7 +104,8 @@ def results():
     if not search_category:
         search_category = 'all majors'
 
-    return render_template('results.html', search=search, search_category=search_category, len = numResults, courseNames = courseNames, usernames=usernames, courseCodes=courseCodes)
+    return render_template('results.html', search=search, search_category=search_category, len = numResults, 
+        real_names=real_names, courseNames = courseNames, usernames=usernames, courseCodes=courseCodes)
 
 
 @application.route('/team/<member>_about')
