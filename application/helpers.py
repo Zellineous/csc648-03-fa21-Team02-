@@ -46,3 +46,32 @@ def getUserProfile(id):
     cursor.execute(f"SELECT * FROM user_profile WHERE sfsu_id={id}")
     return cursor.fetchone()
 
+
+def getAllCourses():
+    cursor.execute(f"SELECT * FROM course")
+    return cursor.fetchall()
+
+# returns courses that are similar to search term
+def getSearch(search):
+    cursor.execute(f"SELECT * FROM course WHERE name LIKE '%" + search + "%'")
+    return cursor.fetchall()
+
+
+# returns corresponding major id
+def getMajor(search_category):
+    cursor.execute(f"SELECT * FROM major WHERE name LIKE '%" + search_category + "%'")
+    return cursor.fetchone()
+
+
+# returns courses that belong to correct major
+def getMajorSearch(id):
+    cursor.execute(f"SELECT * FROM course WHERE major_id={id}")
+    return cursor.fetchall()
+
+
+# returns courses that match both major and search term
+def getMCSearch(search, id):
+    cursor.execute(f"SELECT * FROM course WHERE major_id={id} AND name LIKE '%" + search + "%'")
+    return cursor.fetchall()
+
+
