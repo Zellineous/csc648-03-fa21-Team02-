@@ -6,7 +6,7 @@
 
 <div class="container mt-3 mb-4 d-flex align-items-center justify-content-center flex-column">
     <div class="heading">
-        <h1>List of courses.</h1>
+        <h1>Classes currently available for tutoring:</h1>
     </div>
 
     <div class="col-lg-9 mt-4 mt-lg-0">
@@ -14,37 +14,22 @@
             <div class="col-md-12">
                 <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
                     <table class="table manage-candidates-top mb-0">
-                        <!-- results header -->
-                        <thead>
-                            <tr>
-                                <th>Tutor</th>
-                                <th class="text-center"></th>
-                                <th class="action text-right">Action</th>
-                            </tr>
-                        </thead>
                         <tbody>
-                            <!-- tutor listing result -->
+                            <!-- class listing result -->
                             {% for i in range(0,len) %}
-                            <tr class="candidates-list">
+                            <tr class="candidates-list d-flex justify-content-center">
                                 <td class="title">
-                                    <div class="thumb">
-                                        <!-- need picture here -->
-                                        <img class="img-fluid" src="../static/images/blank_profile.png" alt="">
-                                    </div>
                                     <div class="candidate-list-details">
-                                        <div class="candidate-list-info">
+                                        <div class="d-flex flex-column justify-content-center">
                                             <div class="candidate-list-title">
                                                 <h3><a href="{{ url_for('listingRequest', course=courseNames[i])}}">{{ courseNames[i] }}</a></h3>
                                             </div>
-                                            <div>
+                                            <div class="d-flex justify-content-center">
                                                 <h4 class="mb-1"></h4>
                                                 <p>{{ courseCodes[i] }}</p> 
                                             </div>
                                         </div>
                                     </div>
-                                </td>
-                                <td class="candidate-list-favourite-time text-center">
-                        
                                 </td>
                             </tr>
                             {% endfor %}
