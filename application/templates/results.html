@@ -55,7 +55,9 @@
                       
                                 {% if session['username'] %}
                                 <td>
-                                    <a href="{{ url_for('messaging', user=usernames[i])}}" class="btn btn-warning">Message</a>
+                                    {% if session['username']|string() != usernames[i]|string() %}
+                                        <a href="{{ url_for('messaging', user=usernames[i])}}" class="btn btn-warning">Message</a>
+                                    {% endif %}
                                 </td>
                                 {% endif %}
 

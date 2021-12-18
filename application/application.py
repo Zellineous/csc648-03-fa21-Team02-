@@ -85,6 +85,8 @@ def results():
         for tutor in tutors:
             # getting tutor's real name
             tutor_id = tutor['sfsu_id']
+            if tutor_id == session['id']:
+                continue
             tutor_profile = helpers.getTutorInfo(tutor_id)
 
             listings.append({'courseName':course['name'], 'real_name' : tutor_profile['name'], 'username' : tutor['name'], 'code' : course['code']})
