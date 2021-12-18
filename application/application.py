@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, redirect, url_for, session
 import database as db
 import re
@@ -28,7 +27,6 @@ def nav_search():
     if request.method == 'POST':
         search = request.form.get('search')
         return redirect(url_for('results', search=search))
-
     return render_template('home.html')
 
 
@@ -85,8 +83,6 @@ def results():
         for tutor in tutors:
             # getting tutor's real name
             tutor_id = tutor['sfsu_id']
-            if tutor_id == session['id']:
-                continue
             tutor_profile = helpers.getTutorInfo(tutor_id)
 
             listings.append({'courseName':course['name'], 'real_name' : tutor_profile['name'], 'username' : tutor['name'], 'code' : course['code']})
@@ -233,6 +229,33 @@ def login():
             msg = 'Account does not exist!'
         
     return render_template('login.html', msg=msg)
+
+@application.route('/createListing',methods=['GET','POST'])
+def createListing():
+    courses = helpers.getAllCourses()
+    courseNames = []
+    courseCodes = []
+    for course in courses:
+        courseNames.append(course['name'])
+        courseCodes.append(course['code'])
+    numCourses = len(courseNames)
+    
+    return render_template('createListing.html',courseNames=courseNames,len=numCourses,courseCodes=courseCodes)
+
+
+
+@application.route('/listingRequest',methods=['GET','POST'])
+def listingRequest():
+    courseName = request.args.get('course')
+    cursor.execute(f"SELECT id FROM course WHERE name LIKE '%{courseName}%'")
+    
+    courseID=cursor.fetchone()['id']
+    user = session['username']
+    userID = helpers.getUserId(user)['sfsu_id']
+    print(courseID,userID)
+
+
+    return render_template('listingRequest.html')
 
 
 
