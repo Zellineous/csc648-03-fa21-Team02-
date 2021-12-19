@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="../static/register.css">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+<!-- registration form -->
+<div class="registration-form">
+    <div class="container registration-background col-10">
+        <div class="row">
+
+            <!-- left side of form -->
+            <div class="col-lg-6 col-md-6 details">
+                <div>
+                    <h2>Sign up to receive access</h2>
+                    <h2>to more features such as:</h2>
+                </div>
+                <br>
+                <br>
+                <div>
+                    <h3>Messaging</h3>
+                    <br>
+                </div>
+                <div>
+                    <h3>Personalized Dashboard</h3>
+                    <br>
+                </div>
+                <div>
+                    <h3>Individual Profile</h3>
+                    <br>
+                </div>
+                <div>
+                    <h3>Become a Tutor</h3>
+                    <br>
+                </div>
+            </div>
+
+            <!-- right side of form -->
+            <form action="/register" method="post" class="col-lg-6 col-md-6 col-sm-12 col-12 register-section">
+                <h1>Welcome!</h1>
+
+                <div id="formAlert" class="alert hide error-message">
+                    <strong>{{msg}}</strong>
+                </div>
+
+
+                <!-- name -->
+                <div class="form-group was-validated">
+                    <input id="username" name="username" type="text" class="form-control register-input"
+                        placeholder="Your Username" required>
+                    <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                    </svg>
+                </div>
+
+                <!-- email -->
+                <div class="form-group was-validated">
+                    <input id="email" name="email" type="text" class="form-control register-input"
+                        placeholder="Your e-mail" required>
+                    <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-envelope-fill"
+                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z" />
+                    </svg>
+                </div>
+
+                <!-- SFSU ID -->
+                <div class="form-group was-validated">
+                    <input id="sfsu_id" name="sfsu_id" type="text" class="form-control register-input"
+                        placeholder="Your SFSU ID" required>
+                    <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-envelope-fill"
+                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z" />
+                    </svg>
+                </div>
+
+                <!-- password -->
+                <div class="form-group was-validated">
+                    <input id="password" name="password" type="password" class="form-control register-input"
+                        placeholder="Create password" required>
+                    <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-lock-fill" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z" />
+                        <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z" />
+                    </svg>
+                </div>
+
+                <!-- register / login buttons -->
+                <div class="register-login-btn">
+                    <input type="submit" class="btn btn-primary indv-btn" Create account>
+                    <a href="/login" class="btn btn-primary indv-btn">Already have an account?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

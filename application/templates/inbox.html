@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="../../static/inbox.css">
+
+<div>
+	<div class="inbox">
+		<div class="heading">
+			<h1>Messages</h1>
+		</div>
+		{% for i in range(0,len) %}
+		<div class="main__message">
+			<div class="user__message__wrapper">
+				<div class="user__message d-flex flex-column ">
+					<div class="user__pic">
+						<img class="img-fluid" src="../static/images/blank_profile.png" alt="">
+					</div>
+
+					<br>
+					
+					<div class="user__name">
+						<div class="user__data">
+							<h4>{{ real_names[i] }}</h4>
+							<small>{{dates[i]}}</small>
+						</div>
+					</div>
+				</div>
+				<div class="user__message__preview d-flex justify-content-between">
+					<p>{{lastMessages[i]}}</p><a
+						href="{{ url_for('viewmessage', user=people[i], message=lastMessages[i]) }}"
+						class="btn btn-warning">View Message</a>
+				</div>
+			</div>
+
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+
+{% endblock %}

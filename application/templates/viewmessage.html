@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="../../static/inbox.css">
+
+<div>
+	<div class="inbox">
+		<div class="heading">
+			<h1>Details of {{realName}}'s Message</h1>
+		</div>
+		<div class="main__message view-height">
+			<div class="user__message__wrapper">
+				<div class="message_view">
+					<div class="user__pic">
+						<img class="img-fluid" src="../static/images/blank_profile.png" alt="">
+					</div>
+					<div class="user__name">
+						<div class="user_data">
+							<h4>{{ realName }}</h4>
+							<small>{{ major }}</small>
+							<small>{{ email }}</small>
+							<br>
+							<small>{{ phone }}</small>
+						</div>
+						
+						
+					</div>
+				</div>
+				<div class="user__message__preview view-height center_message" >
+					<p>{{ text }}</p>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="../../static/browse.css">
+
+
+<div class="container mt-3 mb-4 d-flex align-items-center justify-content-center flex-column">
+    <div class="heading">
+        <h1>Classes currently available for tutoring:</h1>
+    </div>
+
+    <div class="col-lg-9 mt-4 mt-lg-0">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+                    <table class="table manage-candidates-top mb-0">
+                        <tbody>
+                            <!-- class listing result -->
+                            {% for i in range(0,len) %}
+                            <tr class="candidates-list d-flex justify-content-center">
+                                <td class="title">
+                                    <div class="candidate-list-details">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <div class="candidate-list-title">
+                                                <h3><a href="{{ url_for('listingRequest', course=courseNames[i])}}">{{ courseNames[i] }}</a></h3>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <h4 class="mb-1"></h4>
+                                                <p>{{ courseCodes[i] }}</p> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
