@@ -265,9 +265,9 @@ def listingRequest():
             return render_template('listingRequest.html',msg=msg)
     
     msg = f"Request to tutor a course has been sent for thomas to tutor Probability and Statistics with Computing."
-    cursor.execute(f"INSERT INTO teaches(tutor,course) VALUES({userID},{courseID})")
-
-    return render_template('listingRequest.html',msg=msg)
+    cursor.execute(f"INSERT INTO listing_request (tutor,course) VALUES ({userID},{courseID})")
+    conn.commit()
+    return render_template('listingRequest.html',msg=msg)   
 
 
 
