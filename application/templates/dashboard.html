@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="../../static/dashboard.css">
+
+<div class="container">
+    <div class="welcome">
+        <h1 class="">
+            Welcome {{name}}!
+        </h1>
+    </div>
+</div>
+
+<div class="container" method="post">
+    <form method="get">
+        <div class="row">
+            
+            <a href="{{ url_for('inbox', user=session['username']) }}" class="col-md options" style="text-decoration: none;">
+                <i class="bi bi-envelope"></i>
+                <h2>Inbox</h2>
+            </a>
+            
+            <a href="{{ url_for('editprofile', user=session['username']) }}" class="col-md options">
+                <i class="bi bi-pen"></i>
+                <h2>Edit Profile</h2>
+            </a>
+            <a href="{{ url_for('tutor', user=session['username']) }}" class="col-md options">
+                <i class="bi bi-person-circle"></i>
+                <h2>View Profile</h2>
+            </a>
+            <a href="{{ url_for('createListing', user=session['username']) }}" class="col-md options" style="text-decoration: none;">
+                <i class="bi bi-envelope"></i>
+                <h2>Be a tutor</h2>
+            </a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

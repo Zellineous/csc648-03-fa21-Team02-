@@ -1,0 +1,43 @@
+body {
+    background-color: #154d6e;;
+}
+
+.welcome {
+    color:white;
+    text-align: center;
+    padding-top: 100px;
+    padding-bottom: 50px;
+}
+
+.options {
+    color: white;
+    border: 2px solid white;
+    height: 400px;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.options i {
+    font-size:5rem;  
+    padding-bottom: 30px;
+}
+
+.options:hover {
+    backdrop-filter: brightness(125%);
+}
+
+a {
+    text-decoration: none;
+    color:inherit;
+}
+
+a:hover {
+    color: white; 
+    text-decoration:none; 
+    cursor:pointer;  
+}
